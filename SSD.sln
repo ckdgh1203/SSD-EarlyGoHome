@@ -5,13 +5,17 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SSD", "SSD\SSD.vcxproj", "{A26D2FE0-E328-41F7-9926-E1E556457DB5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample-Test1", "Sample-Test1\Sample-Test1.vcxproj", "{577BCD11-E9BD-481E-80E5-EBDFB73BADCF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SSD_Test", "Sample-Test1\Sample-Test1.vcxproj", "{577BCD11-E9BD-481E-80E5-EBDFB73BADCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루션 항목", "{124D14B2-F60D-4D6B-BBE3-B77A173A0BE0}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shell", "Shell\Shell.vcxproj", "{F914E3C6-48F0-440F-A074-03F771B6C78C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shell_Test", "Shell_Test\Shell_Test.vcxproj", "{BEC8238B-1897-4781-9682-9ACD9BF369C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,22 @@ Global
 		{577BCD11-E9BD-481E-80E5-EBDFB73BADCF}.Release|x64.Build.0 = Release|x64
 		{577BCD11-E9BD-481E-80E5-EBDFB73BADCF}.Release|x86.ActiveCfg = Release|Win32
 		{577BCD11-E9BD-481E-80E5-EBDFB73BADCF}.Release|x86.Build.0 = Release|Win32
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Debug|x64.ActiveCfg = Debug|x64
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Debug|x64.Build.0 = Debug|x64
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Debug|x86.ActiveCfg = Debug|Win32
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Debug|x86.Build.0 = Debug|Win32
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Release|x64.ActiveCfg = Release|x64
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Release|x64.Build.0 = Release|x64
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Release|x86.ActiveCfg = Release|Win32
+		{F914E3C6-48F0-440F-A074-03F771B6C78C}.Release|x86.Build.0 = Release|Win32
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Debug|x64.ActiveCfg = Debug|x64
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Debug|x64.Build.0 = Debug|x64
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Debug|x86.ActiveCfg = Debug|Win32
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Debug|x86.Build.0 = Debug|Win32
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Release|x64.ActiveCfg = Release|x64
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Release|x64.Build.0 = Release|x64
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Release|x86.ActiveCfg = Release|Win32
+		{BEC8238B-1897-4781-9682-9ACD9BF369C4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

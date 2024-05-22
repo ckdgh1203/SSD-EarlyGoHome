@@ -19,13 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{577bcd11-e9bd-481e-80e5-ebdfb73badcf}</ProjectGuid>
+    <ProjectGuid>{bec8238b-1897-4781-9682-9acd9bf369c4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <ProjectName>SSD_Test</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -103,8 +102,8 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SSD\SSD.vcxproj">
-      <Project>{a26d2fe0-e328-41f7-9926-e1e556457db5}</Project>
+    <ProjectReference Include="..\Shell\Shell.vcxproj">
+      <Project>{f914e3c6-48f0-440f-a074-03f771b6c78c}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
