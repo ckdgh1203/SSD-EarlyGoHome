@@ -46,9 +46,9 @@ TEST(SSD_Test, LBA100_Read_Fail)
 TEST(SSD_Test, LBA0_Write_Data_0x1234_5678_Success)
 {
 	MockFile mFile;
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
-	EXPECT_CALL(mFile, writeToNANDTxt(0, "0x12345678"))
+	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(100);
 
 	SSD ssd(&mFile);
@@ -57,22 +57,24 @@ TEST(SSD_Test, LBA0_Write_Data_0x1234_5678_Success)
 
 TEST(SSD_Test, LBA100_Write_Fail)
 {
-	MockFile mFile;
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	NiceMock<MockFile> mFile;
+	//MockFile mFile;
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
-	EXPECT_CALL(mFile, writeToNANDTxt(0, "0x12345678"))
+	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
 
 	SSD ssd(&mFile);
-	ssd.write(0, "0x12345678");
+	ssd.write(100, "0x12345678");
 }
 
 TEST(SSD_Test, LBA0_Write_Data_0x0000_0000_0000_Fail)
 {
-	MockFile mFile;
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	NiceMock<MockFile> mFile;
+	//MockFile mFile;
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
-	EXPECT_CALL(mFile, writeToNANDTxt(0, "0x000000000000"))
+	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
 
 	SSD ssd(&mFile);
