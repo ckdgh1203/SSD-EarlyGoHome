@@ -23,7 +23,7 @@ TEST(SSD_Test, LBA0_Read_Data_Success)
 {
 	MockFile mFile;
 	EXPECT_CALL(mFile, readFromNANDTxt(0))
-		.Times(1);
+		.Times(100);
 	EXPECT_CALL(mFile, writeToResultTxt(0, "0x00000000"))
 		.Times(1);
 
