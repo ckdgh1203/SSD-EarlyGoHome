@@ -1,12 +1,60 @@
 #include "../SSD/iSSD.h"
 
-#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+
+class iExit
+{
+public:
+	virtual void doExit() = 0;
+private:
+};
+
+class Exit : public iExit
+{
+public:
+	void doExit() override
+	{
+		exit(0);
+	}
+private:
+};
+
 
 class Shell
 {
 public:
-	Shell(void) {}
-	Shell(iSSD* ssd) : m_ssd(ssd) {}
+
+	Shell(void) 
+	{
+		_exit = new Exit();
+	}
+
+	Shell(iSSD* ssd) : m_ssd(ssd)
+	{
+		_exit = new Exit();
+	}
+
+	void help()
+	{
+		helpMessasge();
+	}
+
+	void helpMessasge()
+	{
+		cout << "This is Help Message" << endl;
+	}
+
+	void exit()
+	{ 
+		_exit->doExit();
+	}
+
+	void setExit(iExit *newExit)
+	{
+		_exit = newExit;
+	}
 
 	string read(unsigned int lba)
 	{
@@ -22,8 +70,10 @@ public:
 		if (verifyDataFormat(data)) return;
 		m_ssd->write(static_cast<int>(lba), data);
 	}
+
 private:
 	iSSD* m_ssd{};
+	iExit* _exit;
 
 	bool verifyLba(unsigned int lba)
 	{
