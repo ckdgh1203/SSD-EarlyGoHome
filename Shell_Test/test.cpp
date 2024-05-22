@@ -1,9 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <string>
-#include <vector>
-#include <filesystem>
-#include <fstream>
 
 #include "../Shell/Shell.cpp"
 #include "../SSD/iSSD.h"
@@ -19,63 +16,79 @@ public:
 private:
 };
 
-class ShellTestFixture : public Test
-{
-public:
-	NiceMock<SsdMock> ssdMock{};
-	Shell shell{ &ssdMock };
-protected:
-	static constexpr int INVALID_LBA = 100;
-	static constexpr int VALID_LBA = 99;
-	const string dataZero = "0x00000000";
-};
-
 class TestableExitActor : public iExit
 {
 public:
-	void doExit() override 
+	void doExit() override
 	{
 		cout << "Tesable Exit" << endl;
 	}
 private:
 };
 
+class ShellTestFixture : public Test
+{
+protected:
+	NiceMock<SsdMock> ssdMock{};
+	Shell shell{ &ssdMock };
+	TestableExitActor testableExitActor;
+
+	static constexpr int INVALID_LBA = 100;
+	static constexpr int VALID_LBA = 99;
+	const string dataZero = "0x00000000";
+
+	void SetUp(void) override
+	{
+		shell.setExit(&testableExitActor);
+	}
+	void redirectCout(ostringstream& redirectedOutput)
+	{
+		reservedCout = cout.rdbuf(redirectedOutput.rdbuf());
+	}
+	void restoreCout(void)
+	{
+		cout.rdbuf(reservedCout);
+	}
+	void redirectCin(istringstream& redirectedInput)
+	{
+		reservedCin = cin.rdbuf(redirectedInput.rdbuf());
+	}
+	void restoreCin(void)
+	{
+		cin.rdbuf(reservedCin);
+	}
+private:
+	streambuf* reservedCout;
+	streambuf* reservedCin;
+};
+
 TEST_F(ShellTestFixture, HelpCallTest)
 {
-	Shell shell;
 	ostringstream redirectedOutput;
-	ostringstream expectedOutput;
-	streambuf* oldCout;
-
-	oldCout = cout.rdbuf(redirectedOutput.rdbuf());
+	redirectCout(redirectedOutput);
 	shell.help();
-	cout.rdbuf(oldCout);
+	restoreCout();
 
-	oldCout = cout.rdbuf(expectedOutput.rdbuf());
+	ostringstream expectedOutput;
+	redirectCout(expectedOutput);
 	shell.helpMessasge();
-	cout.rdbuf(oldCout);
+	restoreCout();
 
 	EXPECT_EQ(redirectedOutput.str(), expectedOutput.str());
 }
 
 TEST_F(ShellTestFixture, DISABLE_ExitCallTest)
 {
-	Shell shell;
-	TestableExitActor testableExitActor;
 
 	ostringstream redirectedOutput;
-	ostringstream expectedOutput;
-	streambuf* oldCout;
-
-	shell.setExit(&testableExitActor);
-
-	oldCout = cout.rdbuf(redirectedOutput.rdbuf());
+	redirectCout(redirectedOutput);
 	shell.exit();
-	cout.rdbuf(oldCout);
+	restoreCout();
 
-	oldCout = cout.rdbuf(expectedOutput.rdbuf());
+	ostringstream expectedOutput;
+	redirectCout(expectedOutput);
 	testableExitActor.doExit();
-	cout.rdbuf(oldCout);
+	restoreCout();
 
 	EXPECT_EQ(redirectedOutput.str(), expectedOutput.str());
 }
@@ -116,13 +129,8 @@ TEST_F(ShellTestFixture, WriteSuccess)
 
 TEST_F(ShellTestFixture, RunAndExit)
 {
-	Shell shell;
-	TestableExitActor testableExitActor;
-	shell.setExit(&testableExitActor);
-
 	istringstream redirectedInput("exit\n");
-	streambuf* oldCin;
-	oldCin = cin.rdbuf(redirectedInput.rdbuf());
+	redirectCin(redirectedInput);
 	shell.run();
-	cout.rdbuf(oldCin);
+	restoreCin();
 }
