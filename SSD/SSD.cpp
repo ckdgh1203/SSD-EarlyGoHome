@@ -37,6 +37,19 @@ public:
 		cout << "validity pass!!" << endl;
 
 		//3. readFromNANDTxt 전체 읽어오기
+		vector<string> buf = dataReadFromNand();
+		
+		//4. 읽은 부분에서 target lba data 수정하기
+		buf[lba] = data;
+		//5. writeToNANDTxt 전체 내용 다시 쓰기 
+		for (int currentLBA = 0; currentLBA < 100; currentLBA++)
+		{
+			m_file->writeToNANDTxt(currentLBA, buf[currentLBA]);
+		}
+	}
+
+	vector<string> dataReadFromNand()
+	{
 		vector<string> buf;
 		string targetData;
 		for (int currentLBA = 0; currentLBA < 100; currentLBA++)
@@ -44,15 +57,7 @@ public:
 			targetData = m_file->readFromNANDTxt(currentLBA);
 			buf.push_back(targetData);
 		}
-
-		//4. 읽은 부분에서 target lba data 수정하기
-		buf[lba] = data;
-
-		//5. writeToNANDTxt 전체 내용 다시 쓰기 
-		for (int currentLBA = 0; currentLBA < 100; currentLBA++)
-		{
-			m_file->writeToNANDTxt(currentLBA, buf[currentLBA]);
-		}
+		return buf;
 	}
 
 	bool isInvalidData(const string data)
