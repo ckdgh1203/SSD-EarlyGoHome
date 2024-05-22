@@ -47,9 +47,9 @@ TEST(SSD_Test, LBA0_Write_Data_0x1234_5678_Success)
 {
 	MockFile mFile;
 	EXPECT_CALL(mFile, readFromNANDTxt(0))
-		.Times(1);
+		.Times(100);
 	EXPECT_CALL(mFile, writeToNANDTxt(0, "0x12345678"))
-		.Times(1);
+		.Times(100);
 
 	SSD ssd(&mFile);
 	ssd.write(0, "0x12345678");
