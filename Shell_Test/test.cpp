@@ -5,13 +5,15 @@
 #include <filesystem>
 #include <fstream>
 
+#include "../SSD/iSSD.h"
+
 using namespace std;
 using namespace testing;
 
-class SsdMock
+class SsdMock : public iSSD
 {
-	MOCK_METHOD(void, Write, (unsigned int, unsigned int), ());
-	MOCK_METHOD(void, Read, (unsigned int), ());
+	MOCK_METHOD(void, write, (int, string), (override));
+	MOCK_METHOD(void, read, (int), (override));
 };
 
 class ShellTest : public Test
