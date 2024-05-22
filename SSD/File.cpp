@@ -11,6 +11,7 @@ class SSDFile : public iFile
 public:
 	string readFromNANDTxt(int lba) override
 	{
+		
 	}
 
 	void writeToNANDTxt(int lba, string data) override

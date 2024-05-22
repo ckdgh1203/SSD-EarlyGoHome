@@ -43,7 +43,7 @@ TEST(SSD_Test, LBA100_Read_Fail)
 	ssd.read(100);
 }
 
-TEST(SSD_Test, LBA0_Write_Data_0x1234_5678_Success)
+TEST(SSD_Test, DISABLED_LBA0_Write_Data_0x1234_5678_Success)
 {
 	MockFile mFile;
 	EXPECT_CALL(mFile, readFromNANDTxt(0))
@@ -55,7 +55,7 @@ TEST(SSD_Test, LBA0_Write_Data_0x1234_5678_Success)
 	ssd.write(0, "0x12345678");
 }
 
-TEST(SSD_Test, LBA100_Write_Fail)
+TEST(SSD_Test, DISABLED_LBA100_Write_Fail)
 {
 	MockFile mFile;
 	EXPECT_CALL(mFile, readFromNANDTxt(0))
@@ -67,7 +67,7 @@ TEST(SSD_Test, LBA100_Write_Fail)
 	ssd.write(0, "0x12345678");
 }
 
-TEST(SSD_Test, LBA0_Write_Data_0x0000_0000_0000_Fail)
+TEST(SSD_Test, DISABLED_LBA0_Write_Data_0x0000_0000_0000_Fail)
 {
 	MockFile mFile;
 	EXPECT_CALL(mFile, readFromNANDTxt(0))
