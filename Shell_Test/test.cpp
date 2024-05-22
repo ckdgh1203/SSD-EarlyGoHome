@@ -113,3 +113,16 @@ TEST_F(ShellTestFixture, WriteSuccess)
 	EXPECT_CALL(ssdMock, write(_, _)).Times(1);
 	shell.write(VALID_LBA, dataZero);
 }
+
+TEST_F(ShellTestFixture, RunAndExit)
+{
+	Shell shell;
+	TestableExitActor testableExitActor;
+	shell.setExit(&testableExitActor);
+
+	istringstream redirectedInput("exit\n");
+	streambuf* oldCin;
+	oldCin = cin.rdbuf(redirectedInput.rdbuf());
+	shell.run();
+	cout.rdbuf(oldCin);
+}

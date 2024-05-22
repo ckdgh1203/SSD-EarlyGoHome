@@ -56,6 +56,13 @@ public:
 		_exit = newExit;
 	}
 
+	void run(void)
+	{
+		string cmdline;
+		cin >> cmdline;
+		if ("exit") exit();
+	}
+
 	string read(unsigned int lba)
 	{
 		if (verifyLba(lba)) return "Out of Lba";
@@ -70,7 +77,7 @@ public:
 		if (verifyDataFormat(data)) return;
 		m_ssd->write(static_cast<int>(lba), data);
 	}
-
+	
 private:
 	iSSD* m_ssd{};
 	iExit* _exit;
