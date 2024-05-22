@@ -19,7 +19,47 @@ class ShellTest : public Test
 	NiceMock<SsdMock> ssdMock{};
 };
 
-TEST_F(ShellTest, Test)
+TEST_F(ShellTest, InvalidCommand)
+{
+
+}
+
+TEST_F(ShellTest, InvalidFormat)
+{
+
+}
+
+TEST_F(ShellTest, LBAOutOfBound)
+{
+
+}
+
+TEST_F(ShellTest, WriteInvalidData)
+{
+
+}
+
+TEST_F(ShellTest, WriteCommandSuccess)
+{
+
+}
+
+TEST_F(ShellTest, WriteCommandFailure)
+{
+
+}
+
+TEST_F(ShellTest, ReadCommandSuccess)
+{
+
+}
+
+TEST_F(ShellTest, ReadCommandFailure)
+{
+
+}
+
+TEST_F(ShellTest, ExitCommandSuccess)
 {
 
 }
