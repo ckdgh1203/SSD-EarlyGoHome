@@ -89,14 +89,6 @@ public:
 		}
 	}
 
-	void testapp1()
-	{
-		string inputData = "0xDEADC0DE";
-
-		fullwrite(inputData);
-		fullread();
-		
-	}
 private:
 	iSSD* m_ssd{};
 	iExit* _exit;
