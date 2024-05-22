@@ -40,8 +40,19 @@ public:
 		vector<string> buf = dataReadFromNand();
 		
 		//4. 읽은 부분에서 target lba data 수정하기
-		buf[lba] = data;
+		dataWriteToTargetLba(buf, lba, data);
+
 		//5. writeToNANDTxt 전체 내용 다시 쓰기 
+		dataWriteToNand(buf);
+	}
+
+	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
+	{
+		buf[lba] = data;
+	}
+
+	void dataWriteToNand(std::vector<std::string>& buf)
+	{
 		for (int currentLBA = 0; currentLBA < 100; currentLBA++)
 		{
 			m_file->writeToNANDTxt(currentLBA, buf[currentLBA]);
