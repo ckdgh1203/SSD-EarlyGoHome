@@ -20,29 +20,12 @@ public:
 	}
 	void write(int lba, string data) override
 	{
-		cout << "Write LBA : " << lba << endl;
-		// W 명령어 사용시 : nand.txt 파일 내용 전체 읽어온 후, 특정부분을변경하고새로Write를수행한다.
-		//1. LBA validity check
-		if (isInvalidLbaRange(lba))
+		if (isInvalidLbaRange(lba) || isInvalidData(data))
 		{
 			return;
 		}
-
-		//2. data validity check
-		if (isInvalidData(data))
-		{
-			return;
-		}
-		
-		cout << "validity pass!!" << endl;
-
-		//3. readFromNANDTxt 전체 읽어오기
 		vector<string> buf = dataReadFromNand();
-		
-		//4. 읽은 부분에서 target lba data 수정하기
 		dataWriteToTargetLba(buf, lba, data);
-
-		//5. writeToNANDTxt 전체 내용 다시 쓰기 
 		dataWriteToNand(buf);
 	}
 
@@ -75,30 +58,35 @@ public:
 	{
 		if (data.length() != 10)
 		{
-			cout << "Data invalid length! " << endl;
+			//cout << "Data invalid length! " << endl;
 			return true;;
 		}
 
 		if (data[0] != '0' || data[1] != 'x')
 		{
-			cout << "Data is not Hex format! " << endl;
+			//cout << "Data is not Hex format! " << endl;
 			return true;  
 		}
 
 		for (int i = 2; i < 10; i++)
 		{
-			if ((data[i] >= '0' && data[i] <= '9') || (data[i] >= 'A' && data[i] <= 'F')) continue;
-			cout << "Data Hex invalid char! " << endl;
+			if (isHexFormat(data[i])) continue;
+			//cout << "Data Hex invalid char! " << endl;
 			return true;
 		}
 		return false;
+	}
+
+	bool isHexFormat(char ch)
+	{
+		return ('0' <= ch && ch <= '9') || ('A' <= ch && ch <= 'F');
 	}
 
 	bool isInvalidLbaRange(int lba)
 	{
 		if (lba < 0 || lba >= 100)
 		{
-			cout << "LBA invalid range! " << endl;
+			//cout << "LBA invalid range! " << endl;
 			return true;
 		}
 		return false;
