@@ -4,7 +4,7 @@
 #include <vector>
 #include <filesystem>
 #include <fstream>
-#include "../SSD/SSD.cpp"
+#include "../SSD/iSSD.h"
 
 using namespace std;
 using namespace testing;
