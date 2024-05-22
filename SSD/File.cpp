@@ -9,7 +9,7 @@ using namespace std;
 class SSDFile : public iFile
 {
 public:
-	void readFromNANDTxt(int lba) override
+	string readFromNANDTxt(int lba) override
 	{
 	}
 
@@ -17,7 +17,7 @@ public:
 	{
 	}
 
-	void readFromResultTxt(int lba) override
+	string readFromResultTxt(int lba) override
 	{
 	}
 

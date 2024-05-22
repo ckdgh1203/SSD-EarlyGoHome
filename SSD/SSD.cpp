@@ -38,10 +38,13 @@ public:
 		inputFile.close();
 
 		// result.txt 파일에 저장
+
+		m_file->writeToResultTxt(lba, m_file->readFromNANDTxt(lba));
 	}
 	void write(int lba, string data) override
 	{
-
+		m_file->readFromNANDTxt(lba);
+		m_file->writeToNANDTxt(lba, data);
 	}
 
 private:
