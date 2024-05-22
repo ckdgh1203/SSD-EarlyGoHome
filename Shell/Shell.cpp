@@ -89,6 +89,14 @@ public:
 		}
 	}
 
+	void testapp1()
+	{
+		string inputData = "0xDEADC0DE";
+
+		fullwrite(inputData);
+		fullread();
+		
+	}
 private:
 	iSSD* m_ssd{};
 	iExit* _exit;
@@ -118,7 +126,7 @@ private:
 	{
 		for (int index = 2; index < inputData.length(); index++)
 		{
-			if (('A' <= inputData[index] && inputData[index] <= 'Z') || ('0' <= inputData[index] && inputData[index] <= '9'))
+			if (('A' <= inputData[index] && inputData[index] <= 'F') || ('0' <= inputData[index] && inputData[index] <= '9'))
 			{
 				continue;
 			}
