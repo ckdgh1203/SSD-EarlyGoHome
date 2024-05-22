@@ -42,10 +42,25 @@ public:
 
 		for (int index = 2; index < inputData.length(); index++)
 		{
-			if ((inputData[index] < 'A' || 'F' < inputData[index]) && (inputData[index] < '0' || '9' < inputData[index]))
+			if (('A' <= inputData[index] && inputData[index] <= 'Z') || ('0' <= inputData[index] && inputData[index] <= '9'))
 			{
-				throw NotAllowedInputData();
+				continue;
 			}
+
+			throw NotAllowedInputData();
+		}
+
+		for (int iter = 0; iter < 100; iter++)
+		{
+			m_Ssd->write(iter, inputData);
+		}
+	}
+
+	void fullread()
+	{
+		for (int iter = 0; iter < 100; iter++)
+		{
+			m_Ssd->read(iter);
 		}
 	}
 private:

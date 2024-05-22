@@ -42,20 +42,20 @@ TEST_F(ShellTest, FullWrite_NotAllowedInputDataException)
 
 TEST_F(ShellTest, FullWrite_100TimesSuccessfully)
 {
+	Shell shell(&ssdMock);
 
-}
+	EXPECT_CALL(ssdMock, write)
+		.Times(100);
 
-TEST_F(ShellTest, FullWrite_Under100TimesException)
-{
-
+	shell.fullwrite("0xABCD1234");
 }
 
 TEST_F(ShellTest, FullRead_100TimesSuccessfully)
 {
+	Shell shell(&ssdMock);
 
-}
+	EXPECT_CALL(ssdMock, read)
+		.Times(100);
 
-TEST_F(ShellTest, FullRead_Under100TimesException)
-{
-
+	shell.fullread();
 }
