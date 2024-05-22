@@ -113,3 +113,45 @@ TEST_F(ShellTestFixture, WriteSuccess)
 	EXPECT_CALL(ssdMock, write(_, _)).Times(1);
 	shell.write(VALID_LBA, dataZero);
 }
+
+TEST_F(ShellTestFixture, FullWrite_NotIncludedPrefixException)
+{
+	string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
+	ostringstream redirectedOutput;
+	streambuf* coutBuf;
+
+	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
+	shell.fullwrite("abcd1234");
+	cout.rdbuf(coutBuf);
+
+	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+}
+
+TEST_F(ShellTestFixture, FullWrite_NotAllowedInputDataException)
+{
+	string expected = "[WARNING] Input data has invalid characters !!!\n";
+	ostringstream redirectedOutput;
+	streambuf* coutBuf;
+
+	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
+	shell.fullwrite("0xabcd1234");
+	cout.rdbuf(coutBuf);
+
+	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+}
+
+TEST_F(ShellTestFixture, FullWrite_100TimesSuccessfully)
+{
+	EXPECT_CALL(ssdMock, write(_, _))
+		.Times(100);
+
+	shell.fullwrite("0xABCD1234");
+}
+
+TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
+{
+	EXPECT_CALL(ssdMock, read(_))
+		.Times(100);
+
+	shell.fullread();
+}
