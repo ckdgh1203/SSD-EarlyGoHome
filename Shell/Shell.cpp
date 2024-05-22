@@ -10,7 +10,7 @@ public:
 
 	string read(unsigned int lba)
 	{
-		if (99 < lba) return "Out of Lba";
+		if (verifyLba(lba)) return "Out of Lba";
 		m_ssd->read(static_cast<int>(lba));
 		// read result from result.txt
 		return "0x00000000";
@@ -18,10 +18,20 @@ public:
 
 	void write(unsigned int lba, const string& data)
 	{
-		if (99 < lba) return;
-		if (data.size() != 10) return;
+		if (verifyLba(lba)) return;
+		if (verifyDataFormat(data)) return;
 		m_ssd->write(static_cast<int>(lba), data);
 	}
 private:
 	iSSD* m_ssd{};
+
+	bool verifyLba(unsigned int lba)
+	{
+		return 99 < lba;
+	}
+
+	bool verifyDataFormat(const std::string& data)
+	{
+		return data.size() != 10;
+	}
 };
