@@ -10,8 +10,8 @@ using namespace testing;
 
 class SsdMock
 {
-	MOCK_METHOD(void, Write, (unsigned int, unsigned int), ());
-	MOCK_METHOD(void, Read, (unsigned int), ());
+	MOCK_METHOD(void, Write, (int, string), ());
+	MOCK_METHOD(void, Read, (int), ());
 };
 
 class ShellTest : public Test
