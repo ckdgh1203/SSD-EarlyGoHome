@@ -116,16 +116,28 @@ TEST_F(ShellTestFixture, WriteSuccess)
 
 TEST_F(ShellTestFixture, FullWrite_NotIncludedPrefixException)
 {
-	string inputData = "abcd1234";
+	string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
+	ostringstream redirectedOutput;
+	streambuf* coutBuf;
 
-	EXPECT_THROW(shell.fullwrite(inputData), NotIncludedPrefix);
+	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
+	shell.fullwrite("abcd1234");
+	cout.rdbuf(coutBuf);
+
+	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
 }
 
 TEST_F(ShellTestFixture, FullWrite_NotAllowedInputDataException)
 {
-	string inputData = "0xabcd1234";
+	string expected = "[WARNING] Input data has invalid characters !!!\n";
+	ostringstream redirectedOutput;
+	streambuf* coutBuf;
 
-	EXPECT_THROW(shell.fullwrite(inputData), NotAllowedInputData);
+	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
+	shell.fullwrite("0xabcd1234");
+	cout.rdbuf(coutBuf);
+
+	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
 }
 
 TEST_F(ShellTestFixture, FullWrite_100TimesSuccessfully)

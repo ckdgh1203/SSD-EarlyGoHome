@@ -1,7 +1,6 @@
 #include "../SSD/iSSD.h"
 
 #include <iostream>
-#include <stdexcept>
 
 using namespace std;
 
@@ -20,26 +19,6 @@ public:
 		exit(0);
 	}
 private:
-};
-
-class NotIncludedPrefix : public exception
-{
-public:
-	NotIncludedPrefix()
-		: exception("Prefix '0x' should be included!!!")
-	{
-
-	}
-};
-
-class NotAllowedInputData : public exception
-{
-public:
-	NotAllowedInputData()
-		: exception("InputData should be set to Capital characters or numbers")
-	{
-
-	}
 };
 
 class Shell
@@ -93,8 +72,8 @@ public:
 
 	void fullwrite(const string inputData)
 	{
-		checkInputDataForPrefix(inputData);
-		checkInputDataForInvalid(inputData);
+		if (false == IsInputDataWithPrefix(inputData))	return;
+		if (false == IsInputDataWithValidRange(inputData)) return;
 
 		for (int iter = 0; iter < 100; iter++)
 		{
@@ -124,15 +103,18 @@ private:
 		return data.size() != 10;
 	}
 
-	void checkInputDataForPrefix(const std::string& inputData)
+	bool IsInputDataWithPrefix(const std::string& inputData)
 	{
 		if (inputData[0] != '0' || inputData[1] != 'x')
 		{
-			throw NotIncludedPrefix();
+			cout << "[WARNING] Prefix '0x' was not included in input data !!!" << endl;
+			return false;
 		}
+
+		return true;
 	}
 
-	void checkInputDataForInvalid(const std::string& inputData)
+	bool IsInputDataWithValidRange(const std::string& inputData)
 	{
 		for (int index = 2; index < inputData.length(); index++)
 		{
@@ -141,7 +123,10 @@ private:
 				continue;
 			}
 
-			throw NotAllowedInputData();
+			cout << "[WARNING] Input data has invalid characters !!!" << endl;
+			return false;
 		}
+
+		return true;
 	}
 };
