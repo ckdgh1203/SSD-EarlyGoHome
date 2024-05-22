@@ -33,13 +33,16 @@ public:
 
 	}
 
-	void fullwrite(const string inputData)
+	void checkInputDataForPrefix(const std::string& inputData)
 	{
 		if (inputData[0] != '0' || inputData[1] != 'x')
 		{
 			throw NotIncludedPrefix();
 		}
+	}
 
+	void checkInputDataForInvalid(const std::string& inputData)
+	{
 		for (int index = 2; index < inputData.length(); index++)
 		{
 			if (('A' <= inputData[index] && inputData[index] <= 'Z') || ('0' <= inputData[index] && inputData[index] <= '9'))
@@ -49,6 +52,12 @@ public:
 
 			throw NotAllowedInputData();
 		}
+	}
+
+	void fullwrite(const string inputData)
+	{
+		checkInputDataForPrefix(inputData);
+		checkInputDataForInvalid(inputData);
 
 		for (int iter = 0; iter < 100; iter++)
 		{
