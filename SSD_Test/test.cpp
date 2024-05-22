@@ -4,14 +4,42 @@
 #include <vector>
 #include <filesystem>
 #include <fstream>
-#include "../SSD/iSSD.h"
+#include "../SSD/iFile.h"
+#include "../SSD/File.cpp"
 
 using namespace std;
 using namespace testing;
 
-class MockSSD : public iSSD
+class MockFile : public iFile
 {
 public:
-	MOCK_METHOD(void, read, (int), (override));
-	MOCK_METHOD(void, write, (int, string), (override));
+	MOCK_METHOD(void, readFromNANDTxt, (int), (override));
+	MOCK_METHOD(void, writeToNANDTxt, (int, string), (override));
+	MOCK_METHOD(void, readFromResultTxt, (int), (override));
+	MOCK_METHOD(void, writeToResultTxt, (int, string), (override));
 };
+
+TEST(SSD_Test, LBA0_Read_Data_0x0000_0000_Success)
+{
+
+}
+
+TEST(SSD_Test, LBA100_Read_Fail)
+{
+
+}
+
+TEST(SSD_Test, LBA0_Write_Data_0x0000_0000_Success)
+{
+
+}
+
+TEST(SSD_Test, LBA100_Write_Fail)
+{
+
+}
+
+TEST(SSD_Test, LBA0_Write_Data_0x0000_0000_0000_Fail)
+{
+
+}
