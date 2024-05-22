@@ -22,7 +22,7 @@ public:
 class MockFileFixture : public testing::Test
 {
 public:
-	void SetUp()
+	void SetUp() override
 	{
 		ssd = new SSD(&mFile);
 	}
