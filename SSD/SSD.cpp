@@ -6,6 +6,9 @@
 #include "iFile.h"
 #include <iostream>
 using namespace std;
+const int MAX_LBA_RANGE = 100;
+const int MAX_DATA_LENGTH = 10;
+const int START_LBA = 0;
 
 class SSD : public iSSD
 {
@@ -36,7 +39,7 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		for (int currentLBA = 0; currentLBA < 100; currentLBA++)
+		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
 		{
 			m_file->writeToNANDTxt(currentLBA, buf[currentLBA]);
 		}
@@ -46,7 +49,7 @@ public:
 	{
 		vector<string> buf;
 		string targetData;
-		for (int currentLBA = 0; currentLBA < 100; currentLBA++)
+		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
 		{
 			targetData = m_file->readFromNANDTxt(currentLBA);
 			buf.push_back(targetData);
@@ -56,7 +59,7 @@ public:
 
 	bool isInvalidData(const string data)
 	{
-		if (data.length() != 10)
+		if (data.length() != MAX_DATA_LENGTH)
 		{
 			//cout << "Data invalid length! " << endl;
 			return true;;
@@ -68,7 +71,7 @@ public:
 			return true;  
 		}
 
-		for (int i = 2; i < 10; i++)
+		for (int i = 2; i < MAX_DATA_LENGTH; i++)
 		{
 			if (isHexFormat(data[i])) continue;
 			//cout << "Data Hex invalid char! " << endl;
@@ -84,7 +87,7 @@ public:
 
 	bool isInvalidLbaRange(int lba)
 	{
-		if (lba < 0 || lba >= 100)
+		if (lba < START_LBA || lba >= MAX_LBA_RANGE)
 		{
 			//cout << "LBA invalid range! " << endl;
 			return true;
