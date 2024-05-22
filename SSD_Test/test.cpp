@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include "../SSD/iFile.h"
-#include "../SSD/File.cpp"
+#include "../SSD/SSD.cpp"
 
 using namespace std;
 using namespace testing;
@@ -21,7 +21,8 @@ public:
 
 TEST(SSD_Test, LBA0_Read_Data_0x0000_0000_Success)
 {
-
+	MockFile mFile;
+	SSD ssd(&mFile);
 }
 
 TEST(SSD_Test, LBA100_Read_Fail)
