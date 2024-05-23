@@ -9,6 +9,9 @@
 
 using namespace std;
 
+const string NAND_FILE_NAME = "../Data/nand.txt";
+const string RESULT_FILE_NAME = ".. / Data / result.txt";
+
 class SSD : public iSSD
 {
 public:
@@ -18,32 +21,43 @@ public:
 
 	void read(int lba) override
 	{
-		// 0~99 외의 값 예외 처리
-		if (0 > lba || lba >= 100)
+		if (isNotValidLbaRange(lba))
 			return;
 		// throw exception("LBA(Logical Block Address)는 0에서 99까지의 수 이어야 합니다.");
 		
-		// nand.txt 파일 읽기
-		string filename = "../Data/nand.txt";
-		ifstream inputFile(filename);
+		vector<string> nandTxt;
+		for (int i = 0; i < 100; i++)
+		{
+			nandTxt.push_back(m_file->readFromNANDTxt(i));
+		}
+		// bool isReadFromNANDFlag = m_file->readFromNANDTxt(nandTxt);
 
-		if(!inputFile.is_open())
-			throw exception("파일을 정상적으로 열 수 없습니다.");
+		/* readFromNANDTxt 구현부
+		ifstream inputFile(NAND_FILE_NAME);
 
-		int i = 0;
+		if (!inputFile.is_open())
+			return;
+		// throw exception("파일을 정상적으로 열 수 없습니다.");
+
+		int lineNum = 0;
 		string line;
-		string ret;
+		string lbaLine;
+
 		while (getline(inputFile, line))
 		{
-			if (i == lba)
-				ret = line;
-			i++;
+			if (lineNum == lba)
+				lbaLine = line;
+			lineNum++;
 		}
 		
 		inputFile.close();
+		*/
 
+		m_file->writeToResultTxt(nandTxt[lba]);
+
+		/* writeToResultTxt 구현부
 		// result.txt 파일에 저장
-		ofstream outputFile("../Data/nand.txt");
+		ofstream outputFile(RESULT_FILE_NAME);
 
 		if (!outputFile)
 			throw exception("파일을 정상적으로 열 수 없습니다.");
@@ -51,9 +65,14 @@ public:
 		outputFile << ret << std::endl;
 		
 		outputFile.close();
-
-		// m_file->writeToResultTxt(lba, m_file->readFromNANDTxt(lba));
+		*/
 	}
+
+	bool isNotValidLbaRange(int lba)
+	{
+		return 0 > lba || lba >= 100;
+	}
+
 	void write(int lba, string data) override
 	{
 		m_file->readFromNANDTxt(lba);
