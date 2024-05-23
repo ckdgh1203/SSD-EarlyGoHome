@@ -7,7 +7,7 @@
 #include "FullWrite.cpp"
 #include "Help.cpp"
 #include "Exit.cpp"
-
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -29,7 +29,7 @@ public:
 	CommandHandler* create(const string& commandStr)
 	{
 		CommandEnum commandEnum = stringToCommandEnum(commandStr);
-
+		cout << "commandStr : " << commandStr << endl;
 		switch (commandEnum)
 		{
 		case CommandEnum::READ:
@@ -51,17 +51,17 @@ public:
 private:
 	CommandEnum stringToCommandEnum(const string& commandStr)
 	{
-		if (commandStr == "READ")
+		if (commandStr == "read")
 			return CommandEnum::READ;
-		if (commandStr == "WRITE")
+		if (commandStr == "write")
 			return CommandEnum::WRITE;
-		if (commandStr == "FULLREAD")
+		if (commandStr == "fullread")
 			return CommandEnum::FULLREAD;
-		if (commandStr == "FULLWRITE")
+		if (commandStr == "fullwrite")
 			return CommandEnum::FULLWRITE;
-		if (commandStr == "HELP")
+		if (commandStr == "help")
 			return CommandEnum::HELP;
-		if (commandStr == "EXIT")
+		if (commandStr == "exit")
 			return CommandEnum::EXIT;
 		return CommandEnum::NUMOFCOMMAND;
 	}

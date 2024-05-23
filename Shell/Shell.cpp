@@ -3,11 +3,12 @@
 #include "SsdExcutable.h"
 #include "SsdResult.h"
 #include "CommandHandler.cpp"
+#include "CommandFactory.cpp"
 #include "Exit.cpp"
 
 #include <iostream>
 #include <sstream>
-#include "CommandFactory.cpp"
+#include <vector>
 
 using namespace std;
 
@@ -55,34 +56,32 @@ public:
 
         while (true)
         {
-            m_outputStream << "\nshelasdl> ";
-            getline(inputStream, userInput);
-            m_outputStream << userInput << endl;
-            if (userInput.find("read") == 0)
-            {
-                commandHandler = commandFactory.create("read");
-            }
-            if (userInput.find("write") == 0)
-            {
-                commandHandler = commandFactory.create("write");
-            }
-            if (userInput.find("fullread") == 0)
-            {
-                commandHandler = commandFactory.create("fullread");
-            }
-            if (userInput.find("fullwrite") == 0)
-            {
-                commandHandler = commandFactory.create("fullwrite");
-            }
-            if (userInput == "help")
-            {
-                commandHandler = commandFactory.create("help");
-            }
-            if (userInput == "exit") 
-            {
-                commandHandler = commandFactory.create("exit");
-            }
+            m_outputStream << "\nshell> ";
 
+            vector<string> args{};
+            parseArguments(inputStream, args);
+
+            commandHandler = commandFactory.create(args[0]);
+            if (commandHandler == nullptr)
+            {
+                m_outputStream << "\nINVALID COMMAND";
+            }
+            else
+            {
+                m_outputStream << "\nGood";
+            }
+        }
+    }
+
+    void parseArguments(istream& inputStream, vector<string>& args)
+    {
+        string userInput;
+        getline(inputStream, userInput);
+        stringstream ss(userInput);
+        string argument;
+        while (getline(ss, argument, ' '))
+        {
+            args.push_back(argument);
         }
     }
 
@@ -93,7 +92,8 @@ public:
             m_outputStream << "Out of Lba";
             return;
         }
-        m_ssdExcutable->execute("R 3\n");
+        string arguments = "R " + to_string(lba) + "\n";
+        m_ssdExcutable->execute(arguments);
         m_outputStream << m_ssdResult->get();
     }
 
