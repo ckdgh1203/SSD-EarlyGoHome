@@ -69,6 +69,12 @@ protected:
         EXPECT_THAT(fetchOutput(), expected);
     }
 
+    void runAndExpect(string& input, string& expected)
+    {
+        shell.run(istringstream(input));
+        EXPECT_EQ(expected, fetchOutput());
+    }
+
 private:
     ostringstream redirectedOutput{};
 };
@@ -171,22 +177,47 @@ TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
 
 TEST_F(ShellTestFixture, RunAndExit)
 {
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-    istringstream userInput("exit\n");
-
-    shell.run(userInput);
-    EXPECT_EQ("\nshell> exit\nTestable Exit\n", fetchOutput());
+    constexpr int NUMBER_OF_OPERATION = 0;
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
+    EXPECT_CALL(ssdResultMock, get()).Times(NUMBER_OF_OPERATION);
+    string inputString = "exit\n";
+    string expected = "\nshell> "
+        "Testable Exit\n";
+    runAndExpect(inputString, expected);
 }
 
 TEST_F(ShellTestFixture, RunAndRead)
 {
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
-    EXPECT_CALL(ssdResultMock, get()).WillOnce(Return(dataZero));
-    istringstream userInput("read 3\nexit\n");
+    constexpr int NUMBER_OF_OPERATION = 2;
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
+    EXPECT_CALL(ssdResultMock, get())
+        .Times(NUMBER_OF_OPERATION)
+        .WillRepeatedly(Return(dataZero));
+    string inputString = "read 3\n"
+        "read 99\n"
+        "exit\n";
+    string expected = "\nshell> "
+        "0x00000000"
+        "\nshell> "
+        "0x00000000"
+        "\nshell> "
+        "Testable Exit\n";
+    runAndExpect(inputString, expected);
+}
 
-    shell.run(userInput);
-
-    EXPECT_EQ("\nshell> read 3\n0x00000000\nshell> exit\nTestable Exit\n", fetchOutput());
+TEST_F(ShellTestFixture, RunAndWrite)
+{
+    constexpr int NUMBER_OF_OPERATION = 2;
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
+    EXPECT_CALL(ssdResultMock, get()).Times(0);
+    string inputString = "write 3 0x12345678\n"
+        "write 99 0x12345678\n"
+        "exit\n";
+    string expected = "\nshell> "
+        "\nshell> "
+        "\nshell> "
+        "Testable Exit\n";
+    runAndExpect(inputString, expected);
 }
 
 TEST_F(ShellTestFixture, TestApp1FailureCase)

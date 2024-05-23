@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -61,23 +62,39 @@ public:
 
     void run(istream& inputStream)
     {
-        string userInput;
         while (true)
         {
             m_outputStream << "\nshell> ";
 
-            getline(inputStream, userInput);
-            m_outputStream << userInput << endl;
-            if (userInput == "exit")
+            vector<string> args{};
+            parseArguments(inputStream, args);
+
+            if (args[0] == "exit")
             {
                 exit();
                 return;
             }
 
-            if (userInput.find("read") == 0)
+            if (args[0] == "read")
             {
-                read(3);
+                read(stoi(args[1]));
             }
+            else if (args[0] == "write")
+            {
+                write(stoi(args[1]), args[2]);
+            }
+        }
+    }
+
+    void parseArguments(istream& inputStream, vector<string>& args)
+    {
+        string userInput;
+        getline(inputStream, userInput);
+        stringstream ss(userInput);
+        string argument;
+        while (getline(ss, argument, ' '))
+        {
+            args.push_back(argument);
         }
     }
 
@@ -88,7 +105,8 @@ public:
             m_outputStream << "Out of Lba";
             return;
         }
-        m_ssdExcutable->execute("R 3\n");
+        string arguments = "R " + to_string(lba) + "\n";
+        m_ssdExcutable->execute(arguments);
         m_outputStream << m_ssdResult->get();
     }
 
