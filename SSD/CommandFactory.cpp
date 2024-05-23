@@ -9,13 +9,13 @@ public:
 		static CommandFactory instance{};
 		return instance;
 	}
-	Command* createCommand(iFile* m_file, int lba)
+	Command* createCommand(iFile* file, int lba)
 	{
-		return new ReadCommand{m_file, lba };
+		return new ReadCommand{file, lba };
 	}
-	Command* createCommand(iFile* m_file, int lba, string data)
+	Command* createCommand(iFile* file, int lba, string data)
 	{
-		return new WriteCommand{m_file, lba, data };
+		return new WriteCommand{file, lba, data };
 	}
 
 private:
