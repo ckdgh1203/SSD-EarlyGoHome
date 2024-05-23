@@ -53,7 +53,7 @@ public:
 		inputFile.close();
 		*/
 
-		m_file->writeToResultTxt(nandTxt[lba]);
+		m_file->writeToResultTxt(0, nandTxt[lba]);
 
 		/* writeToResultTxt 구현부
 		// result.txt 파일에 저장
