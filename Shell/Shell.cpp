@@ -125,7 +125,16 @@ public:
 	{
 		fullwrite("0xDEADC0DE");
 		fullread();
-		cout << "[WARNING] testapp1 : written data is different with read data!!!" << endl;
+
+		bool isDifferentData = true;
+
+		if (isDifferentData)
+		{
+			m_outputStream << "[WARNING] testapp1 : written data is different with read data!!!" << endl;
+			return;
+		}
+
+		m_outputStream << "testapp1 : Done test, written data is same with read data :)" << endl;
 	}
 
 private:
