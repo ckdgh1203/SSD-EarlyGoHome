@@ -19,9 +19,9 @@ const string RESULT_FILE_NAME = "../Data/result.txt";
 class SSD : public iSSD
 {
 public:
-	SSD(iFile* iFile) : m_file(iFile)
-	{
-	}
+	SSD(iFile* m_file, Command* command)
+		: m_file(m_file), command(command)
+	{}
 
 	void read(int lba) override
 	{
@@ -154,4 +154,5 @@ public:
 private:
 	iFile* m_file;
 	Command* command;
+
 };

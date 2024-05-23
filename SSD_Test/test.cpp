@@ -24,9 +24,9 @@ class MockFileFixture : public testing::Test
 public:
 	void SetUp() override
 	{
-		ssd = new SSD(&mFile);
+		ssd = new SSD(&mFile, &wCmd);
 	}
-
+	WriteCommand wCmd{ 0,"0x00000000" };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
