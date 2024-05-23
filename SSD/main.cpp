@@ -19,15 +19,14 @@ int main(int argc, char* argv[])
 	if (cmd == "R")
 	{
 		ssd.setCommand(commandFactory.createCommand(&file, lba));
-		ssd.executeCommand();
 	}
 	
 	if (cmd == "W")
 	{
 		string data = argv[3];
 		ssd.setCommand(commandFactory.createCommand(&file, lba, data));
-		ssd.executeCommand();
 	}
+	ssd.executeCommand();
 
 	return 0;
 }
