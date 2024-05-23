@@ -19,19 +19,21 @@ private:
 class TestableExitActor : public iExit
 {
 public:
+	TestableExitActor(ostream& _out) : m_outputStream(_out) {}
 	void doExit() override
 	{
-		cout << "Testable Exit" << endl;
+		m_outputStream << "Testable Exit" << endl;
 	}
 private:
+	ostream& m_outputStream;
 };
 
 class ShellTestFixture : public Test
 {
 protected:
 	NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
-	Shell shell{ &ssdExecutableMock };
-	TestableExitActor testableExitActor;
+	Shell shell{ &ssdExecutableMock, redirectedOutput };
+	TestableExitActor testableExitActor{ redirectedOutput };
 
 	static constexpr int INVALID_LBA = 100;
 	static constexpr int VALID_LBA = 99;
@@ -41,46 +43,38 @@ protected:
 	{
 		shell.setExit(&testableExitActor);
 	}
-	void redirectCout(ostringstream& redirectedOutput)
+
+	string fetchOutput(void)
 	{
-		reservedCout = cout.rdbuf(redirectedOutput.rdbuf());
+		auto fetchedString = redirectedOutput.str();
+		redirectedOutput.str("");
+		redirectedOutput.clear();
+		return fetchedString;
 	}
-	void restoreCout(void)
-	{
-		cout.rdbuf(reservedCout);
-	}
-private:
-	streambuf* reservedCout;
+
+	ostringstream redirectedOutput{};
 };
 
 TEST_F(ShellTestFixture, HelpCallTest)
 {
-	ostringstream redirectedOutput;
-	redirectCout(redirectedOutput);
 	shell.help();
-	restoreCout();
+	auto& helpMessage = fetchOutput();
 
-	ostringstream expectedOutput;
-	redirectCout(expectedOutput);
 	shell.helpMessasge();
-	restoreCout();
-
-	EXPECT_EQ(redirectedOutput.str(), expectedOutput.str());
+	auto& expectedMessage = fetchOutput();
+	
+	EXPECT_EQ(expectedMessage, helpMessage);
 }
 
 TEST_F(ShellTestFixture, ExitCallTest)
 {
-	ostringstream redirectedOutput;
-	redirectCout(redirectedOutput);
 	shell.exit();
-	restoreCout();
+	auto& exitMessage = fetchOutput();
 
-	ostringstream expectedOutput;
-	redirectCout(expectedOutput);
 	testableExitActor.doExit();
-	restoreCout();
+	auto& expectedMessage = fetchOutput();
 
-	EXPECT_EQ(redirectedOutput.str(), expectedOutput.str());
+	EXPECT_EQ(exitMessage, expectedMessage);
 }
 
 TEST_F(ShellTestFixture, OutOfLbaRead)
@@ -93,14 +87,11 @@ TEST_F(ShellTestFixture, OutOfLbaRead)
 TEST_F(ShellTestFixture, ReadSuccess)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
-	ostringstream redirectedOutput;
-	redirectCout(redirectedOutput);
 
 	for (int lba = 0; lba < 100; lba++)
 	{
 		EXPECT_EQ("0x00000000", shell.read(lba));
 	}
-	restoreCout();
 }
 
 TEST_F(ShellTestFixture, OutOfLbaWrite)
@@ -113,26 +104,17 @@ TEST_F(ShellTestFixture, InvalidDataFormatWrite)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
 	shell.write(VALID_LBA, "0x0");
+	EXPECT_THAT(fetchOutput(), Eq(""));
+
+	shell.write(VALID_LBA, "abcd123456");
 
 	string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
-	ostringstream redirectedOutput;
-	streambuf* coutBuf;
+	EXPECT_THAT(fetchOutput(), Eq(expected));
 
-	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
-	shell.write(VALID_LBA, "abcd123456");
-	cout.rdbuf(coutBuf);
-
-	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+	shell.write(VALID_LBA, "0xabcd1234");
 
 	expected = "[WARNING] Input data has invalid characters !!!\n";
-	redirectedOutput.str("");
-	redirectedOutput.clear();
-
-	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
-	shell.write(VALID_LBA, "0xabcd1234");
-	cout.rdbuf(coutBuf);
-
-	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+	EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
 TEST_F(ShellTestFixture, WriteSuccess)
@@ -144,27 +126,19 @@ TEST_F(ShellTestFixture, WriteSuccess)
 TEST_F(ShellTestFixture, FullWrite_NotIncludedPrefixException)
 {
 	string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
-	ostringstream redirectedOutput;
-	streambuf* coutBuf;
 
-	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
 	shell.fullwrite("abcd1234");
-	cout.rdbuf(coutBuf);
 
-	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+	EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
 TEST_F(ShellTestFixture, FullWrite_NotAllowedInputDataException)
 {
 	string expected = "[WARNING] Input data has invalid characters !!!\n";
-	ostringstream redirectedOutput;
-	streambuf* coutBuf;
 
-	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
 	shell.fullwrite("0xabcd1234");
-	cout.rdbuf(coutBuf);
 
-	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+	EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
 TEST_F(ShellTestFixture, FullWrite_100TimesSuccessfully)

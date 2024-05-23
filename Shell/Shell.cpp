@@ -27,17 +27,19 @@ class Shell
 {
 public:
 
-	Shell(void) 
+	Shell(void) : m_outputStream(cout)
 	{
 		_exit = new Exit();
 	}
 
-	Shell(iSSD* ssd) : m_ssd(ssd)
+	Shell(iSSD* ssd) : m_ssd(ssd), m_outputStream(cout)
 	{
 		_exit = new Exit();
 	}
 
-	Shell(ISsdExecutable* executable) : m_ssdExcutable(executable)
+	Shell(ISsdExecutable* executable, ostream& _out) :
+		m_ssdExcutable(executable),
+		m_outputStream(_out)
 	{
 		_exit = new Exit();
 	}
@@ -48,7 +50,7 @@ public:
 
 	void helpMessasge()
 	{
-		cout << "This is Help Message" << endl;
+		m_outputStream << "This is Help Message" << endl;
 	}
 
 	void exit()
@@ -66,9 +68,9 @@ public:
 		string userInput;
 		while (true)
 		{
-			cout << "shell> ";
+			m_outputStream << "shell> ";
 			getline(inputStream, userInput);
-			cout << userInput << endl;
+			m_outputStream << userInput << endl;
 			if (userInput == "exit")
 			{
 				exit();
@@ -123,6 +125,7 @@ private:
 	iSSD* m_ssd{};
 	iExit* _exit;
 	ISsdExecutable* m_ssdExcutable{};
+	ostream& m_outputStream;
 
 	bool verifyLba(unsigned int lba)
 	{
@@ -138,7 +141,7 @@ private:
 	{
 		if (inputData[0] != '0' || inputData[1] != 'x')
 		{
-			cout << "[WARNING] Prefix '0x' was not included in input data !!!" << endl;
+			m_outputStream << "[WARNING] Prefix '0x' was not included in input data !!!" << endl;
 			return false;
 		}
 
@@ -154,7 +157,7 @@ private:
 				continue;
 			}
 
-			cout << "[WARNING] Input data has invalid characters !!!" << endl;
+			m_outputStream << "[WARNING] Input data has invalid characters !!!" << endl;
 			return false;
 		}
 
