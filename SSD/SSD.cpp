@@ -7,11 +7,9 @@
 #include "iSSD.h"
 #include "iFile.h"
 #include <iostream>
-#include "Command.cpp"
+#include "CommandFactory.cpp"
 using namespace std;
 
-
-//class SSD : public iSSD
 class SSD
 {
 public:

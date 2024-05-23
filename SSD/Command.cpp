@@ -4,9 +4,6 @@
 #include "iSSD.h"
 #include "iFile.h"
 using namespace std;
-const int MAX_LBA_RANGE = 100;
-const int MAX_DATA_LENGTH = 10;
-const int START_LBA = 0;
 
 class Command
 {
@@ -18,6 +15,9 @@ protected:
 	{
 		return ((START_LBA > lba) || (lba >= MAX_LBA_RANGE));
 	}
+	const int MAX_LBA_RANGE = 100;
+	const int MAX_DATA_LENGTH = 10;
+	const int START_LBA = 0;
 };
 
 class WriteCommand : public Command
@@ -29,7 +29,7 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		cout << "WriteCommadn execute() " << endl;
+		cout << "WriteCommand execute() " << endl;
 		//Write 함수 여기로 이동시키기
 		if (isInvalidLbaRange(lba) || isInvalidData(data))
 		{
@@ -105,7 +105,7 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		cout << "ReadCommadn execute() " << endl;
+		cout << "ReadCommand execute() " << endl;
 		//Read 함수를 여기로 이동시키기
 		if (isInvalidLbaRange(lba))
 			return;

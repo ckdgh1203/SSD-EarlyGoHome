@@ -10,6 +10,7 @@ int main(int argc, char* argv[])
 	if (argc < 2 || argc > 4)
 		return 0;
 
+	CommandFactory& commandFactory = CommandFactory::getInstance();
 	SSDFile file;
 	SSD ssd{};
 	string cmd = argv[1];
@@ -17,18 +18,15 @@ int main(int argc, char* argv[])
 
 	if (cmd == "R")
 	{
-		ReadCommand rCmd{&file, lba };
-		ssd.setCommand(&rCmd);
-		ssd.executeCommand();
+		ssd.setCommand(commandFactory.createCommand(&file, lba));
 	}
 	
 	if (cmd == "W")
 	{
 		string data = argv[3];
-		WriteCommand wCmd{ &file, lba, data };
-		ssd.setCommand(&wCmd);
-		ssd.executeCommand();
+		ssd.setCommand(commandFactory.createCommand(&file, lba, data));
 	}
+	ssd.executeCommand();
 
 	return 0;
 }
