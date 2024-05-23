@@ -27,7 +27,7 @@ public:
 		ssd = new SSD(&mFile);
 	}
 
-	MockFile mFile;
+	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
 
@@ -53,9 +53,9 @@ TEST_F(MockFileFixture, LBA100_Read_Fail)
 
 TEST_F(MockFileFixture, LBA0_Write_Data_0x1234_5678_Success)
 {
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
-	EXPECT_CALL(mFile, writeToNANDTxt(0, "0x12345678"))
+	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(100);
 
 	ssd->write(0, "0x12345678");
@@ -63,19 +63,19 @@ TEST_F(MockFileFixture, LBA0_Write_Data_0x1234_5678_Success)
 
 TEST_F(MockFileFixture, LBA100_Write_Fail)
 {
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
-	EXPECT_CALL(mFile, writeToNANDTxt(0, "0x12345678"))
+	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
 
-	ssd->write(0, "0x12345678");
+	ssd->write(100, "0x12345678");
 }
 
 TEST_F(MockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
 {
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
-	EXPECT_CALL(mFile, writeToNANDTxt(0, "0x000000000000"))
+	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
 
 	ssd->write(0, "0x000000000000");
