@@ -48,7 +48,7 @@ public:
     {
         while (true)
         {
-            m_outputStream << "\nshell> ";
+            m_outputStream << "shell> ";
 
             vector<string> args{};
             parseArguments(inputStream, args);
@@ -101,9 +101,9 @@ public:
             m_outputStream << "Out of Lba";
             return;
         }
-        string arguments = "R " + to_string(lba) + "\n";
+        string arguments = "R " + to_string(lba);
         m_ssdExcutable->execute(arguments);
-        m_outputStream << m_ssdResult->get();
+        m_outputStream << m_ssdResult->get() << endl;
     }
 
     void write(unsigned int lba, const string& inputData)
@@ -132,7 +132,6 @@ public:
         for (int iter = 0; iter < 100; iter++)
         {
             read(iter);
-            m_outputStream << "\n";
         }
     }
 
@@ -141,7 +140,7 @@ public:
 		fullwrite("0xDEADC0DE");
 		fullread();
 
-		bool isCompareSuccess = readCompare();
+		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
 
 		if (false == isCompareSuccess)
 		{
@@ -152,27 +151,34 @@ public:
 		m_outputStream << "testapp1 : Done test, written data is same with read data :)" << endl;
 	}
 
-    bool readCompare()
+    void doTestApp2()
     {
-        string referenceData = "";
-        for (int iter = 0; iter < 100; iter++)
+        unsigned int lbaBound = 6;
+
+        for (int i = 0; i < 30; i++)
         {
-            referenceData += "0xDEADC0DE\n";
+            writeRepeatedly("0xAAAABBBB", lbaBound);
         }
 
-        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
-        string readData = redirectedOutput->str();
-        redirectedOutput->str("");
-        redirectedOutput->clear();
+        writeRepeatedly("0x12345678", lbaBound);
+        readRepeatedly(lbaBound);
 
-        return (referenceData == readData);
+        bool isCompareSuccess = readCompare("0x12345678", lbaBound);
+
+        if (false == isCompareSuccess)
+        {
+            m_outputStream << "[WARNING] testapp2 : written data is different with read data!!!" << endl;
+            return;
+        }
+        m_outputStream << "testapp2 : Done test, written data is same with read data :)" << endl;
     }
+
 protected:
     const string m_helpMessage = "Help:\n"
         "\tread [LBA]\n"
         "\twrite [LBA] [DATA]\n"
         "\tfullread\n"
-        "\tfullwrite [DATA]";
+        "\tfullwrite [DATA]\n";
 
 private:
     iExit* _exit;
@@ -219,5 +225,37 @@ private:
         }
 
         return true;
+    }
+
+    bool readCompare(const string& inputData, unsigned int lbaBound)
+    {
+        string referenceData = "";
+        for (int iter = 0; iter < lbaBound; iter++)
+        {
+            referenceData += inputData + "\n";
+        }
+
+        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
+        string readData = redirectedOutput->str();
+        redirectedOutput->str("");
+        redirectedOutput->clear();
+
+        return (referenceData == readData);
+    }
+
+    void readRepeatedly(const int lbaBound)
+    {
+        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        {
+            read(lbaIter);
+        }
+    }
+
+    void writeRepeatedly(const string& inputData, const int lbaBound)
+    {
+        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        {
+            write(lbaIter, inputData);
+        }
     }
 };

@@ -104,7 +104,7 @@ TEST_F(ShellTestFixture, ReadSuccess)
     for (int lba = 0; lba < 100; lba++)
     {
         shell.read(lba);
-        EXPECT_EQ(dataZero, fetchOutput());
+        EXPECT_EQ(dataZero + "\n", fetchOutput());
     }
 }
 
@@ -167,7 +167,7 @@ TEST_F(ShellTestFixture, RunAndExit)
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
     EXPECT_CALL(ssdResultMock, get()).Times(NUMBER_OF_OPERATION);
     string inputString = "exit\n";
-    string expected = "\nshell> "
+    string expected = "shell> "
         "Testable Exit\n";
     runAndExpect(inputString, expected);
 }
@@ -182,7 +182,7 @@ TEST_F(ShellTestFixture, RunAndRead)
     string inputString = "read 3\n"
         "read 99\n"
         "exit\n";
-    string expected = "\nshell> "
+    string expected = "shell> "
         "0x00000000"
         "\nshell> "
         "0x00000000"
@@ -199,9 +199,7 @@ TEST_F(ShellTestFixture, RunAndWrite)
     string inputString = "write 3 0x12345678\n"
         "write 99 0x12345678\n"
         "exit\n";
-    string expected = "\nshell> "
-        "\nshell> "
-        "\nshell> "
+    string expected = "shell> " "shell> " "shell> "
         "Testable Exit\n";
     runAndExpect(inputString, expected);
 }
@@ -216,12 +214,12 @@ TEST_F(ShellTestFixture, RunAndFullRead)
     string inputString = "fullread\n"
         "exit\n";
 
-    string expected = "\nshell> ";
+    string expected = "shell> ";
     for (int i = 0; i < NUMBER_OF_OPERATION; i++)
     {
         expected += "0x00000000\n";
     }
-    expected += "\nshell> " "Testable Exit\n";
+    expected += "shell> " "Testable Exit\n";
     runAndExpect(inputString, expected);
 }
 
@@ -233,7 +231,7 @@ TEST_F(ShellTestFixture, RunAndFullWrite)
     string inputString = "fullwrite 0xDEADBEEF\n"
         "exit\n";
 
-    string expected = "\nshell> " "\nshell> " "Testable Exit\n";
+    string expected = "shell> " "shell> " "Testable Exit\n";
     runAndExpect(inputString, expected);
 }
 
@@ -245,13 +243,13 @@ TEST_F(ShellTestFixture, RunAndHelp)
     string inputString = "help\n"
         "exit\n";
 
-    string expected = "\nshell> "
+    string expected = "shell> "
         "Help:\n"
         "\tread [LBA]\n"
         "\twrite [LBA] [DATA]\n"
         "\tfullread\n"
-        "\tfullwrite [DATA]"
-        "\nshell> " "Testable Exit\n";
+        "\tfullwrite [DATA]\n"
+        "shell> " "Testable Exit\n";
 
     runAndExpect(inputString, expected);
 }
@@ -280,6 +278,30 @@ TEST_F(ShellTestFixture, TestApp1SuccessCase)
     EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return(testData));
 
     shell.doTestApp1();
+
+    EXPECT_THAT(fetchOutput(), Eq(expected));
+}
+
+TEST_F(ShellTestFixture, TestApp2FailureCase)
+{
+    string expected = "[WARNING] testapp2 : written data is different with read data!!!\n";
+
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(192);
+    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0xAAAABBBB"));
+
+    shell.doTestApp2();
+
+    EXPECT_THAT(fetchOutput(), Eq(expected));
+}
+
+TEST_F(ShellTestFixture, TestApp2SuccessCase)
+{
+    string expected = "testapp2 : Done test, written data is same with read data :)\n";
+
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(192);
+    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0x12345678"));
+
+    shell.doTestApp2();
 
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
