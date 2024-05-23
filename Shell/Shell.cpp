@@ -126,8 +126,21 @@ public:
 		fullwrite("0xDEADC0DE");
 		fullread();
 
+		bool isCompareSuccess = readCompare();
+
+		if (false == isCompareSuccess)
+		{
+			m_outputStream << "[WARNING] testapp1 : written data is different with read data!!!" << endl;
+			return;
+		}
+
+		m_outputStream << "testapp1 : Done test, written data is same with read data :)" << endl;
+	}
+
+    bool readCompare()
+    {
         string referenceData = "";
-        for (int i = 0; i < 100; i++)
+        for (int iter = 0; iter < 100; iter++)
         {
             referenceData += "0xDEADC0DE";
         }
@@ -137,16 +150,8 @@ public:
         redirectedOutput->str("");
         redirectedOutput->clear();
 
-		bool isDifferentData = (referenceData != readData);
-
-		if (isDifferentData)
-		{
-			m_outputStream << "[WARNING] testapp1 : written data is different with read data!!!" << endl;
-			return;
-		}
-
-		m_outputStream << "testapp1 : Done test, written data is same with read data :)" << endl;
-	}
+        return (referenceData == readData);
+    }
 
 private:
     iExit* _exit;

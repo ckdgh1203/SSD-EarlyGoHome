@@ -47,6 +47,7 @@ protected:
     static constexpr int INVALID_LBA = 100;
     static constexpr int VALID_LBA = 99;
     const string dataZero = "0x00000000";
+    const string testData = "0xDEADC0DE";
 
     void SetUp(void) override
     {
@@ -194,9 +195,9 @@ TEST_F(ShellTestFixture, TestApp1FailureCase)
 
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
     EXPECT_CALL(ssdResultMock, get())
-        .WillOnce(Return("0xDEADC0DE"))
-        .WillOnce(Return("0xDEADC0DE"))
-        .WillOnce(Return("0xDEADC0DE"))
+        .WillOnce(Return(testData))
+        .WillOnce(Return(testData))
+        .WillOnce(Return(testData))
         .WillRepeatedly(Return(dataZero));
 
     shell.doTestApp1();
@@ -209,7 +210,7 @@ TEST_F(ShellTestFixture, TestApp1SuccessCase)
     string expected = "testapp1 : Done test, written data is same with read data :)\n";
 
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
-    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0xDEADC0DE"));
+    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return(testData));
 
     shell.doTestApp1();
 
