@@ -116,7 +116,7 @@ public:
 			nandTxt.push_back(m_file->readFromNANDTxt(i));
 		}
 
-		m_file->writeToResultTxt(0, nandTxt[lba]);
+		m_file->writeToResultTxt(nandTxt[lba]);
 	}
 
 private:

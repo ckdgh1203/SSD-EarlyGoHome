@@ -65,8 +65,19 @@ public:
 		return ret;
 	}
 
-	void writeToResultTxt(int lba, string data) override
-	{}
+	void writeToResultTxt(string data) override
+	{
+		ofstream file(RESULT_FILE);
+		if (!file.is_open())
+		{
+			cout << "write file open fail" << endl;
+			return;
+		}
+
+		file << data << endl;
+
+		file.close();
+	}
 
 private:
 	void getLBAData(int lba, ifstream& file, string& ret)
