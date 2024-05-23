@@ -90,22 +90,24 @@ public:
 		return "0x00000000";
 	}
 
-	void write(unsigned int lba, const string& data)
+	void write(unsigned int lba, const string& inputData)
 	{
 		if (verifyLba(lba)) return;
-		if (verifyDataFormat(data)) return;
-		string arguments = "W " + to_string(lba) + " " + data + "\n";
-		m_ssdExcutable->execute(arguments);
-	}
-
-	void fullwrite(const string inputData)
-	{
+		if (verifyDataFormat(inputData)) return;
 		if (false == IsInputDataWithPrefix(inputData))	return;
 		if (false == IsInputDataWithValidRange(inputData)) return;
 
+		string arguments = "W " + to_string(lba) + " " + inputData + "\n";
+		m_ssdExcutable->execute(arguments);
+	}
+
+	void fullwrite(const string& inputData)
+	{
+		if (false == IsInputDataWithPrefix(inputData))	return;
+		if (false == IsInputDataWithValidRange(inputData)) return;
 		for (int iter = 0; iter < 100; iter++)
 		{
-			m_ssd->write(iter, inputData);
+			write(iter, inputData);
 		}
 	}
 
@@ -113,7 +115,7 @@ public:
 	{
 		for (int iter = 0; iter < 100; iter++)
 		{
-			m_ssd->read(iter);
+			read(iter);
 		}
 	}
 
