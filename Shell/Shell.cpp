@@ -83,6 +83,10 @@ public:
             {
                 write(stoi(args[1]), args[2]);
             }
+            else if (args[0] == "fullread")
+            {
+                fullread();
+            }
         }
     }
 
@@ -136,6 +140,7 @@ public:
         for (int iter = 0; iter < 100; iter++)
         {
             read(iter);
+            m_outputStream << "\n";
         }
     }
 
@@ -160,7 +165,7 @@ public:
         string referenceData = "";
         for (int iter = 0; iter < 100; iter++)
         {
-            referenceData += "0xDEADC0DE";
+            referenceData += "0xDEADC0DE\n";
         }
 
         ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);

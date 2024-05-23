@@ -220,6 +220,25 @@ TEST_F(ShellTestFixture, RunAndWrite)
     runAndExpect(inputString, expected);
 }
 
+TEST_F(ShellTestFixture, RunAndFullRead)
+{
+    constexpr int NUMBER_OF_OPERATION = 100;
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
+    EXPECT_CALL(ssdResultMock, get())
+        .Times(NUMBER_OF_OPERATION)
+        .WillRepeatedly(Return(dataZero));
+    string inputString = "fullread\n"
+        "exit\n";
+
+    string expected = "\nshell> ";
+    for (int i = 0; i < NUMBER_OF_OPERATION; i++)
+    {
+        expected += "0x00000000\n";
+    }
+    expected += "\nshell> " "Testable Exit\n";
+    runAndExpect(inputString, expected);
+}
+
 TEST_F(ShellTestFixture, TestApp1FailureCase)
 {
     string expected = "[WARNING] testapp1 : written data is different with read data!!!\n";
