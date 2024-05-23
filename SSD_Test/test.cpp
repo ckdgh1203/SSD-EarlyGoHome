@@ -19,7 +19,7 @@ public:
 	MOCK_METHOD(void, writeToResultTxt, (int, string), (override));
 };
 
-class MockFileFixture : public testing::Test
+class WriteMockFileFixture : public testing::Test
 {
 public:
 	void SetUp() override
@@ -31,7 +31,19 @@ public:
 	SSD* ssd;
 };
 
-TEST_F(MockFileFixture, LBA0_Read_Data_Success)
+class ReadMockFileFixture : public testing::Test
+{
+public:
+	void SetUp() override
+	{
+		ssd = new SSD(&mFile, &rCmd);
+	}
+	ReadCommand rCmd{ &mFile, 0};
+	NiceMock<MockFile> mFile;
+	SSD* ssd;
+};
+
+TEST_F(ReadMockFileFixture, LBA0_Read_Data_Success)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
@@ -41,7 +53,7 @@ TEST_F(MockFileFixture, LBA0_Read_Data_Success)
 	ssd->read(0);
 }
 
-TEST_F(MockFileFixture, LBA100_Read_Fail)
+TEST_F(ReadMockFileFixture, LBA100_Read_Fail)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt(0))
 		.Times(0);
@@ -51,7 +63,7 @@ TEST_F(MockFileFixture, LBA100_Read_Fail)
 	ssd->read(100);
 }
 
-TEST_F(MockFileFixture, LBA0_Write_Data_0x1234_5678_Success)
+TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x1234_5678_Success)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
@@ -61,7 +73,7 @@ TEST_F(MockFileFixture, LBA0_Write_Data_0x1234_5678_Success)
 	ssd->write(0, "0x12345678");
 }
 
-TEST_F(MockFileFixture, LBA100_Write_Fail)
+TEST_F(WriteMockFileFixture, LBA100_Write_Fail)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
@@ -71,7 +83,7 @@ TEST_F(MockFileFixture, LBA100_Write_Fail)
 	ssd->write(100, "0x12345678");
 }
 
-TEST_F(MockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
+TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
@@ -99,4 +111,14 @@ TEST(SSD_Test, CommandExecute_Read)
 
 	ssd.executeCommand();
 
+}
+
+TEST(SSD_Test, CommandExecute_ChangeCommand)
+{
+	NiceMock<MockFile> mFile;
+	ReadCommand rCmd{ &mFile, 0 };
+	SSD ssd{ &mFile, &rCmd };
+	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
+	ssd.setCommand(&wCmd);
+	ssd.executeCommand();
 }

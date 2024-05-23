@@ -27,6 +27,11 @@ public:
 	{
 		command->executeCommand();
 	}
+	
+	void setCommand(Command* newCommand)
+	{
+		command = newCommand;
+	}
 
 	void read(int lba) override
 	{
