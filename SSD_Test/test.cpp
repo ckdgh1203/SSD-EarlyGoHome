@@ -123,9 +123,12 @@ TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
 	ssd->executeCommand();
 }
 
-TEST(SSD_Test, CommandExecute_Write)
+TEST_F(WriteMockFileFixture, CommandExecute_Write)
 {
-	NiceMock<MockFile> mFile;
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToNANDTxt)
+		.Times(1);
 	WriteCommand wCmd{&mFile, 0, "0x00000000"};
 	SSD ssd{&wCmd};
 
@@ -133,9 +136,12 @@ TEST(SSD_Test, CommandExecute_Write)
 
 }
 
-TEST(SSD_Test, CommandExecute_Read)
+TEST_F(ReadMockFileFixture, CommandExecute_Read)
 {
-	NiceMock<MockFile> mFile;
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToResultTxt(0, _))
+		.Times(1);
 	ReadCommand rCmd{&mFile, 0};
 	SSD ssd{&rCmd };
 
@@ -143,9 +149,14 @@ TEST(SSD_Test, CommandExecute_Read)
 
 }
 
-TEST(SSD_Test, CommandExecute_ChangeCommand)
+TEST_F(WriteMockFileFixture, CommandExecute_ChangeCommand)
 {
-	NiceMock<MockFile> mFile;
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToNANDTxt)
+		.Times(1);
+	EXPECT_CALL(mFile, writeToResultTxt(0, _))
+		.Times(0);
 	ReadCommand rCmd{ &mFile, 0 };
 	SSD ssd{&rCmd };
 	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
@@ -153,10 +164,13 @@ TEST(SSD_Test, CommandExecute_ChangeCommand)
 	ssd.executeCommand();
 }
 
-TEST(SSD_Test, CommandFactory_CreateWriteCommand)
+TEST_F(WriteMockFileFixture, CommandFactory_CreateWriteCommand)
 {
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToNANDTxt)
+		.Times(1);
 	SSD ssd;
-	NiceMock<MockFile> mFile;
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
 	
@@ -164,10 +178,14 @@ TEST(SSD_Test, CommandFactory_CreateWriteCommand)
 	ssd.executeCommand();
 }
 
-TEST(SSD_Test, CommandFactory_CreateReadCommand)
+TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 {
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToResultTxt(0, _))
+		.Times(1);
 	SSD ssd;
-	NiceMock<MockFile> mFile;
+	
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0);
 
