@@ -2,6 +2,10 @@
 
 #include "CommandHandler.cpp"
 
+#include <iostream>
+
+using namespace std;
+
 class iExit
 {
 public:
@@ -14,11 +18,20 @@ class Exit : public iExit, public CommandHandler
 public:
     Exit() {};
 
-    // CommandHandler을(를) 통해 상속됨
-    bool isValidArgs(string args) override
+    bool isValidArgs(const vector<string>& args) override
     {
-        return true;
+        if (args.size() != 1)
+            return INVALID;
+
+        return VALID;
     }
+
+    void doCommand(const vector<string>& args) override
+    {
+        exit(0);
+    }
+
+    void usage() override {};
 
     ~Exit() {};
 

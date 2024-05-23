@@ -29,7 +29,7 @@ public:
 	CommandHandler* create(const string& commandStr)
 	{
 		CommandEnum commandEnum = stringToCommandEnum(commandStr);
-		cout << "commandStr : " << commandStr << endl;
+
 		switch (commandEnum)
 		{
 		case CommandEnum::READ:
@@ -37,9 +37,9 @@ public:
 		case CommandEnum::WRITE:
 			return new Write();
 		case CommandEnum::FULLREAD:
-			return new FullRead();
+			return new FullRead(new Read());
 		case CommandEnum::FULLWRITE:
-			return new FullWrite();
+			return new FullWrite(new Write());
 		case CommandEnum::HELP:
 			return new Help();
 		case CommandEnum::EXIT:

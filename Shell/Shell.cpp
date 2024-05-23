@@ -65,11 +65,17 @@ public:
             if (commandHandler == nullptr)
             {
                 m_outputStream << "\nINVALID COMMAND";
+                continue;
             }
-            else
+
+            if (!commandHandler->isValidArgs(args))
             {
-                m_outputStream << "\nGood";
+                m_outputStream << "\nINVALID COMMAND";
+                commandHandler->usage();
+                continue;
             }
+
+            commandHandler->doCommand(args);
         }
     }
 

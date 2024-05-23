@@ -2,16 +2,26 @@
 
 #include "CommandHandler.cpp"
 
+#include <iostream>
+
+using namespace std;
+
 class Help : public CommandHandler
 {
 public:
 	Help() {};
 
-	// CommandHandler을(를) 통해 상속됨
-	bool isValidArgs(string args) override
+	bool isValidArgs(const vector<string>& args) override
 	{
-		return true;
+		return VALID;
 	}
+
+	void doCommand(const vector<string>& args) override
+	{
+		cout << "Do Help!!!" << endl;
+	}
+
+	void usage() override {};
 
 	~Help() {};
 private:
