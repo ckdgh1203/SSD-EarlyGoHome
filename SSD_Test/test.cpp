@@ -6,9 +6,12 @@
 #include <fstream>
 #include "../SSD/iFile.h"
 #include "../SSD/SSD.cpp"
+#include "../SSD/File.cpp"
 
 using namespace std;
 using namespace testing;
+
+const int FILE_TEST_NUM = 100;
 
 class MockFile : public iFile
 {
@@ -19,6 +22,11 @@ public:
 	MOCK_METHOD(void, writeToResultTxt, (int, string), (override));
 };
 
+void ValidateFileTest(const string actualValue, const string expectedValue)
+{
+	EXPECT_EQ(actualValue, expectedValue);
+}
+
 class MockFileFixture : public testing::Test
 {
 public:
@@ -27,9 +35,71 @@ public:
 		ssd = new SSD(&mFile);
 	}
 
+	void TearDown() override
+	{
+		for (int i = 0; i < FILE_TEST_NUM; i++)
+		{
+			/*
+			readnand -> 특정 줄 읽어서 비교
+			writenand -> 넣은 줄 읽어서 비교?
+			readresult -> 첫번째 줄 읽어서 비교
+			writeresult -> 넣은 줄 읽어서 비교?
+			*/
+			ValidateFileTest(expected[i], actual[i]);
+		}
+	}
+
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
+
+protected:
+	string expected[FILE_TEST_NUM];
+	string actual[FILE_TEST_NUM];
 };
+
+TEST_F(MockFileFixture, Actual_Read_NAND_Success)
+{
+	SSDFile sFile;
+	SSD* ssd = new SSD(&sFile);
+
+	expected[1] = "0x00000000";
+	actual[1] = "0x00000000";
+}
+
+TEST_F(MockFileFixture, Actual_Read_NAND_Fail)
+{
+
+}
+
+TEST_F(MockFileFixture, Actual_Write_NAND_Success)
+{
+
+}
+
+TEST_F(MockFileFixture, Actual_Write_NAND_Fail)
+{
+
+}
+
+TEST_F(MockFileFixture, Actual_Read_RESULT_Success)
+{
+
+}
+
+TEST_F(MockFileFixture, Actual_Read_RESULT_Fail)
+{
+
+}
+
+TEST_F(MockFileFixture, Actual_Write_RESULT_Success)
+{
+
+}
+
+TEST_F(MockFileFixture, Actual_Write_RESULT_Fail)
+{
+
+}
 
 TEST_F(MockFileFixture, LBA0_Read_Data_Success)
 {
