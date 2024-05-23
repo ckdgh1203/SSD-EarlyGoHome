@@ -15,6 +15,12 @@ class Command
 {
 public:
 	virtual void executeCommand() = 0;
+
+protected:
+	bool isInvalidLbaRange(int lba)
+	{
+		return ((START_LBA > lba) || (lba >= MAX_LBA_RANGE));
+	}
 };
 
 class WriteCommand : public Command
@@ -89,16 +95,6 @@ public:
 		return ('0' <= ch && ch <= '9') || ('A' <= ch && ch <= 'F');
 	}
 
-	bool isInvalidLbaRange(int lba)
-	{
-		if (lba < START_LBA || lba >= MAX_LBA_RANGE)
-		{
-			//cout << "LBA invalid range! " << endl;
-			return true;
-		}
-		return false;
-	}
-
 private:
 	iFile* m_file;
 	int lba;
@@ -117,7 +113,7 @@ public:
 	{
 		cout << "ReadCommadn execute() " << endl;
 		//Read 함수를 여기로 이동시키기
-		if (isNotValidLbaRange(lba))
+		if (isInvalidLbaRange(lba))
 			return;
 
 		vector<string> nandTxt;
@@ -128,10 +124,7 @@ public:
 
 		m_file->writeToResultTxt(0, nandTxt[lba]);
 	}
-	bool isNotValidLbaRange(int lba)
-	{
-		return 0 > lba || lba >= 100;
-	}
+
 private:
 	iFile* m_file;
 	int lba;
