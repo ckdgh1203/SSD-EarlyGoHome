@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\CommandList">
+      <UniqueIdentifier>{8d005933-33cd-4237-a7fd-da172751811a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,15 +24,36 @@
     <ClCompile Include="Shell.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CommandHandler.cpp">
+      <Filter>소스 파일\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="Help.cpp">
+      <Filter>소스 파일\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="Exit.cpp">
+      <Filter>소스 파일\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="Read.cpp">
+      <Filter>소스 파일\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="Write.cpp">
+      <Filter>소스 파일\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="FullWrite.cpp">
+      <Filter>소스 파일\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="FullRead.cpp">
+      <Filter>소스 파일\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SsdResult.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SsdExcutable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Exit.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

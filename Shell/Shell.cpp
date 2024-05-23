@@ -1,6 +1,10 @@
+#pragma once
+
 #include "SsdExcutable.h"
 #include "SsdResult.h"
-#include "Exit.h"
+#include "CommandHandler.cpp"
+#include "CommandFactory.cpp"
+#include "Exit.cpp"
 
 #include <iostream>
 #include <sstream>
@@ -46,6 +50,10 @@ public:
 
     void run(istream& inputStream)
     {
+        string userInput;
+        CommandFactory commandFactory;
+        CommandHandler *commandHandler;
+
         while (true)
         {
             m_outputStream << "shell> ";
@@ -53,32 +61,21 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            if (args[0] == "exit")
+            commandHandler = commandFactory.create(args[0]);
+            if (commandHandler == nullptr)
             {
-                exit();
-                return;
+                m_outputStream << "\nINVALID COMMAND";
+                continue;
             }
 
-            if (args[0] == "read")
+            if (!commandHandler->isValidArgs(args))
             {
-                read(stoi(args[1]));
+                m_outputStream << "\nINVALID COMMAND";
+                commandHandler->usage();
+                continue;
             }
-            else if (args[0] == "write")
-            {
-                write(stoi(args[1]), args[2]);
-            }
-            else if (args[0] == "fullread")
-            {
-                fullread();
-            }
-            else if (args[0] == "fullwrite")
-            {
-                fullwrite(args[1]);
-            }
-            else if (args[0] == "help")
-            {
-                help();
-            }
+
+            commandHandler->doCommand(args);
         }
     }
 
