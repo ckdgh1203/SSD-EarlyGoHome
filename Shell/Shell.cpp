@@ -144,7 +144,7 @@ public:
 		fullwrite("0xDEADC0DE");
 		fullread();
 
-		bool isCompareSuccess = readCompare();
+		bool isCompareSuccess = readCompare(100, "0xDEADC0DE");
 
 		if (false == isCompareSuccess)
 		{
@@ -155,20 +155,40 @@ public:
 		m_outputStream << "testapp1 : Done test, written data is same with read data :)" << endl;
 	}
 
-    bool readCompare()
+    void doTestApp2()
     {
-        string referenceData = "";
-        for (int iter = 0; iter < 100; iter++)
+        for (int i = 0; i < 30; i++)
         {
-            referenceData += "0xDEADC0DE";
+            write(0, "0xAAAABBBB");
+            write(1, "0xAAAABBBB");
+            write(2, "0xAAAABBBB");
+            write(3, "0xAAAABBBB");
+            write(4, "0xAAAABBBB");
+            write(5, "0xAAAABBBB");
         }
 
-        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
-        string readData = redirectedOutput->str();
-        redirectedOutput->str("");
-        redirectedOutput->clear();
+        write(0, "0x12345678");
+        write(1, "0x12345678");
+        write(2, "0x12345678");
+        write(3, "0x12345678");
+        write(4, "0x12345678");
+        write(5, "0x12345678");
+        
+        read(0);
+        read(1);
+        read(2);
+        read(3);
+        read(4);
+        read(5);
 
-        return (referenceData == readData);
+        bool isCompareSuccess = readCompare(6, "0x12345678");
+
+        if (false == isCompareSuccess)
+        {
+            m_outputStream << "[WARNING] testapp2 : written data is different with read data!!!" << endl;
+            return;
+        }
+        m_outputStream << "testapp2 : Done test, written data is same with read data :)" << endl;
     }
 
 private:
@@ -216,5 +236,21 @@ private:
         }
 
         return true;
+    }
+
+    bool readCompare(const int lbaBound, const string& inputData)
+    {
+        string referenceData = "";
+        for (int iter = 0; iter < lbaBound; iter++)
+        {
+            referenceData += inputData;
+        }
+
+        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
+        string readData = redirectedOutput->str();
+        redirectedOutput->str("");
+        redirectedOutput->clear();
+
+        return (referenceData == readData);
     }
 };

@@ -247,3 +247,27 @@ TEST_F(ShellTestFixture, TestApp1SuccessCase)
 
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
+
+TEST_F(ShellTestFixture, TestApp2FailureCase)
+{
+    string expected = "[WARNING] testapp2 : written data is different with read data!!!\n";
+
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(192);
+    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0xAAAABBBB"));
+
+    shell.doTestApp2();
+
+    EXPECT_THAT(fetchOutput(), Eq(expected));
+}
+
+TEST_F(ShellTestFixture, TestApp2SuccessCase)
+{
+    string expected = "testapp2 : Done test, written data is same with read data :)\n";
+
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(192);
+    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0x12345678"));
+
+    shell.doTestApp2();
+
+    EXPECT_THAT(fetchOutput(), Eq(expected));
+}
