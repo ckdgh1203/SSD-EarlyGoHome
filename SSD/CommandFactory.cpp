@@ -11,7 +11,7 @@ public:
 	}
 	Command* createCommand(iFile* file, int lba)
 	{
-		return new ReadCommand{file, lba };
+		return new ReadCommand{file, lba};
 	}
 	Command* createCommand(iFile* file, int lba, string data)
 	{

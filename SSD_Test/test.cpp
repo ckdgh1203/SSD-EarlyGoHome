@@ -153,6 +153,28 @@ TEST(SSD_Test, CommandExecute_ChangeCommand)
 	ssd.executeCommand();
 }
 
+TEST(SSD_Test, CommandFactory_CreateWriteCommand)
+{
+	SSD ssd;
+	NiceMock<MockFile> mFile;
+	CommandFactory& cf = CommandFactory::getInstance();
+	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
+	
+	ssd.setCommand(cmd);
+	ssd.executeCommand();
+}
+
+TEST(SSD_Test, CommandFactory_CreateReadCommand)
+{
+	SSD ssd;
+	NiceMock<MockFile> mFile;
+	CommandFactory& cf = CommandFactory::getInstance();
+	Command* cmd = cf.createCommand(&mFile, 0);
+
+	ssd.setCommand(cmd);
+	ssd.executeCommand();
+}
+
 TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 {
 	expected[0] = "0x00000000";
@@ -171,24 +193,3 @@ TEST_F(FileTestFixture, DISABLED_Actual_Write_NAND_Success)
 	// 2. 테스트 의존성 문제는 데이터 초기화 부분 추가
 }
 
-TEST(SSD_Test, CommandFactory_CreateWriteCommand)
-{
-	SSD ssd;
-	NiceMock<MockFile> mFile;
-	CommandFactory& cf = CommandFactory::getInstance();
-	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
-
-	ssd.setCommand(cmd);
-	ssd.executeCommand();
-}
-
-TEST(SSD_Test, CommandFactory_CreateReadCommand)
-{
-	SSD ssd;
-	NiceMock<MockFile> mFile;
-	CommandFactory& cf = CommandFactory::getInstance();
-	Command* cmd = cf.createCommand(&mFile, 0);
-
-	ssd.setCommand(cmd);
-	ssd.executeCommand();
-}
