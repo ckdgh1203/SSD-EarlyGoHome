@@ -4,19 +4,10 @@
 #include <sstream>
 
 #include "../Shell/Shell.cpp"
-#include "../SSD/iSSD.h"
 #include "../Shell/SsdExcutable.h"
 
 using namespace std;
 using namespace testing;
-
-class SsdMock : public iSSD
-{
-public:
-	MOCK_METHOD(void, write, (int, string), (override));
-	MOCK_METHOD(void, read, (int), (override));
-private:
-};
 
 class SsdExcutalbeMock : public ISsdExecutable
 {
@@ -28,20 +19,21 @@ private:
 class TestableExitActor : public iExit
 {
 public:
+	TestableExitActor(ostream& _out) : m_outputStream(_out) {}
 	void doExit() override
 	{
-		cout << "Testable Exit" << endl;
+		m_outputStream << "Testable Exit" << endl;
 	}
 private:
+	ostream& m_outputStream;
 };
 
 class ShellTestFixture : public Test
 {
 protected:
-	NiceMock<SsdMock> ssdMock{};
 	NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
-	Shell shell{ &ssdExecutableMock };
-	TestableExitActor testableExitActor;
+	Shell shell{ &ssdExecutableMock, redirectedOutput };
+	TestableExitActor testableExitActor{ redirectedOutput };
 
 	static constexpr int INVALID_LBA = 100;
 	static constexpr int VALID_LBA = 99;
@@ -51,47 +43,46 @@ protected:
 	{
 		shell.setExit(&testableExitActor);
 	}
-	void redirectCout(ostringstream& redirectedOutput)
+
+	string fetchOutput(void)
 	{
-		reservedCout = cout.rdbuf(redirectedOutput.rdbuf());
+		auto fetchedString = redirectedOutput.str();
+		redirectedOutput.str("");
+		redirectedOutput.clear();
+		return fetchedString;
 	}
-	void restoreCout(void)
+
+	void writeAndExpect(string input, string expected)
 	{
-		cout.rdbuf(reservedCout);
+		shell.write(VALID_LBA, input);
+
+		EXPECT_THAT(fetchOutput(), expected);
 	}
+
 private:
-	streambuf* reservedCout;
+	ostringstream redirectedOutput{};
 };
 
 TEST_F(ShellTestFixture, HelpCallTest)
 {
-	ostringstream redirectedOutput;
-	redirectCout(redirectedOutput);
 	shell.help();
-	restoreCout();
+	auto& helpMessage = fetchOutput();
 
-	ostringstream expectedOutput;
-	redirectCout(expectedOutput);
 	shell.helpMessasge();
-	restoreCout();
-
-	EXPECT_EQ(redirectedOutput.str(), expectedOutput.str());
+	auto& expectedMessage = fetchOutput();
+	
+	EXPECT_EQ(expectedMessage, helpMessage);
 }
 
 TEST_F(ShellTestFixture, ExitCallTest)
 {
-
-	ostringstream redirectedOutput;
-	redirectCout(redirectedOutput);
 	shell.exit();
-	restoreCout();
+	auto& exitMessage = fetchOutput();
 
-	ostringstream expectedOutput;
-	redirectCout(expectedOutput);
 	testableExitActor.doExit();
-	restoreCout();
+	auto& expectedMessage = fetchOutput();
 
-	EXPECT_EQ(redirectedOutput.str(), expectedOutput.str());
+	EXPECT_EQ(exitMessage, expectedMessage);
 }
 
 TEST_F(ShellTestFixture, OutOfLbaRead)
@@ -104,14 +95,11 @@ TEST_F(ShellTestFixture, OutOfLbaRead)
 TEST_F(ShellTestFixture, ReadSuccess)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
-	ostringstream redirectedOutput;
-	redirectCout(redirectedOutput);
 
 	for (int lba = 0; lba < 100; lba++)
 	{
 		EXPECT_EQ("0x00000000", shell.read(lba));
 	}
-	restoreCout();
 }
 
 TEST_F(ShellTestFixture, OutOfLbaWrite)
@@ -123,7 +111,10 @@ TEST_F(ShellTestFixture, OutOfLbaWrite)
 TEST_F(ShellTestFixture, InvalidDataFormatWrite)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-	shell.write(VALID_LBA, "0x0");
+
+	writeAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
+	writeAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
+	writeAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
 }
 
 TEST_F(ShellTestFixture, WriteSuccess)
@@ -132,44 +123,34 @@ TEST_F(ShellTestFixture, WriteSuccess)
 	shell.write(VALID_LBA, dataZero);
 }
 
-TEST_F(ShellTestFixture, DISABLED_FullWrite_NotIncludedPrefixException)
+TEST_F(ShellTestFixture, FullWrite_NotIncludedPrefixException)
 {
 	string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
-	ostringstream redirectedOutput;
-	streambuf* coutBuf;
 
-	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
 	shell.fullwrite("abcd1234");
-	cout.rdbuf(coutBuf);
 
-	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+	EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(ShellTestFixture, DISABLED_FullWrite_NotAllowedInputDataException)
+TEST_F(ShellTestFixture, FullWrite_NotAllowedInputDataException)
 {
 	string expected = "[WARNING] Input data has invalid characters !!!\n";
-	ostringstream redirectedOutput;
-	streambuf* coutBuf;
 
-	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
 	shell.fullwrite("0xabcd1234");
-	cout.rdbuf(coutBuf);
 
-	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+	EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(ShellTestFixture, DISABLED_FullWrite_100TimesSuccessfully)
+TEST_F(ShellTestFixture, FullWrite_100TimesSuccessfully)
 {
-	EXPECT_CALL(ssdMock, write(_, _))
-		.Times(100);
+	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
 
 	shell.fullwrite("0xABCD1234");
 }
 
-TEST_F(ShellTestFixture, DISABLED_FullRead_100TimesSuccessfully)
+TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
 {
-	EXPECT_CALL(ssdMock, read(_))
-		.Times(100);
+	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
 
 	shell.fullread();
 }
