@@ -57,9 +57,9 @@ public:
 		}
 	}
 
-	void ValidateFileTest(const string actualValue, const string expectedValue)
+	void ValidateFileTest(const string expectedValue, const string actualValue)
 	{
-		EXPECT_EQ(actualValue, expectedValue);
+		EXPECT_EQ(expectedValue, actualValue);
 	}
 
 	SSDFile sFile;
@@ -185,6 +185,21 @@ TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
 	expected[0] = "0x00000000";
 	actual[0] = sFile.readFromResultTxt(99);
+}
+
+TEST_F(FileTestFixture, Actual_Write_NAND_Success)
+{
+	vector<string> buf;
+	for (int i = 0; i < 100; i++)
+	{
+		buf.push_back("0x00000001");
+	}
+	sFile.writeToNANDTxt(buf);
+	expected[0] = "0x00000001";
+	actual[0] = sFile.readFromNANDTxt(0);
+
+	// 1. Write는 파일에 직접 접근해서 값 확인 및 비교 
+	// 2. 테스트 의존성 문제는 데이터 초기화 부분 추가
 }
 
 TEST_F(FileTestFixture, DISABLED_Actual_Write_NAND_Success)
