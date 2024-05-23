@@ -52,6 +52,14 @@ protected:
 		return fetchedString;
 	}
 
+	void writeAndExpect(string input, string expected)
+	{
+		shell.write(VALID_LBA, input);
+
+		EXPECT_THAT(fetchOutput(), expected);
+	}
+
+private:
 	ostringstream redirectedOutput{};
 };
 
@@ -103,18 +111,10 @@ TEST_F(ShellTestFixture, OutOfLbaWrite)
 TEST_F(ShellTestFixture, InvalidDataFormatWrite)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-	shell.write(VALID_LBA, "0x0");
-	EXPECT_THAT(fetchOutput(), Eq(""));
 
-	shell.write(VALID_LBA, "abcd123456");
-
-	string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
-	EXPECT_THAT(fetchOutput(), Eq(expected));
-
-	shell.write(VALID_LBA, "0xabcd1234");
-
-	expected = "[WARNING] Input data has invalid characters !!!\n";
-	EXPECT_THAT(fetchOutput(), Eq(expected));
+	writeAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
+	writeAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
+	writeAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
 }
 
 TEST_F(ShellTestFixture, WriteSuccess)

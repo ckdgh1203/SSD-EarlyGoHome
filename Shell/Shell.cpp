@@ -134,6 +134,10 @@ private:
 
 	bool verifyDataFormat(const std::string& data)
 	{
+		if (data.size() != 10)
+		{
+			m_outputStream << "[WARNING] Invalid input data length !!!" << endl;
+		}
 		return data.size() != 10;
 	}
 
