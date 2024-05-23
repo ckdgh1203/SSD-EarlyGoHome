@@ -193,3 +193,33 @@ TEST_F(ShellTestFixture, RunAndRead)
 	
 	// should check result
 }
+
+TEST_F(ShellTestFixture, DISABLED_TestApp1FailureCase)
+{
+	string expected = "[WARNING] testapp1 : written data is different with read data!!!\n";
+	ostringstream redirectedOutput;
+	streambuf* coutBuf;
+	
+	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
+
+	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
+	shell.doTestApp1();
+	cout.rdbuf(coutBuf);
+
+	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+}
+
+TEST_F(ShellTestFixture, DISABLED_TestApp1SuccessCase)
+{
+	string expected = "testapp1 : Done test, written data is same with read data :)\n";
+	ostringstream redirectedOutput;
+	streambuf* coutBuf;
+
+	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
+
+	coutBuf = cout.rdbuf(redirectedOutput.rdbuf());
+	shell.doTestApp1();
+	cout.rdbuf(coutBuf);
+
+	EXPECT_THAT(redirectedOutput.str(), Eq(expected));
+}
