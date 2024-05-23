@@ -11,19 +11,23 @@ int main(int argc, char* argv[])
 		return 0;
 
 	SSDFile file;
-	SSD ssd(&file);
+	SSD ssd{};
 	string cmd = argv[1];
 	int lba = lba = stoi(argv[2]);
 
 	if (cmd == "R")
 	{
-		ssd.read(lba);
+		ReadCommand rCmd{&file, lba };
+		ssd.setCommand(&rCmd);
+		ssd.executeCommand();
 	}
 	
 	if (cmd == "W")
 	{
 		string data = argv[3];
-		ssd.write(lba, data);
+		WriteCommand wCmd{ &file, lba, data };
+		ssd.setCommand(&wCmd);
+		ssd.executeCommand();
 	}
 
 	return 0;
