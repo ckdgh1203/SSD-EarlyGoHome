@@ -17,7 +17,7 @@ class MockFile : public iFile
 {
 public:
 	MOCK_METHOD(string, readFromNANDTxt, (int), (override));
-	MOCK_METHOD(void, writeToNANDTxt, (int, string), (override));
+	MOCK_METHOD(void, writeToNANDTxt, (vector<string> buf), (override));
 	MOCK_METHOD(string, readFromResultTxt, (int), (override));
 	MOCK_METHOD(void, writeToResultTxt, (int, string), (override));
 };
@@ -95,7 +95,7 @@ TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x1234_5678_Success)
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToNANDTxt)
-		.Times(100);
+		.Times(1);
 	WriteCommand wCmd{ &mFile, 0, "0x12345678" };
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
