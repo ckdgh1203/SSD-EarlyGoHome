@@ -62,21 +62,13 @@ public:
 
     void run(istream& inputStream)
     {
-        string userInput;
         while (true)
         {
             m_outputStream << "\nshell> ";
 
-            getline(inputStream, userInput);
-            stringstream ss(userInput);
-            string argument;
             vector<string> args{};
-            while (getline(ss, argument, ' '))
-            {
-                args.push_back(argument);
-            }
+            parseArguments(inputStream, args);
 
-            m_outputStream << userInput << endl;
             if (args[0] == "exit")
             {
                 exit();
@@ -87,10 +79,22 @@ public:
             {
                 read(stoi(args[1]));
             }
-            else if (userInput.find("write") == 0)
+            else if (args[0] == "write")
             {
                 write(stoi(args[1]), args[2]);
             }
+        }
+    }
+
+    void parseArguments(istream& inputStream, vector<string>& args)
+    {
+        string userInput;
+        getline(inputStream, userInput);
+        stringstream ss(userInput);
+        string argument;
+        while (getline(ss, argument, ' '))
+        {
+            args.push_back(argument);
         }
     }
 

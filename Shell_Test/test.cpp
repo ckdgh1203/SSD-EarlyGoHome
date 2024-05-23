@@ -176,11 +176,13 @@ TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
 
 TEST_F(ShellTestFixture, RunAndExit)
 {
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-    istringstream userInput("exit\n");
-
-    shell.run(userInput);
-    EXPECT_EQ("\nshell> exit\nTestable Exit\n", fetchOutput());
+    constexpr int NUMBER_OF_OPERATION = 0;
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
+    EXPECT_CALL(ssdResultMock, get()).Times(NUMBER_OF_OPERATION);
+    string inputString = "exit\n";
+    string expected = "\nshell> "
+        "Testable Exit\n";
+    runAndExpect(inputString, expected);
 }
 
 TEST_F(ShellTestFixture, RunAndRead)
@@ -193,11 +195,11 @@ TEST_F(ShellTestFixture, RunAndRead)
     string inputString = "read 3\n"
         "read 99\n"
         "exit\n";
-    string expected = "\nshell> read 3\n"
+    string expected = "\nshell> "
         "0x00000000"
-        "\nshell> read 99\n"
+        "\nshell> "
         "0x00000000"
-        "\nshell> exit\n"
+        "\nshell> "
         "Testable Exit\n";
     runAndExpect(inputString, expected);
 }
@@ -210,9 +212,9 @@ TEST_F(ShellTestFixture, RunAndWrite)
     string inputString = "write 3 0x12345678\n"
         "write 99 0x12345678\n"
         "exit\n";
-    string expected = "\nshell> write 3 0x12345678\n"
-        "\nshell> write 99 0x12345678\n"
-        "\nshell> exit\n"
+    string expected = "\nshell> "
+        "\nshell> "
+        "\nshell> "
         "Testable Exit\n";
     runAndExpect(inputString, expected);
 }
