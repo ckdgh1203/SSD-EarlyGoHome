@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -67,32 +68,28 @@ public:
             m_outputStream << "\nshell> ";
 
             getline(inputStream, userInput);
+            stringstream ss(userInput);
+            string argument;
+            vector<string> args{};
+            while (getline(ss, argument, ' '))
+            {
+                args.push_back(argument);
+            }
+
             m_outputStream << userInput << endl;
-            if (userInput == "exit")
+            if (args[0] == "exit")
             {
                 exit();
                 return;
             }
 
-            if (userInput.find("read") == 0)
+            if (args[0] == "read")
             {
-                stringstream ss(userInput);
-                string command;
-                getline(ss, command, ' ');
-                string lba;
-                getline(ss, lba, ' ');
-                read(stoi(lba));
+                read(stoi(args[1]));
             }
             else if (userInput.find("write") == 0)
             {
-                stringstream ss(userInput);
-                string command;
-                getline(ss, command, ' ');
-                string lba;
-                getline(ss, lba, ' ');
-                string data;
-                getline(ss, data, ' ');
-                write(stoi(lba), data);
+                write(stoi(args[1]), args[2]);
             }
         }
     }

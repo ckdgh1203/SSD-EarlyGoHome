@@ -185,9 +185,10 @@ TEST_F(ShellTestFixture, RunAndExit)
 
 TEST_F(ShellTestFixture, RunAndRead)
 {
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(2);
+    constexpr int NUMBER_OF_OPERATION = 2;
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
     EXPECT_CALL(ssdResultMock, get())
-        .Times(2)
+        .Times(NUMBER_OF_OPERATION)
         .WillRepeatedly(Return(dataZero));
     string inputString = "read 3\n"
         "read 99\n"
@@ -203,11 +204,14 @@ TEST_F(ShellTestFixture, RunAndRead)
 
 TEST_F(ShellTestFixture, RunAndWrite)
 {
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
+    constexpr int NUMBER_OF_OPERATION = 2;
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
     EXPECT_CALL(ssdResultMock, get()).Times(0);
     string inputString = "write 3 0x12345678\n"
+        "write 99 0x12345678\n"
         "exit\n";
     string expected = "\nshell> write 3 0x12345678\n"
+        "\nshell> write 99 0x12345678\n"
         "\nshell> exit\n"
         "Testable Exit\n";
     runAndExpect(inputString, expected);
