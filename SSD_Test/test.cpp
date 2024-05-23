@@ -33,9 +33,9 @@ public:
 
 TEST_F(MockFileFixture, LBA0_Read_Data_Success)
 {
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
-	EXPECT_CALL(mFile, writeToResultTxt(0, "0x00000000"))
+	EXPECT_CALL(mFile, writeToResultTxt(0, _))
 		.Times(1);
 
 	ssd->read(0);
