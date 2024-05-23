@@ -32,7 +32,7 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		cout << "WriteCommadn execute() " << endl;
+		cout << "WriteCommand execute() " << endl;
 		//Write 함수 여기로 이동시키기
 		if (isInvalidLbaRange(lba) || isInvalidData(data))
 		{
@@ -111,7 +111,7 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		cout << "ReadCommadn execute() " << endl;
+		cout << "ReadCommand execute() " << endl;
 		//Read 함수를 여기로 이동시키기
 		if (isInvalidLbaRange(lba))
 			return;

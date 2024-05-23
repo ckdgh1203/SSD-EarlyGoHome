@@ -10,8 +10,6 @@
 #include "Command.cpp"
 using namespace std;
 
-
-//class SSD : public iSSD
 class SSD
 {
 public:
@@ -22,7 +20,6 @@ public:
 	SSD(Command* command)
 		: command(command)
 	{}
-
 
 	void executeCommand()
 	{
