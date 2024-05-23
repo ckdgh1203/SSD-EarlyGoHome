@@ -87,6 +87,10 @@ public:
             {
                 fullread();
             }
+            else if (args[0] == "fullwrite")
+            {
+                fullwrite(args[1]);
+            }
         }
     }
 
