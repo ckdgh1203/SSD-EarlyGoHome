@@ -97,7 +97,26 @@ public:
 		string arguments = "W " + to_string(lba) + " " + data + "\n";
 		m_ssdExcutable->execute(arguments);
 	}
-	
+
+	void fullwrite(const string inputData)
+	{
+		if (false == IsInputDataWithPrefix(inputData))	return;
+		if (false == IsInputDataWithValidRange(inputData)) return;
+
+		for (int iter = 0; iter < 100; iter++)
+		{
+			m_ssd->write(iter, inputData);
+		}
+	}
+
+	void fullread()
+	{
+		for (int iter = 0; iter < 100; iter++)
+		{
+			m_ssd->read(iter);
+		}
+	}
+
 private:
 	iSSD* m_ssd{};
 	iExit* _exit;
@@ -111,5 +130,32 @@ private:
 	bool verifyDataFormat(const std::string& data)
 	{
 		return data.size() != 10;
+	}
+
+	bool IsInputDataWithPrefix(const std::string& inputData)
+	{
+		if (inputData[0] != '0' || inputData[1] != 'x')
+		{
+			cout << "[WARNING] Prefix '0x' was not included in input data !!!" << endl;
+			return false;
+		}
+
+		return true;
+	}
+
+	bool IsInputDataWithValidRange(const std::string& inputData)
+	{
+		for (int index = 2; index < inputData.length(); index++)
+		{
+			if (('A' <= inputData[index] && inputData[index] <= 'F') || ('0' <= inputData[index] && inputData[index] <= '9'))
+			{
+				continue;
+			}
+
+			cout << "[WARNING] Input data has invalid characters !!!" << endl;
+			return false;
+		}
+
+		return true;
 	}
 };
