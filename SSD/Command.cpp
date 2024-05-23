@@ -29,8 +29,6 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		cout << "WriteCommand execute() " << endl;
-		//Write 함수 여기로 이동시키기
 		if (isInvalidLbaRange(lba) || isInvalidData(data))
 		{
 			return;
@@ -65,20 +63,17 @@ public:
 	{
 		if (data.length() != MAX_DATA_LENGTH)
 		{
-			//cout << "Data invalid length! " << endl;
 			return true;;
 		}
 
 		if (data[0] != '0' || data[1] != 'x')
 		{
-			//cout << "Data is not Hex format! " << endl;
 			return true;
 		}
 
 		for (int i = 2; i < MAX_DATA_LENGTH; i++)
 		{
 			if (isHexFormat(data[i])) continue;
-			//cout << "Data Hex invalid char! " << endl;
 			return true;
 		}
 		return false;
@@ -105,8 +100,6 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		cout << "ReadCommand execute() " << endl;
-		//Read 함수를 여기로 이동시키기
 		if (isInvalidLbaRange(lba))
 			return;
 
