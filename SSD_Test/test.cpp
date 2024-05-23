@@ -125,3 +125,25 @@ TEST(SSD_Test, CommandExecute_ChangeCommand)
 	ssd.setCommand(&wCmd);
 	ssd.executeCommand();
 }
+
+TEST(SSD_Test, CommandFactory_CreateWriteCommand)
+{
+	SSD ssd;
+	NiceMock<MockFile> mFile;
+	CommandFactory& cf = CommandFactory::getInstance();
+	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
+	
+	ssd.setCommand(cmd);
+	ssd.executeCommand();
+}
+
+TEST(SSD_Test, CommandFactory_CreateReadCommand)
+{
+	SSD ssd;
+	NiceMock<MockFile> mFile;
+	CommandFactory& cf = CommandFactory::getInstance();
+	Command* cmd = cf.createCommand(&mFile, 0);
+
+	ssd.setCommand(cmd);
+	ssd.executeCommand();
+}

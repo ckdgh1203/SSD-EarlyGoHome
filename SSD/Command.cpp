@@ -4,9 +4,6 @@
 #include "iSSD.h"
 #include "iFile.h"
 using namespace std;
-const int MAX_LBA_RANGE = 100;
-const int MAX_DATA_LENGTH = 10;
-const int START_LBA = 0;
 
 const string NAND_FILE_NAME = "../Data/nand.txt";
 const string RESULT_FILE_NAME = "../Data/result.txt";
@@ -21,6 +18,9 @@ protected:
 	{
 		return ((START_LBA > lba) || (lba >= MAX_LBA_RANGE));
 	}
+	const int MAX_LBA_RANGE = 100;
+	const int MAX_DATA_LENGTH = 10;
+	const int START_LBA = 0;
 };
 
 class WriteCommand : public Command
