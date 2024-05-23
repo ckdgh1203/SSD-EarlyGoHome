@@ -9,14 +9,10 @@
 #include <iostream>
 #include "Command.cpp"
 using namespace std;
-const int MAX_LBA_RANGE = 100;
-const int MAX_DATA_LENGTH = 10;
-const int START_LBA = 0;
 
-const string NAND_FILE_NAME = "../Data/nand.txt";
-const string RESULT_FILE_NAME = "../Data/result.txt";
 
-class SSD : public iSSD
+//class SSD : public iSSD
+class SSD
 {
 public:
 	SSD(iFile* m_file, Command* command)
@@ -32,7 +28,7 @@ public:
 	{
 		command = newCommand;
 	}
-
+#if 0
 	void read(int lba) override
 	{
 		if (isNotValidLbaRange(lba))
@@ -160,7 +156,7 @@ public:
 		}
 		return false;
 	}
-
+#endif
 private:
 	iFile* m_file;
 	Command* command;
