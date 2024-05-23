@@ -137,7 +137,7 @@ TEST_F(ReadMockFileFixture, CommandExecute_Read)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
-	EXPECT_CALL(mFile, writeToResultTxt(0, _))
+	EXPECT_CALL(mFile, writeToResultTxt(_))
 		.Times(1);
 
 	ssd->executeCommand();
@@ -149,7 +149,7 @@ TEST_F(ReadMockFileFixture, CommandExecute_ChangeCommand)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(1);
-	EXPECT_CALL(mFile, writeToResultTxt(0, _))
+	EXPECT_CALL(mFile, writeToResultTxt(_))
 		.Times(0);
 
 	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
@@ -175,7 +175,7 @@ TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
-	EXPECT_CALL(mFile, writeToResultTxt(0, _))
+	EXPECT_CALL(mFile, writeToResultTxt(_))
 		.Times(1);
 	
 	CommandFactory& cf = CommandFactory::getInstance();
