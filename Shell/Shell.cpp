@@ -1,4 +1,3 @@
-#include "../SSD/iSSD.h"
 #include "SsdExcutable.h"
 
 #include <iostream>
@@ -23,6 +22,12 @@ public:
 private:
 };
 
+class ISsdResult
+{
+public:
+	virtual string get(void) = 0;
+};
+
 class Shell
 {
 public:
@@ -32,17 +37,13 @@ public:
 		_exit = new Exit();
 	}
 
-	Shell(iSSD* ssd) : m_ssd(ssd), m_outputStream(cout)
-	{
-		_exit = new Exit();
-	}
-
-	Shell(ISsdExecutable* executable, ostream& _out) :
-		m_ssdExcutable(executable),
+	Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out) :
+		m_ssdExcutable(executable), m_ssdResult(result),
 		m_outputStream(_out)
 	{
 		_exit = new Exit();
 	}
+
 	void help()
 	{
 		helpMessasge();
@@ -68,7 +69,8 @@ public:
 		string userInput;
 		while (true)
 		{
-			m_outputStream << "shell> ";
+			m_outputStream << "\nshell> ";
+
 			getline(inputStream, userInput);
 			m_outputStream << userInput << endl;
 			if (userInput == "exit")
@@ -84,12 +86,15 @@ public:
 		}
 	}
 
-	string read(unsigned int lba)
+	void read(unsigned int lba)
 	{
-		if (verifyLba(lba)) return "Out of Lba";
+		if (verifyLba(lba))
+		{
+			m_outputStream << "Out of Lba";
+			return;
+		}
 		m_ssdExcutable->execute("R 3\n");
-		// read result from result.txt
-		return "0x00000000";
+		m_outputStream << m_ssdResult->get();
 	}
 
 	void write(unsigned int lba, const string& inputData)
@@ -122,9 +127,9 @@ public:
 	}
 
 private:
-	iSSD* m_ssd{};
 	iExit* _exit;
 	ISsdExecutable* m_ssdExcutable{};
+	ISsdResult* m_ssdResult{};
 	ostream& m_outputStream;
 
 	bool verifyLba(unsigned int lba)

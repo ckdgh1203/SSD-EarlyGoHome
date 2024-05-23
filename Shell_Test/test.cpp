@@ -16,6 +16,12 @@ public:
 private:
 };
 
+class SsdResultMock : public ISsdResult
+{
+public:
+	MOCK_METHOD(string, get, (), (override));
+};
+
 class TestableExitActor : public iExit
 {
 public:
@@ -32,7 +38,9 @@ class ShellTestFixture : public Test
 {
 protected:
 	NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
-	Shell shell{ &ssdExecutableMock, redirectedOutput };
+	NiceMock<SsdResultMock> ssdResultMock{};
+
+	Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput };
 	TestableExitActor testableExitActor{ redirectedOutput };
 
 	static constexpr int INVALID_LBA = 100;
@@ -88,17 +96,21 @@ TEST_F(ShellTestFixture, ExitCallTest)
 TEST_F(ShellTestFixture, OutOfLbaRead)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-
-	EXPECT_EQ("Out of Lba", shell.read(INVALID_LBA));
+	shell.read(INVALID_LBA);
+	EXPECT_EQ("Out of Lba", fetchOutput());
 }
 
 TEST_F(ShellTestFixture, ReadSuccess)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
+	EXPECT_CALL(ssdResultMock, get())
+		.Times(100)
+		.WillRepeatedly(Return(dataZero));
 
 	for (int lba = 0; lba < 100; lba++)
 	{
-		EXPECT_EQ("0x00000000", shell.read(lba));
+		shell.read(lba);
+		EXPECT_EQ(dataZero, fetchOutput());
 	}
 }
 
@@ -161,16 +173,16 @@ TEST_F(ShellTestFixture, RunAndExit)
 	istringstream userInput("exit\n");
 
 	shell.run(userInput);
-
-	// should check result
+	EXPECT_EQ("\nshell> exit\nTestable Exit\n", fetchOutput());
 }
 
 TEST_F(ShellTestFixture, RunAndRead)
 {
 	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
+	EXPECT_CALL(ssdResultMock, get()).WillOnce(Return(dataZero));
 	istringstream userInput("read 3\nexit\n");
 
 	shell.run(userInput);
-	
-	// should check result
+
+	EXPECT_EQ("\nshell> read 3\n0x00000000\nshell> exit\nTestable Exit\n", fetchOutput());
 }
