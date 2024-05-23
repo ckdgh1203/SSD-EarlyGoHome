@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\CommandList">
       <UniqueIdentifier>{8d005933-33cd-4237-a7fd-da172751811a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ScriptList">
+      <UniqueIdentifier>{66978895-e99e-46ee-9d61-2e1930d98d57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -47,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="CommandFactory.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptHandler.cpp">
+      <Filter>소스 파일\ScriptList</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

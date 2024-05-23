@@ -135,6 +135,7 @@
     <ClCompile Include="Help.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Read.cpp" />
+    <ClCompile Include="ScriptHandler.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="Write.cpp" />
   </ItemGroup>
