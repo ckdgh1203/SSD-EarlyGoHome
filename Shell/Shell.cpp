@@ -1,27 +1,15 @@
+#pragma once
+
 #include "SsdExcutable.h"
 #include "SsdResult.h"
+#include "CommandHandler.cpp"
+#include "Exit.cpp"
 
 #include <iostream>
 #include <sstream>
+#include "CommandFactory.cpp"
 
 using namespace std;
-
-class iExit
-{
-public:
-    virtual void doExit() = 0;
-private:
-};
-
-class Exit : public iExit
-{
-public:
-    void doExit() override
-    {
-        exit(0);
-    }
-private:
-};
 
 class Shell
 {
@@ -62,22 +50,39 @@ public:
     void run(istream& inputStream)
     {
         string userInput;
+        CommandFactory commandFactory;
+        CommandHandler *commandHandler;
+
         while (true)
         {
-            m_outputStream << "\nshell> ";
-
+            m_outputStream << "\nshelasdl> ";
             getline(inputStream, userInput);
             m_outputStream << userInput << endl;
-            if (userInput == "exit")
-            {
-                exit();
-                return;
-            }
-
             if (userInput.find("read") == 0)
             {
-                read(3);
+                commandHandler = commandFactory.create("read");
             }
+            if (userInput.find("write") == 0)
+            {
+                commandHandler = commandFactory.create("write");
+            }
+            if (userInput.find("fullread") == 0)
+            {
+                commandHandler = commandFactory.create("fullread");
+            }
+            if (userInput.find("fullwrite") == 0)
+            {
+                commandHandler = commandFactory.create("fullwrite");
+            }
+            if (userInput == "help")
+            {
+                commandHandler = commandFactory.create("help");
+            }
+            if (userInput == "exit") 
+            {
+                commandHandler = commandFactory.create("exit");
+            }
+
         }
     }
 
