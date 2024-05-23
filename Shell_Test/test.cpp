@@ -179,11 +179,24 @@ TEST_F(ShellTestFixture, RunAndExit)
 
 TEST_F(ShellTestFixture, RunAndRead)
 {
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
-    EXPECT_CALL(ssdResultMock, get()).WillOnce(Return(dataZero));
-    istringstream userInput("read 3\nexit\n");
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(2);
+    EXPECT_CALL(ssdResultMock, get())
+        .Times(2)
+        .WillRepeatedly(Return(dataZero));
+    istringstream userInput("read 3\nread 99\nexit\n");
 
     shell.run(userInput);
 
-    EXPECT_EQ("\nshell> read 3\n0x00000000\nshell> exit\nTestable Exit\n", fetchOutput());
+    EXPECT_EQ("\nshell> read 3\n0x00000000\nshell> read 99\n0x00000000\nshell> exit\nTestable Exit\n", fetchOutput());
+}
+
+TEST_F(ShellTestFixture, RunAndWrite)
+{
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
+    EXPECT_CALL(ssdResultMock, get()).Times(0);
+    istringstream userInput("write 3 0x12345678\nexit\n");
+
+    shell.run(userInput);
+
+    EXPECT_EQ("\nshell> write 3 0x12345678\n\nshell> exit\nTestable Exit\n", fetchOutput());
 }

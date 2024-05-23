@@ -76,7 +76,23 @@ public:
 
             if (userInput.find("read") == 0)
             {
-                read(3);
+                stringstream ss(userInput);
+                string command;
+                getline(ss, command, ' ');
+                string lba;
+                getline(ss, lba, ' ');
+                read(stoi(lba));
+            }
+            else if (userInput.find("write") == 0)
+            {
+                stringstream ss(userInput);
+                string command;
+                getline(ss, command, ' ');
+                string lba;
+                getline(ss, lba, ' ');
+                string data;
+                getline(ss, data, ' ');
+                write(stoi(lba), data);
             }
         }
     }
@@ -88,7 +104,8 @@ public:
             m_outputStream << "Out of Lba";
             return;
         }
-        m_ssdExcutable->execute("R 3\n");
+        string arguments = "R " + to_string(lba) + "\n";
+        m_ssdExcutable->execute(arguments);
         m_outputStream << m_ssdResult->get();
     }
 
