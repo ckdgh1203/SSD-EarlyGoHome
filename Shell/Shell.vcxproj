@@ -127,8 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandFactory.cpp" />
+    <ClCompile Include="CommandHandler.cpp" />
+    <ClCompile Include="Exit.cpp" />
+    <ClCompile Include="FullRead.cpp" />
+    <ClCompile Include="FullWrite.cpp" />
+    <ClCompile Include="Help.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Read.cpp" />
     <ClCompile Include="Shell.cpp" />
+    <ClCompile Include="Write.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SsdExcutable.h" />

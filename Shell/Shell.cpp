@@ -1,28 +1,16 @@
+#pragma once
+
 #include "SsdExcutable.h"
 #include "SsdResult.h"
+#include "CommandHandler.cpp"
+#include "CommandFactory.cpp"
+#include "Exit.cpp"
 
 #include <iostream>
 #include <sstream>
 #include <vector>
 
 using namespace std;
-
-class iExit
-{
-public:
-    virtual void doExit() = 0;
-private:
-};
-
-class Exit : public iExit
-{
-public:
-    void doExit() override
-    {
-        exit(0);
-    }
-private:
-};
 
 class Shell
 {
@@ -62,6 +50,10 @@ public:
 
     void run(istream& inputStream)
     {
+        string userInput;
+        CommandFactory commandFactory;
+        CommandHandler *commandHandler;
+
         while (true)
         {
             m_outputStream << "\nshell> ";
@@ -69,20 +61,21 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            if (args[0] == "exit")
+            commandHandler = commandFactory.create(args[0]);
+            if (commandHandler == nullptr)
             {
-                exit();
-                return;
+                m_outputStream << "\nINVALID COMMAND";
+                continue;
             }
 
-            if (args[0] == "read")
+            if (!commandHandler->isValidArgs(args))
             {
-                read(stoi(args[1]));
+                m_outputStream << "\nINVALID COMMAND";
+                commandHandler->usage();
+                continue;
             }
-            else if (args[0] == "write")
-            {
-                write(stoi(args[1]), args[2]);
-            }
+
+            commandHandler->doCommand(args);
         }
     }
 
