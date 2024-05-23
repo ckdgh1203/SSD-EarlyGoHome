@@ -10,7 +10,7 @@
 using namespace std;
 
 const string NAND_FILE_NAME = "../Data/nand.txt";
-const string RESULT_FILE_NAME = ".. / Data / result.txt";
+const string RESULT_FILE_NAME = "../Data/result.txt";
 
 class SSD : public iSSD
 {
