@@ -68,6 +68,12 @@ protected:
         EXPECT_THAT(fetchOutput(), expected);
     }
 
+    void runAndExpect(string& input, string& expected)
+    {
+        shell.run(istringstream(input));
+        EXPECT_EQ(expected, fetchOutput());
+    }
+
 private:
     ostringstream redirectedOutput{};
 };
@@ -183,20 +189,26 @@ TEST_F(ShellTestFixture, RunAndRead)
     EXPECT_CALL(ssdResultMock, get())
         .Times(2)
         .WillRepeatedly(Return(dataZero));
-    istringstream userInput("read 3\nread 99\nexit\n");
-
-    shell.run(userInput);
-
-    EXPECT_EQ("\nshell> read 3\n0x00000000\nshell> read 99\n0x00000000\nshell> exit\nTestable Exit\n", fetchOutput());
+    string inputString = "read 3\n"
+        "read 99\n"
+        "exit\n";
+    string expected = "\nshell> read 3\n"
+        "0x00000000"
+        "\nshell> read 99\n"
+        "0x00000000"
+        "\nshell> exit\n"
+        "Testable Exit\n";
+    runAndExpect(inputString, expected);
 }
 
 TEST_F(ShellTestFixture, RunAndWrite)
 {
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
     EXPECT_CALL(ssdResultMock, get()).Times(0);
-    istringstream userInput("write 3 0x12345678\nexit\n");
-
-    shell.run(userInput);
-
-    EXPECT_EQ("\nshell> write 3 0x12345678\n\nshell> exit\nTestable Exit\n", fetchOutput());
+    string inputString = "write 3 0x12345678\n"
+        "exit\n";
+    string expected = "\nshell> write 3 0x12345678\n"
+        "\nshell> exit\n"
+        "Testable Exit\n";
+    runAndExpect(inputString, expected);
 }
