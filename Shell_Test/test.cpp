@@ -47,6 +47,7 @@ protected:
     static constexpr int INVALID_LBA = 100;
     static constexpr int VALID_LBA = 99;
     const string dataZero = "0x00000000";
+    const string testData = "0xDEADC0DE";
 
     void SetUp(void) override
     {
@@ -217,4 +218,32 @@ TEST_F(ShellTestFixture, RunAndWrite)
         "\nshell> "
         "Testable Exit\n";
     runAndExpect(inputString, expected);
+}
+
+TEST_F(ShellTestFixture, TestApp1FailureCase)
+{
+    string expected = "[WARNING] testapp1 : written data is different with read data!!!\n";
+
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
+    EXPECT_CALL(ssdResultMock, get())
+        .WillOnce(Return(testData))
+        .WillOnce(Return(testData))
+        .WillOnce(Return(testData))
+        .WillRepeatedly(Return(dataZero));
+
+    shell.doTestApp1();
+
+    EXPECT_THAT(fetchOutput(), Eq(expected));
+}
+
+TEST_F(ShellTestFixture, TestApp1SuccessCase)
+{
+    string expected = "testapp1 : Done test, written data is same with read data :)\n";
+
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
+    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return(testData));
+
+    shell.doTestApp1();
+
+    EXPECT_THAT(fetchOutput(), Eq(expected));
 }
