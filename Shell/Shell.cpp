@@ -1,6 +1,8 @@
 #include "../SSD/iSSD.h"
+#include "SsdExcutable.h"
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -35,6 +37,10 @@ public:
 		_exit = new Exit();
 	}
 
+	Shell(ISsdExecutable* executable) : m_ssdExcutable(executable)
+	{
+		_exit = new Exit();
+	}
 	void help()
 	{
 		helpMessasge();
@@ -55,10 +61,31 @@ public:
 		_exit = newExit;
 	}
 
+	void run(istream& inputStream)
+	{
+		string userInput;
+		while (true)
+		{
+			cout << "shell> ";
+			getline(inputStream, userInput);
+			cout << userInput << endl;
+			if (userInput == "exit")
+			{
+				exit();
+				return;
+			}
+
+			if (userInput.find("read") == 0)
+			{
+				read(3);
+			}
+		}
+	}
+
 	string read(unsigned int lba)
 	{
 		if (verifyLba(lba)) return "Out of Lba";
-		m_ssd->read(static_cast<int>(lba));
+		m_ssdExcutable->execute("R 3\n");
 		// read result from result.txt
 		return "0x00000000";
 	}
@@ -67,7 +94,8 @@ public:
 	{
 		if (verifyLba(lba)) return;
 		if (verifyDataFormat(data)) return;
-		m_ssd->write(static_cast<int>(lba), data);
+		string arguments = "W " + to_string(lba) + " " + data + "\n";
+		m_ssdExcutable->execute(arguments);
 	}
 
 	void fullwrite(const string inputData)
@@ -92,6 +120,7 @@ public:
 private:
 	iSSD* m_ssd{};
 	iExit* _exit;
+	ISsdExecutable* m_ssdExcutable{};
 
 	bool verifyLba(unsigned int lba)
 	{
