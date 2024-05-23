@@ -129,11 +129,8 @@ TEST_F(WriteMockFileFixture, CommandExecute_Write)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(1);
-	WriteCommand wCmd{&mFile, 0, "0x00000000"};
-	SSD ssd{&wCmd};
 
-	ssd.executeCommand();
-
+	ssd->executeCommand();
 }
 
 TEST_F(ReadMockFileFixture, CommandExecute_Read)
@@ -142,14 +139,11 @@ TEST_F(ReadMockFileFixture, CommandExecute_Read)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToResultTxt(0, _))
 		.Times(1);
-	ReadCommand rCmd{&mFile, 0};
-	SSD ssd{&rCmd };
 
-	ssd.executeCommand();
-
+	ssd->executeCommand();
 }
 
-TEST_F(WriteMockFileFixture, CommandExecute_ChangeCommand)
+TEST_F(ReadMockFileFixture, CommandExecute_ChangeCommand)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
@@ -157,11 +151,11 @@ TEST_F(WriteMockFileFixture, CommandExecute_ChangeCommand)
 		.Times(1);
 	EXPECT_CALL(mFile, writeToResultTxt(0, _))
 		.Times(0);
-	ReadCommand rCmd{ &mFile, 0 };
-	SSD ssd{&rCmd };
+
 	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
-	ssd.setCommand(&wCmd);
-	ssd.executeCommand();
+
+	ssd->setCommand(&wCmd);
+	ssd->executeCommand();
 }
 
 TEST_F(WriteMockFileFixture, CommandFactory_CreateWriteCommand)
@@ -170,12 +164,11 @@ TEST_F(WriteMockFileFixture, CommandFactory_CreateWriteCommand)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(1);
-	SSD ssd;
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
 	
-	ssd.setCommand(cmd);
-	ssd.executeCommand();
+	ssd->setCommand(cmd);
+	ssd->executeCommand();
 }
 
 TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
@@ -184,13 +177,12 @@ TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToResultTxt(0, _))
 		.Times(1);
-	SSD ssd;
 	
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0);
 
-	ssd.setCommand(cmd);
-	ssd.executeCommand();
+	ssd->setCommand(cmd);
+	ssd->executeCommand();
 }
 
 TEST_F(FileTestFixture, Actual_Read_NAND_Success)
