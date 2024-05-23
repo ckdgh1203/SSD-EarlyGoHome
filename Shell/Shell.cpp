@@ -126,7 +126,18 @@ public:
 		fullwrite("0xDEADC0DE");
 		fullread();
 
-		bool isDifferentData = true;
+        string referenceData = "";
+        for (int i = 0; i < 100; i++)
+        {
+            referenceData += "0xDEADC0DE";
+        }
+
+        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
+        string readData = redirectedOutput->str();
+        redirectedOutput->str("");
+        redirectedOutput->clear();
+
+		bool isDifferentData = (referenceData != readData);
 
 		if (isDifferentData)
 		{
