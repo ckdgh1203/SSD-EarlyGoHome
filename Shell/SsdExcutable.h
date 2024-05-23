@@ -7,7 +7,7 @@ using namespace std;
 class ISsdExecutable
 {
 public:
-	virtual bool execute(const string& arguments) = 0;
+    virtual bool execute(const string& arguments) = 0;
 private:
 
 };
@@ -15,16 +15,16 @@ private:
 class SsdExecutable : public ISsdExecutable
 {
 public:
-	SsdExecutable()
-	{
+    SsdExecutable()
+    {
         
-	}
+    }
 
-	bool execute(const string& arguments) override
-	{
-		string command = std::string(ssdExcutablePath) + " " + arguments;
-		STARTUPINFOA si{};
-		PROCESS_INFORMATION pi{};
+    bool execute(const string& arguments) override
+    {
+        string command = std::string(ssdExcutablePath) + " " + arguments;
+        STARTUPINFOA si{};
+        PROCESS_INFORMATION pi{};
 
         if (!CreateProcessA(
             nullptr,
@@ -48,7 +48,7 @@ public:
         CloseHandle(pi.hThread);
 
         return true;
-	}
+    }
 private:
-	const char* ssdExcutablePath = "SSD.exe";
+    const char* ssdExcutablePath = "SSD.exe";
 };

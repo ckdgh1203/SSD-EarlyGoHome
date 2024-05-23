@@ -12,177 +12,177 @@ using namespace testing;
 class SsdExcutalbeMock : public ISsdExecutable
 {
 public:
-	MOCK_METHOD(bool, execute, (const string&), (override));
+    MOCK_METHOD(bool, execute, (const string&), (override));
 private:
 };
 
 class SsdResultMock : public ISsdResult
 {
 public:
-	MOCK_METHOD(string, get, (), (override));
+    MOCK_METHOD(string, get, (), (override));
 };
 
 class TestableExitActor : public iExit
 {
 public:
-	TestableExitActor(ostream& _out) : m_outputStream(_out) {}
-	void doExit() override
-	{
-		m_outputStream << "Testable Exit" << endl;
-	}
+    TestableExitActor(ostream& _out) : m_outputStream(_out) {}
+    void doExit() override
+    {
+        m_outputStream << "Testable Exit" << endl;
+    }
 private:
-	ostream& m_outputStream;
+    ostream& m_outputStream;
 };
 
 class ShellTestFixture : public Test
 {
 protected:
-	NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
-	NiceMock<SsdResultMock> ssdResultMock{};
+    NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
+    NiceMock<SsdResultMock> ssdResultMock{};
 
-	Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput };
-	TestableExitActor testableExitActor{ redirectedOutput };
+    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput };
+    TestableExitActor testableExitActor{ redirectedOutput };
 
-	static constexpr int INVALID_LBA = 100;
-	static constexpr int VALID_LBA = 99;
-	const string dataZero = "0x00000000";
+    static constexpr int INVALID_LBA = 100;
+    static constexpr int VALID_LBA = 99;
+    const string dataZero = "0x00000000";
 
-	void SetUp(void) override
-	{
-		shell.setExit(&testableExitActor);
-	}
+    void SetUp(void) override
+    {
+        shell.setExit(&testableExitActor);
+    }
 
-	string fetchOutput(void)
-	{
-		auto fetchedString = redirectedOutput.str();
-		redirectedOutput.str("");
-		redirectedOutput.clear();
-		return fetchedString;
-	}
+    string fetchOutput(void)
+    {
+        auto fetchedString = redirectedOutput.str();
+        redirectedOutput.str("");
+        redirectedOutput.clear();
+        return fetchedString;
+    }
 
-	void writeAndExpect(string input, string expected)
-	{
-		shell.write(VALID_LBA, input);
+    void writeAndExpect(string input, string expected)
+    {
+        shell.write(VALID_LBA, input);
 
-		EXPECT_THAT(fetchOutput(), expected);
-	}
+        EXPECT_THAT(fetchOutput(), expected);
+    }
 
 private:
-	ostringstream redirectedOutput{};
+    ostringstream redirectedOutput{};
 };
 
 TEST_F(ShellTestFixture, HelpCallTest)
 {
-	shell.help();
-	auto& helpMessage = fetchOutput();
+    shell.help();
+    auto& helpMessage = fetchOutput();
 
-	shell.helpMessasge();
-	auto& expectedMessage = fetchOutput();
-	
-	EXPECT_EQ(expectedMessage, helpMessage);
+    shell.helpMessasge();
+    auto& expectedMessage = fetchOutput();
+    
+    EXPECT_EQ(expectedMessage, helpMessage);
 }
 
 TEST_F(ShellTestFixture, ExitCallTest)
 {
-	shell.exit();
-	auto& exitMessage = fetchOutput();
+    shell.exit();
+    auto& exitMessage = fetchOutput();
 
-	testableExitActor.doExit();
-	auto& expectedMessage = fetchOutput();
+    testableExitActor.doExit();
+    auto& expectedMessage = fetchOutput();
 
-	EXPECT_EQ(exitMessage, expectedMessage);
+    EXPECT_EQ(exitMessage, expectedMessage);
 }
 
 TEST_F(ShellTestFixture, OutOfLbaRead)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-	shell.read(INVALID_LBA);
-	EXPECT_EQ("Out of Lba", fetchOutput());
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+    shell.read(INVALID_LBA);
+    EXPECT_EQ("Out of Lba", fetchOutput());
 }
 
 TEST_F(ShellTestFixture, ReadSuccess)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
-	EXPECT_CALL(ssdResultMock, get())
-		.Times(100)
-		.WillRepeatedly(Return(dataZero));
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
+    EXPECT_CALL(ssdResultMock, get())
+        .Times(100)
+        .WillRepeatedly(Return(dataZero));
 
-	for (int lba = 0; lba < 100; lba++)
-	{
-		shell.read(lba);
-		EXPECT_EQ(dataZero, fetchOutput());
-	}
+    for (int lba = 0; lba < 100; lba++)
+    {
+        shell.read(lba);
+        EXPECT_EQ(dataZero, fetchOutput());
+    }
 }
 
 TEST_F(ShellTestFixture, OutOfLbaWrite)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-	shell.write(INVALID_LBA, dataZero);
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+    shell.write(INVALID_LBA, dataZero);
 }
 
 TEST_F(ShellTestFixture, InvalidDataFormatWrite)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
 
-	writeAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
-	writeAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
-	writeAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
+    writeAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
+    writeAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
+    writeAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
 }
 
 TEST_F(ShellTestFixture, WriteSuccess)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
-	shell.write(VALID_LBA, dataZero);
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
+    shell.write(VALID_LBA, dataZero);
 }
 
 TEST_F(ShellTestFixture, FullWrite_NotIncludedPrefixException)
 {
-	string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
+    string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
 
-	shell.fullwrite("abcd1234");
+    shell.fullwrite("abcd1234");
 
-	EXPECT_THAT(fetchOutput(), Eq(expected));
+    EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
 TEST_F(ShellTestFixture, FullWrite_NotAllowedInputDataException)
 {
-	string expected = "[WARNING] Input data has invalid characters !!!\n";
+    string expected = "[WARNING] Input data has invalid characters !!!\n";
 
-	shell.fullwrite("0xabcd1234");
+    shell.fullwrite("0xabcd1234");
 
-	EXPECT_THAT(fetchOutput(), Eq(expected));
+    EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
 TEST_F(ShellTestFixture, FullWrite_100TimesSuccessfully)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
 
-	shell.fullwrite("0xABCD1234");
+    shell.fullwrite("0xABCD1234");
 }
 
 TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
 
-	shell.fullread();
+    shell.fullread();
 }
 
 TEST_F(ShellTestFixture, RunAndExit)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-	istringstream userInput("exit\n");
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+    istringstream userInput("exit\n");
 
-	shell.run(userInput);
-	EXPECT_EQ("\nshell> exit\nTestable Exit\n", fetchOutput());
+    shell.run(userInput);
+    EXPECT_EQ("\nshell> exit\nTestable Exit\n", fetchOutput());
 }
 
 TEST_F(ShellTestFixture, RunAndRead)
 {
-	EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
-	EXPECT_CALL(ssdResultMock, get()).WillOnce(Return(dataZero));
-	istringstream userInput("read 3\nexit\n");
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
+    EXPECT_CALL(ssdResultMock, get()).WillOnce(Return(dataZero));
+    istringstream userInput("read 3\nexit\n");
 
-	shell.run(userInput);
+    shell.run(userInput);
 
-	EXPECT_EQ("\nshell> read 3\n0x00000000\nshell> exit\nTestable Exit\n", fetchOutput());
+    EXPECT_EQ("\nshell> read 3\n0x00000000\nshell> exit\nTestable Exit\n", fetchOutput());
 }
