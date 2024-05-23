@@ -11,7 +11,7 @@ class SSDFile : public iFile
 public:
 	string readFromNANDTxt(int lba) override
 	{
-		
+		return "";
 	}
 
 	void writeToNANDTxt(int lba, string data) override
@@ -20,6 +20,7 @@ public:
 
 	string readFromResultTxt(int lba) override
 	{
+		return "";
 	}
 
 	void writeToResultTxt(int lba, string data) override
