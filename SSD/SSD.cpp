@@ -23,7 +23,6 @@ public:
 		: command(command)
 	{}
 
-
 	void executeCommand()
 	{
 		command->executeCommand();

@@ -6,9 +6,12 @@
 #include <fstream>
 #include "../SSD/iFile.h"
 #include "../SSD/SSD.cpp"
+#include "../SSD/File.cpp"
 
 using namespace std;
 using namespace testing;
+
+const int FILE_TEST_NUM = 100;
 
 class MockFile : public iFile
 {
@@ -42,6 +45,30 @@ public:
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
+
+class FileTestFixture : public testing::Test
+{
+public:
+	void TearDown() override
+	{
+		for (int i = 0; i < FILE_TEST_NUM; i++)
+		{
+			ValidateFileTest(expected[i], actual[i]);
+		}
+	}
+
+	void ValidateFileTest(const string actualValue, const string expectedValue)
+	{
+		EXPECT_EQ(actualValue, expectedValue);
+	}
+
+	SSDFile sFile;
+
+protected:
+	string expected[FILE_TEST_NUM];
+	string actual[FILE_TEST_NUM];
+};
+
 
 TEST_F(ReadMockFileFixture, LBA0_Read_Data_Success)
 {
@@ -125,4 +152,17 @@ TEST(SSD_Test, CommandExecute_ChangeCommand)
 	ssd.setCommand(&wCmd);
 	ssd.executeCommand();
 }
->>>>>>> f615bf541294ce9d062a64afb8dee2eaa901e3fd
+
+TEST(FileTestFixture, Actual_Read_NAND_Success)
+{
+	SSDFile sFile;
+	// WriteCommand wCmd{ &sFile, 0,"0x00000000" };
+	// SSD ssd{ &wCmd };
+
+	sFile.readFromNANDTxt(0);
+}
+
+TEST(FileTestFixture, DISABLED_Actual_Read_RESULT_Success)
+{
+	
+}
