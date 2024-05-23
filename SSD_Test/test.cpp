@@ -19,7 +19,7 @@ public:
 	MOCK_METHOD(string, readFromNANDTxt, (int), (override));
 	MOCK_METHOD(void, writeToNANDTxt, (vector<string> buf), (override));
 	MOCK_METHOD(string, readFromResultTxt, (int), (override));
-	MOCK_METHOD(void, writeToResultTxt, (int, string), (override));
+	MOCK_METHOD(void, writeToResultTxt, (string), (override));
 };
 
 class WriteMockFileFixture : public testing::Test
@@ -74,16 +74,16 @@ TEST_F(ReadMockFileFixture, LBA0_Read_Data_Success)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
-	EXPECT_CALL(mFile, writeToResultTxt(0, _))
+	EXPECT_CALL(mFile, writeToResultTxt)
 		.Times(1);
 	ssd->executeCommand();
 }
 
 TEST_F(ReadMockFileFixture, LBA100_Read_Fail)
 {
-	EXPECT_CALL(mFile, readFromNANDTxt(0))
+	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
-	EXPECT_CALL(mFile, writeToResultTxt(0, "0x12345678"))
+	EXPECT_CALL(mFile, writeToResultTxt)
 		.Times(0);
 	ReadCommand rCmd{ &mFile, 100};
 	ssd->setCommand(&rCmd);

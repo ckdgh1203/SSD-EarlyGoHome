@@ -11,5 +11,5 @@ public:
 	virtual void writeToNANDTxt(vector<string> buf) = 0;
 
 	virtual string readFromResultTxt(int lba) = 0;
-	virtual void writeToResultTxt(int lba, string data) = 0;
+	virtual void writeToResultTxt(string data) = 0;
 };
