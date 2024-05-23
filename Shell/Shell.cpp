@@ -144,7 +144,7 @@ public:
 		fullwrite("0xDEADC0DE");
 		fullread();
 
-		bool isCompareSuccess = readCompare(100, "0xDEADC0DE");
+		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
 
 		if (false == isCompareSuccess)
 		{
@@ -157,31 +157,17 @@ public:
 
     void doTestApp2()
     {
+        unsigned int lbaBound = 6;
+
         for (int i = 0; i < 30; i++)
         {
-            write(0, "0xAAAABBBB");
-            write(1, "0xAAAABBBB");
-            write(2, "0xAAAABBBB");
-            write(3, "0xAAAABBBB");
-            write(4, "0xAAAABBBB");
-            write(5, "0xAAAABBBB");
+            writeRepeatedly("0xAAAABBBB", lbaBound);
         }
 
-        write(0, "0x12345678");
-        write(1, "0x12345678");
-        write(2, "0x12345678");
-        write(3, "0x12345678");
-        write(4, "0x12345678");
-        write(5, "0x12345678");
-        
-        read(0);
-        read(1);
-        read(2);
-        read(3);
-        read(4);
-        read(5);
+        writeRepeatedly("0x12345678", lbaBound);
+        readRepeatedly(lbaBound);
 
-        bool isCompareSuccess = readCompare(6, "0x12345678");
+        bool isCompareSuccess = readCompare("0x12345678", lbaBound);
 
         if (false == isCompareSuccess)
         {
@@ -238,7 +224,7 @@ private:
         return true;
     }
 
-    bool readCompare(const int lbaBound, const string& inputData)
+    bool readCompare(const string& inputData, unsigned int lbaBound)
     {
         string referenceData = "";
         for (int iter = 0; iter < lbaBound; iter++)
@@ -252,5 +238,21 @@ private:
         redirectedOutput->clear();
 
         return (referenceData == readData);
+    }
+
+    void readRepeatedly(const int lbaBound)
+    {
+        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        {
+            read(lbaIter);
+        }
+    }
+
+    void writeRepeatedly(const string& inputData, const int lbaBound)
+    {
+        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        {
+            write(lbaIter, inputData);
+        }
     }
 };
