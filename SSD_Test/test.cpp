@@ -26,7 +26,7 @@ public:
 	{
 		ssd = new SSD(&mFile, &wCmd);
 	}
-	WriteCommand wCmd{ 0,"0x00000000" };
+	WriteCommand wCmd{&mFile, 0,"0x00000000" };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
@@ -79,4 +79,24 @@ TEST_F(MockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
 		.Times(0);
 
 	ssd->write(0, "0x000000000000");
+}
+
+TEST(SSD_Test, CommandExecute_Write)
+{
+	NiceMock<MockFile> mFile;
+	WriteCommand wCmd{&mFile, 0, "0x00000000"};
+	SSD ssd{&mFile, &wCmd};
+
+	ssd.executeCommand();
+
+}
+
+TEST(SSD_Test, CommandExecute_Read)
+{
+	NiceMock<MockFile> mFile;
+	ReadCommand rCmd{&mFile, 0};
+	SSD ssd{ &mFile, &rCmd };
+
+	ssd.executeCommand();
+
 }

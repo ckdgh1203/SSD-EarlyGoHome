@@ -23,6 +23,11 @@ public:
 		: m_file(m_file), command(command)
 	{}
 
+	void executeCommand()
+	{
+		command->executeCommand();
+	}
+
 	void read(int lba) override
 	{
 		if (isNotValidLbaRange(lba))
