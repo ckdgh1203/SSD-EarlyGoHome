@@ -1,28 +1,12 @@
 #include "SsdExcutable.h"
 #include "SsdResult.h"
+#include "Exit.h"
 
 #include <iostream>
 #include <sstream>
 #include <vector>
 
 using namespace std;
-
-class iExit
-{
-public:
-    virtual void doExit() = 0;
-private:
-};
-
-class Exit : public iExit
-{
-public:
-    void doExit() override
-    {
-        exit(0);
-    }
-private:
-};
 
 class Shell
 {

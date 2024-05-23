@@ -4,24 +4,10 @@
 #include <sstream>
 
 #include "../Shell/Shell.cpp"
-#include "../Shell/SsdExcutable.h"
-#include "../Shell/SsdResult.h"
+#include "SsdMock.h"
 
 using namespace std;
 using namespace testing;
-
-class SsdExcutalbeMock : public ISsdExecutable
-{
-public:
-    MOCK_METHOD(bool, execute, (const string&), (override));
-private:
-};
-
-class SsdResultMock : public ISsdResult
-{
-public:
-    MOCK_METHOD(string, get, (), (override));
-};
 
 class TestableExitActor : public iExit
 {
