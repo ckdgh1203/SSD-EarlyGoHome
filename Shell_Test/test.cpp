@@ -233,12 +233,26 @@ TEST_F(ShellTestFixture, RunAndFullWrite)
     string inputString = "fullwrite 0xDEADBEEF\n"
         "exit\n";
 
-    string expected = "\nshell> ";
-    //for (int i = 0; i < NUMBER_OF_OPERATION; i++)
-    //{
-    //    expected += "0x00000000\n";
-    //}
-    expected += "\nshell> " "Testable Exit\n";
+    string expected = "\nshell> " "\nshell> " "Testable Exit\n";
+    runAndExpect(inputString, expected);
+}
+
+
+TEST_F(ShellTestFixture, RunAndHelp)
+{
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+    EXPECT_CALL(ssdResultMock, get()).Times(0);
+    string inputString = "help\n"
+        "exit\n";
+
+    string expected = "\nshell> "
+        "Help:\n"
+        "\tread [LBA]\n"
+        "\twrite [LBA] [DATA]\n"
+        "\tfullread\n"
+        "\tfullwrite [DATA]"
+        "\nshell> " "Testable Exit\n";
+
     runAndExpect(inputString, expected);
 }
 

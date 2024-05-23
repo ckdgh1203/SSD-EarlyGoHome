@@ -31,7 +31,7 @@ public:
 
     void helpMessasge()
     {
-        m_outputStream << "This is Help Message" << endl;
+        m_outputStream << m_helpMessage;
     }
 
     void exit()
@@ -74,6 +74,10 @@ public:
             else if (args[0] == "fullwrite")
             {
                 fullwrite(args[1]);
+            }
+            else if (args[0] == "help")
+            {
+                help();
             }
         }
     }
@@ -163,6 +167,12 @@ public:
 
         return (referenceData == readData);
     }
+protected:
+    const string m_helpMessage = "Help:\n"
+        "\tread [LBA]\n"
+        "\twrite [LBA] [DATA]\n"
+        "\tfullread\n"
+        "\tfullwrite [DATA]";
 
 private:
     iExit* _exit;
