@@ -1,4 +1,5 @@
 #include "SsdExcutable.h"
+#include "SsdResult.h"
 
 #include <iostream>
 #include <sstream>
@@ -20,12 +21,6 @@ public:
         exit(0);
     }
 private:
-};
-
-class ISsdResult
-{
-public:
-    virtual string get(void) = 0;
 };
 
 class Shell

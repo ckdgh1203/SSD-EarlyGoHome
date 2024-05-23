@@ -5,6 +5,7 @@
 
 #include "../Shell/Shell.cpp"
 #include "../Shell/SsdExcutable.h"
+#include "../Shell/SsdResult.h"
 
 using namespace std;
 using namespace testing;
