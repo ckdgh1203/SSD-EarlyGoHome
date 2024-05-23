@@ -7,6 +7,7 @@
 #include "iSSD.h"
 #include "iFile.h"
 #include <iostream>
+#include "Command.cpp"
 using namespace std;
 const int MAX_LBA_RANGE = 100;
 const int MAX_DATA_LENGTH = 10;
@@ -152,4 +153,5 @@ public:
 
 private:
 	iFile* m_file;
+	Command* command;
 };
