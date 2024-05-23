@@ -24,7 +24,7 @@ class WriteMockFileFixture : public testing::Test
 public:
 	void SetUp() override
 	{
-		ssd = new SSD(&mFile, &wCmd);
+		ssd = new SSD(&wCmd);
 	}
 	WriteCommand wCmd{&mFile, 0,"0x00000000" };
 	NiceMock<MockFile> mFile;
@@ -36,7 +36,7 @@ class ReadMockFileFixture : public testing::Test
 public:
 	void SetUp() override
 	{
-		ssd = new SSD(&mFile, &rCmd);
+		ssd = new SSD(&rCmd);
 	}
 	ReadCommand rCmd{ &mFile, 0};
 	NiceMock<MockFile> mFile;
@@ -85,7 +85,7 @@ TEST_F(WriteMockFileFixture, LBA100_Write_Fail)
 	ssd->executeCommand();
 }
 
-TEST_F(WriteMockFileFixture, DISABLED_LBA0_Write_Data_0x0000_0000_0000_Fail)
+TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(0);
@@ -100,7 +100,7 @@ TEST(SSD_Test, CommandExecute_Write)
 {
 	NiceMock<MockFile> mFile;
 	WriteCommand wCmd{&mFile, 0, "0x00000000"};
-	SSD ssd{&mFile, &wCmd};
+	SSD ssd{&wCmd};
 
 	ssd.executeCommand();
 
@@ -110,7 +110,7 @@ TEST(SSD_Test, CommandExecute_Read)
 {
 	NiceMock<MockFile> mFile;
 	ReadCommand rCmd{&mFile, 0};
-	SSD ssd{ &mFile, &rCmd };
+	SSD ssd{&rCmd };
 
 	ssd.executeCommand();
 
@@ -120,7 +120,7 @@ TEST(SSD_Test, CommandExecute_ChangeCommand)
 {
 	NiceMock<MockFile> mFile;
 	ReadCommand rCmd{ &mFile, 0 };
-	SSD ssd{ &mFile, &rCmd };
+	SSD ssd{&rCmd };
 	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
 	ssd.setCommand(&wCmd);
 	ssd.executeCommand();
