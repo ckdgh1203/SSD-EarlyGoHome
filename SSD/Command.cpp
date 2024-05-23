@@ -8,9 +8,6 @@ const int MAX_LBA_RANGE = 100;
 const int MAX_DATA_LENGTH = 10;
 const int START_LBA = 0;
 
-const string NAND_FILE_NAME = "../Data/nand.txt";
-const string RESULT_FILE_NAME = "../Data/result.txt";
-
 class Command
 {
 public:
@@ -49,10 +46,7 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
-		{
-			m_file->writeToNANDTxt(currentLBA, buf[currentLBA]);
-		}
+		m_file->writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
