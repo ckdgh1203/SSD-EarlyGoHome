@@ -55,13 +55,13 @@ public:
             auto* commandHandler = m_commandFactory.create(args[0]);
             if (commandHandler == nullptr)
             {
-                m_outputStream << "\nINVALID COMMAND";
+                m_outputStream << "\nINVALID COMMAND\n";
                 continue;
             }
 
             if (!commandHandler->isValidArgs(args))
             {
-                m_outputStream << "\nINVALID COMMAND";
+                m_outputStream << "\nINVALID COMMAND\n";
                 commandHandler->usage();
                 continue;
             }

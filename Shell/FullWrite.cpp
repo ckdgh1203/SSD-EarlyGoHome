@@ -30,6 +30,7 @@ public:
 
 	Progress doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			write->doCommand(nArgs[lba]);

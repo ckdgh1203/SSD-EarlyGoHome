@@ -38,6 +38,7 @@ public:
 
 	Progress doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		string arguments = "W " + args[1] + " " + args[2] + "\n";
 		m_ssdHelper.execute(arguments);
 		return Progress::Continue;
