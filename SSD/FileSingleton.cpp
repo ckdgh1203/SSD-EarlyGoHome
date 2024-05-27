@@ -36,7 +36,7 @@ public:
 		writeToResultTxt(DEFAULT_DATA);
 	}
 
-	vector<string> readFromNANDTxt(int lba) override
+	vector<string> readFromNANDTxt() override
 	{
 		ifstream file(filePath + NAND_FILE);
 		vector<string> ret;
@@ -51,7 +51,7 @@ public:
 			return ret;
 		}
 
-		getLBAData(lba, file, ret);
+		getLBAData(file, ret);
 		file.close();
 
 		return ret;
@@ -114,7 +114,7 @@ private:
 	FileSingleton& operator=(const FileSingleton& other) = delete;
 	FileSingleton(const FileSingleton& other) = delete;
 
-	void getLBAData(int lba, ifstream& file, vector<string>& ret)
+	void getLBAData(ifstream& file, vector<string>& ret)
 	{
 		int targetLine = 0;
 		string buf;

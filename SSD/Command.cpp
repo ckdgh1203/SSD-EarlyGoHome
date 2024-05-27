@@ -55,7 +55,7 @@ public:
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
-		buf = FileSingleton::getInstance().readFromNANDTxt(0);
+		buf = FileSingleton::getInstance().readFromNANDTxt();
 		return buf;
 	}
 
@@ -102,7 +102,7 @@ public:
 			return;
 
 		vector<string> nandTxt;
-		nandTxt = FileSingleton::getInstance().readFromNANDTxt(0);
+		nandTxt = FileSingleton::getInstance().readFromNANDTxt();
 		FileSingleton::getInstance().writeToResultTxt(nandTxt[lba]);
 	}
 
@@ -153,7 +153,7 @@ public:
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
-		buf = FileSingleton::getInstance().readFromNANDTxt(0);
+		buf = FileSingleton::getInstance().readFromNANDTxt();
 		return buf;
 	}
 

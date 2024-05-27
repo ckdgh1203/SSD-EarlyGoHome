@@ -16,7 +16,7 @@ const int FILE_TEST_NUM = 100;
 class MockFile : public iFile
 {
 public:
-	MOCK_METHOD(vector<string>, readFromNANDTxt, (int), (override));
+	MOCK_METHOD(vector<string>, readFromNANDTxt, (), (override));
 	MOCK_METHOD(void, writeToNANDTxt, (vector<string> buf), (override));
 	MOCK_METHOD(string, readFromResultTxt, (), (override));
 	MOCK_METHOD(void, writeToResultTxt, (string), (override));
@@ -202,7 +202,7 @@ TEST_F(ReadMockFileFixture, DISABLED_CommandFactory_CreateReadCommand)
 TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 {
 	expected[99] = DEFAULT_DATA;
-	vector<string> temp = FileSingleton::getInstance().readFromNANDTxt(0);
+	vector<string> temp = FileSingleton::getInstance().readFromNANDTxt();
 	actual[99] = temp[99];
 }
 
@@ -224,7 +224,7 @@ TEST_F(FileTestFixture, Actual_Write_NAND_Success)
 	FileSingleton::getInstance().writeToNANDTxt(buf);
 
 	expected[99] = "0x00000001";
-	vector<string> temp = FileSingleton::getInstance().readFromNANDTxt(0);
+	vector<string> temp = FileSingleton::getInstance().readFromNANDTxt();
 	actual[99] = temp[99];
 }
 
