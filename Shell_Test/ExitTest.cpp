@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "../Shell/Exit.cpp"
-#include "TestableExitActor.h"
 
 using namespace testing;
 

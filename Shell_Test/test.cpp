@@ -5,7 +5,6 @@
 
 #include "../Shell/Shell.cpp"
 #include "SsdMock.h"
-#include "TestableExitActor.h"
 
 using namespace std;
 using namespace testing;
@@ -16,8 +15,7 @@ protected:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
 
-    TestableExitActor testableExitActor{ redirectedOutput };
-    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput, &testableExitActor };
+    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput};
 
     static constexpr int INVALID_LBA = 100;
     static constexpr int VALID_LBA = 99;
@@ -64,17 +62,6 @@ TEST_F(ShellTestFixture, HelpCallTest)
     
     EXPECT_EQ(expectedMessage, helpMessage);
 }
-
-//TEST_F(ShellTestFixture, ExitCallTest)
-//{
-//    shell.exit();
-//    auto& exitMessage = fetchOutput();
-//
-//    testableExitActor.doExit();
-//    auto& expectedMessage = fetchOutput();
-//
-//    EXPECT_EQ(exitMessage, expectedMessage);
-//}
 
 TEST_F(ShellTestFixture, OutOfLbaRead)
 {

@@ -7,15 +7,7 @@
 
 using namespace std;
 
-class iExit : public CommandHandler
-{
-public:
-    virtual void doExit() = 0;
-    virtual bool isTest() = 0;
-private:
-};
-
-class Exit : public iExit
+class Exit : public CommandHandler
 {
 public:
     Exit() {};
@@ -33,18 +25,9 @@ public:
         return Progress::Done;
     }
 
-    void doExit() override
-    {
-        exit(0);
-    }
-
     void usage() override {};
 
     ~Exit() {};
 
-    bool isTest() override
-    {
-        return false;
-    }
 private:
 };

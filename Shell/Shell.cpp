@@ -16,19 +16,13 @@ class Shell
 {
 public:
 
-    Shell(void) : m_outputStream(cout), _exit(new Exit()), m_commandFactory(_exit)
+    Shell(void) : m_outputStream(cout)
     {
     }
 
     Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out) :
         m_ssdExcutable(executable), m_ssdResult(result),
-        m_outputStream(_out), _exit(new Exit()), m_commandFactory(_exit)
-    {
-    }
-
-    Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out, iExit *_exit) :
-        m_ssdExcutable(executable), m_ssdResult(result),
-        m_outputStream(_out), m_commandFactory(_exit)
+        m_outputStream(_out)
     {
     }
 
@@ -65,9 +59,7 @@ public:
                 continue;
             }
 
-            commandHandler->doCommand(args);
-            if (_exit->isTest())
-                break;
+            if (Progress::Done == commandHandler->doCommand(args)) break;
         }
     }
 
@@ -170,11 +162,10 @@ protected:
         "\tfullwrite [DATA]\n";
 
 private:
-    iExit* _exit;
     ISsdExecutable* m_ssdExcutable{};
     ISsdResult* m_ssdResult{};
     ostream& m_outputStream;
-    CommandFactory m_commandFactory;
+    CommandFactory m_commandFactory{};
 
     bool verifyLba(unsigned int lba)
     {
