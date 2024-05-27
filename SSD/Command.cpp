@@ -19,6 +19,7 @@ protected:
 	const int MAX_DATA_LENGTH = 10;
 	const int START_LBA = 0;
 	const int MAX_ERASE_SIZE = 10;
+	const int MIN_ERASE_SIZE = 0;
 	string ERASE_DATA = "0x00000000";
 
 };
@@ -107,7 +108,7 @@ public:
 			return;
 
 		vector<string> nandTxt;
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < MAX_LBA_RANGE; i++)
 		{
 			nandTxt.push_back(m_file->readFromNANDTxt(i));
 		}
@@ -130,7 +131,7 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		if (isInvalidEraseSize())
+		if (isInvalidEraseSize() || isInvalidLbaRange(lba))
 			return;
 
 		vector<string> buf = dataReadFromNand();
@@ -148,7 +149,7 @@ public:
 
 	bool isInvalidEraseSize()
 	{
-		return size > MAX_ERASE_SIZE;
+		return (size > MAX_ERASE_SIZE) || (size <= MIN_ERASE_SIZE);
 	}
 
 	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
