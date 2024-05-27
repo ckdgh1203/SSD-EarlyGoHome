@@ -29,17 +29,13 @@ public:
 		return VALID;
 	}
 
-	void commandBody(const vector<string>& args) override
+	void doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			write->doCommand(nArgs[lba]);
 		}
-	}
-
-	string defaultLogMsg() override
-	{
-		return "FullWrite!!";
 	}
 
 	void usage() override {}

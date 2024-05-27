@@ -16,14 +16,10 @@ public:
 		return VALID;
 	}
 
-	void commandBody(const vector<string>& args) override
+	void doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		cout << m_helpMessage;
-	}
-
-	string defaultLogMsg() override
-	{
-		return "Help";
 	}
 
 	void usage() override {};

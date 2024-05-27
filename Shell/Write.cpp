@@ -36,14 +36,10 @@ public:
 		return VALID;
 	}
 
-	void commandBody(const vector<string>& args) override
+	void doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		cout << "Do Write!!!" << endl;
-	}
-
-	string defaultLogMsg() override
-	{
-		return "Write";
 	}
 
 	void usage() override {};

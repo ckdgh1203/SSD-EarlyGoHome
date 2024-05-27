@@ -23,14 +23,10 @@ public:
 		return VALID;
 	}
 
-	void commandBody(const vector<string>& args) override
+	void doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		cout << "Do Read!!!" << endl;
-	}
-
-	string defaultLogMsg() override
-	{
-		return "Read";
 	}
 
 	void usage() override {};

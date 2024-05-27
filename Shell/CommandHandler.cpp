@@ -13,11 +13,7 @@ public:
 
 	virtual bool isValidArgs(const vector<string>& args) = 0;
 	virtual void usage() = 0;
-	void doCommand(const vector<string>& args)
-	{
-		logger.print(defaultLogMsg());
-		commandBody(args);
-	}
+	virtual void doCommand(const vector<string>& args) = 0;
 	virtual ~CommandHandler() {};
 private:
 protected:
@@ -27,7 +23,19 @@ protected:
 	const static bool VALID = true;
 	const static bool INVALID = false;
 
+	string sliceString(const std::vector<std::string>& words, size_t start)
+	{
+		std::string result;
+		for (size_t i = start; i < words.size(); ++i)
+		{
+			result += words[i];
+			if (i != words.size() - 1)
+			{
+				result += " ";
+			}
+		}
+		return result;
+	}
+
 	Logger logger;
-	virtual void commandBody(const vector<string>& args) = 0;
-	virtual string defaultLogMsg() = 0;
 };

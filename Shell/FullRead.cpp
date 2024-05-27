@@ -28,15 +28,16 @@ public:
 		return VALID;
 	}
 
-	void commandBody(const vector<string>& args) override
+	void doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			read->doCommand(nArgs[lba]);
 		}
 	}
 
-	string defaultLogMsg() override
+	string invalidArgsMsg(const vector<string> &args)
 	{
 		return "FullRead!!";
 	}

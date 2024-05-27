@@ -28,14 +28,10 @@ public:
         return VALID;
     }
 
-    void commandBody(const vector<string>& args) override
+    void doCommand(const vector<string>& args) override
     {
+        logger.print("Command : " + sliceString(args, 0));
         exit(0);
-    }
-
-    string defaultLogMsg() override
-    {
-        return "Program Exit!";
     }
 
     void doExit() override
