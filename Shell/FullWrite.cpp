@@ -29,12 +29,13 @@ public:
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	Progress doCommand(const vector<string>& args) override
 	{
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			write->doCommand(nArgs[lba]);
 		}
+		return Progress::Continue;
 	}
 
 	void usage() override {}

@@ -99,6 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandFactoryTest.cpp" />
+    <ClCompile Include="ExitTest.cpp" />
     <ClCompile Include="gtest_main.cc" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>

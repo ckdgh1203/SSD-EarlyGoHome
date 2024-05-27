@@ -5,13 +5,19 @@
 
 using namespace std;
 
+enum class Progress
+{
+	Continue = 0,
+	Done = 1,
+};
+
 class CommandHandler
 {
 public:
 	CommandHandler() {};
 
 	virtual bool isValidArgs(const vector<string>& args) = 0;
-	virtual void doCommand(const vector<string>& args) = 0;
+	virtual Progress doCommand(const vector<string>& args) = 0;
 	virtual void usage() = 0;
 
 	virtual ~CommandHandler() {};

@@ -16,9 +16,10 @@ public:
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	Progress doCommand(const vector<string>& args) override
 	{
 		cout << m_helpMessage;
+		return Progress::Continue;
 	}
 
 	void usage() override {};

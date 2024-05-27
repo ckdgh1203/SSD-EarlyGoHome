@@ -28,9 +28,9 @@ public:
         return VALID;
     }
 
-    void doCommand(const vector<string>& args) override
+    Progress doCommand(const vector<string>& args) override
     {
-        exit(0);
+        return Progress::Done;
     }
 
     void doExit() override

@@ -9,9 +9,10 @@ public:
     {
         return true;
     }
-    void doCommand(const vector<string>& args) override
+    Progress doCommand(const vector<string>& args) override
     {
         m_outputStream << "Testable Exit" << endl;
+        return Progress::Done;
     }
     void doCommand()
     {
