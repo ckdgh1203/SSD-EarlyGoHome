@@ -11,7 +11,6 @@ class FullRead : public CommandHandler
 {
 public:
 	FullRead(ostream& _out, SsdHelper& _ssd, Read* _read) : CommandHandler(_out, _ssd), read(_read){};
-	// fullread
 	bool isValidArgs(const vector<string>& args) override
 	{
 		if (args.size() != 1)
