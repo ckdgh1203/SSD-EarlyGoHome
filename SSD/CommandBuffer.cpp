@@ -9,7 +9,7 @@ class CommandBuffer
 public:
 	int getBufferedCommandCount()
 	{
-
+		return 0;
 	}
 	void insertCommandToCommandBuffer(CommandPacket cmdPacket)
 	{
@@ -17,11 +17,12 @@ public:
 	}
 	bool executeFastReadInCommandBuffer(CommandPacket cmdPacket)
 	{
-
+		return 0;
 	}
-	CommandPacket getCommandFromCommandBuffer()
+	vector<CommandPacket> getCommandFromCommandBuffer()
 	{
-
+		vector<CommandPacket> tmp = {};
+		return tmp;
 	}
 };
 

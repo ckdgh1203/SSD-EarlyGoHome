@@ -32,6 +32,41 @@ public:
 		command = newCommand;
 	}
 
+	bool isNeedFlush()
+	{
+		return commandBuffer.getBufferedCommandCount() >= 10;
+	}
+
+	bool executeFastRead(CommandPacket cmdPacket)
+	{
+		return commandBuffer.executeFastReadInCommandBuffer(cmdPacket);
+	}
+
+	void bufferingCommand(CommandPacket cmdPacket)
+	{
+		commandBuffer.insertCommandToCommandBuffer(cmdPacket);
+	}
+
+	void flush()
+	{
+		vector<CommandPacket> cmdPacket = {};
+		int currentBufferedCommandCnt = commandBuffer.getBufferedCommandCount();
+		for (int i = 0; i < currentBufferedCommandCnt; i++)
+		{
+			cmdPacket = commandBuffer.getCommandFromCommandBuffer();
+			if (cmdPacket[i].command == "W")
+			{
+				setCommand(CommandFactory::getInstance().createCommand(cmdPacket[i].startLba, cmdPacket[i].data));
+			}
+			else if (cmdPacket[i].command == "U")
+			{
+				int size = cmdPacket[i].endLba - cmdPacket[i].startLba + 1;
+				setCommand(CommandFactory::getInstance().createCommand(cmdPacket[i].startLba, size));
+			}
+			executeCommand();
+		}
+	}
+
 private:
 	Command* command;
 	CommandBuffer commandBuffer;
