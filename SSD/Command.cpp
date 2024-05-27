@@ -18,6 +18,10 @@ protected:
 	const int MAX_LBA_RANGE = 100;
 	const int MAX_DATA_LENGTH = 10;
 	const int START_LBA = 0;
+	const int MAX_ERASE_SIZE = 10;
+	const int MIN_ERASE_SIZE = 0;
+	string ERASE_DATA = "0x00000000";
+
 };
 
 class WriteCommand : public Command
@@ -104,7 +108,7 @@ public:
 			return;
 
 		vector<string> nandTxt;
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < MAX_LBA_RANGE; i++)
 		{
 			nandTxt.push_back(m_file->readFromNANDTxt(i));
 		}
@@ -116,4 +120,62 @@ private:
 	iFile* m_file;
 	int lba;
 
+};
+
+class EraseCommand : public Command
+{
+public:
+	EraseCommand(iFile* m_file, int lba, int size)
+		: m_file(m_file), lba(lba), size(size)
+	{}
+	// Command을(를) 통해 상속됨
+	void executeCommand() override
+	{
+		if (isInvalidEraseSize() || isInvalidLbaRange(lba))
+			return;
+
+		vector<string> buf = dataReadFromNand();
+		dataEraseToTargetLba(buf);
+		dataWriteToNand(buf);
+	}
+
+	void dataEraseToTargetLba(std::vector<std::string>& buf)
+	{
+		for (int i = lba; i < lba + size; i++)
+		{
+			dataWriteToTargetLba(buf, i, ERASE_DATA);
+		}
+	}
+
+	bool isInvalidEraseSize()
+	{
+		return (size > MAX_ERASE_SIZE) || (size <= MIN_ERASE_SIZE);
+	}
+
+	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
+	{
+		buf[lba] = data;
+	}
+
+	void dataWriteToNand(std::vector<std::string>& buf)
+	{
+		m_file->writeToNANDTxt(buf);
+	}
+
+	vector<string> dataReadFromNand()
+	{
+		vector<string> buf;
+		string targetData;
+		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
+		{
+			targetData = m_file->readFromNANDTxt(currentLBA);
+			buf.push_back(targetData);
+		}
+		return buf;
+	}
+
+private:
+	iFile* m_file;
+	int lba;
+	int size;
 };
