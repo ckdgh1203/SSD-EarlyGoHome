@@ -104,6 +104,7 @@
     <ClCompile Include="HelpTest.cpp" />
     <ClCompile Include="ReadTest.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="WriteTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shell\Shell.vcxproj">
