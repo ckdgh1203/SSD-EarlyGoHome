@@ -18,6 +18,8 @@ protected:
 	const int MAX_LBA_RANGE = 100;
 	const int MAX_DATA_LENGTH = 10;
 	const int START_LBA = 0;
+	const int MAX_ERASE_SIZE = 10;
+	string ERASE_DATA = "0x00000000";
 
 };
 
@@ -129,17 +131,16 @@ public:
 	void executeCommand() override
 	{
 		//size invalidity check
-		if (size > 10)
+		if (size > MAX_ERASE_SIZE)
 			return;
 
 		//nand.txt 열어서 
 		vector<string> buf = dataReadFromNand();
 
-		string erase_data = "0x00000000";
 		//lba부터 size 만큼 0x00000000 으로 쓰고
 		for (int i = lba; i < lba + size; i++)
 		{
-			dataWriteToTargetLba(buf, i, erase_data);
+			dataWriteToTargetLba(buf, i, ERASE_DATA);
 		}
 
 		//nand.txt 쓰기
