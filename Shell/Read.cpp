@@ -9,7 +9,7 @@ using namespace std;
 class Read : public CommandHandler
 {
 public:
-	Read() {};
+	Read(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
 	// read 99
 	bool isValidArgs(const vector<string>& args) override
@@ -23,9 +23,12 @@ public:
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	Progress doCommand(const vector<string>& args) override
 	{
-		cout << "Do Read!!!" << endl;
+		string arguments = "R " + args[1];
+		m_ssdHelper.execute(arguments);
+		m_outputStream << m_ssdHelper.getResult() << endl;
+		return Progress::Continue;
 	}
 
 	void usage() override {};

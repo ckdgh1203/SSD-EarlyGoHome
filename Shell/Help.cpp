@@ -9,22 +9,23 @@ using namespace std;
 class Help : public CommandHandler
 {
 public:
-	Help() {};
+	Help(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
 	bool isValidArgs(const vector<string>& args) override
 	{
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	Progress doCommand(const vector<string>& args) override
 	{
-		cout << m_helpMessage;
+		m_outputStream << m_helpMessage;
+		return Progress::Continue;
 	}
 
 	void usage() override {};
 
 	~Help() {};
-private:
+protected:
 	const string m_helpMessage = "Help:\n"
 		"\tread [LBA]\n"
 		"\twrite [LBA] [DATA]\n"

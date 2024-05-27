@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "../Shell/CommandFactory.cpp"
-#include "TestableExitActor.h"
+#include "SsdMock.h"
 
 using namespace testing;
 
@@ -13,8 +13,10 @@ public:
 
 TEST_F(CommandFactoryTest, ConstructorAndCreate)
 {
-	TestableExitActor testableExitActor{ std::cout };
-	CommandFactory factory{ &testableExitActor };
+	NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
+	NiceMock<SsdResultMock> ssdResultMock{};
+	SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
+	CommandFactory factory{std::cout, ssd };
 
 	EXPECT_NE(nullptr, factory.create("read"));
 	EXPECT_NE(nullptr, factory.create("write"));

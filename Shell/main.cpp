@@ -6,7 +6,8 @@ int main(int argc, char* argv[])
 {
     SsdExecutable executable;
     SsdResult ssdResult;
-    Shell shell{ &executable, &ssdResult, cout};
+    SsdHelper ssdHelper{ &executable, &ssdResult };
+    Shell shell{ ssdHelper, cout };
 
     if (argc < 2)
     {

@@ -7,18 +7,11 @@
 
 using namespace std;
 
-class iExit : public CommandHandler
+class Exit : public CommandHandler
 {
 public:
-    virtual void doExit() = 0;
-    virtual bool isTest() = 0;
-private:
-};
+    Exit(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
-class Exit : public iExit
-{
-public:
-    Exit() {};
 
     bool isValidArgs(const vector<string>& args) override
     {
@@ -28,23 +21,15 @@ public:
         return VALID;
     }
 
-    void doCommand(const vector<string>& args) override
+    Progress doCommand(const vector<string>& args) override
     {
-        exit(0);
-    }
-
-    void doExit() override
-    {
-        exit(0);
+        m_outputStream << "Exit from Shell" << endl;
+        return Progress::Done;
     }
 
     void usage() override {};
 
     ~Exit() {};
 
-    bool isTest() override
-    {
-        return false;
-    }
 private:
 };

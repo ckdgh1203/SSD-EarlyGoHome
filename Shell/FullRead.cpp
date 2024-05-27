@@ -10,9 +10,7 @@ using namespace std;
 class FullRead : public CommandHandler
 {
 public:
-	FullRead(Read* _read) : read(_read) {};
-
-	// fullread
+	FullRead(ostream& _out, SsdHelper& _ssd, Read* _read) : CommandHandler(_out, _ssd), read(_read){};
 	bool isValidArgs(const vector<string>& args) override
 	{
 		if (args.size() != 1)
@@ -28,12 +26,13 @@ public:
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	Progress doCommand(const vector<string>& args) override
 	{
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			read->doCommand(nArgs[lba]);
 		}
+		return Progress::Continue;
 	}
 
 	void usage() override 
