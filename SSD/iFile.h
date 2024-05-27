@@ -7,7 +7,7 @@ using namespace std;
 class iFile
 {
 public:
-	virtual string readFromNANDTxt(int lba) = 0;
+	virtual vector<string> readFromNANDTxt() = 0;
 	virtual void writeToNANDTxt(vector<string> buf) = 0;
 
 	virtual string readFromResultTxt() = 0;
