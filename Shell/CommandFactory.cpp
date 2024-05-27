@@ -26,27 +26,31 @@ enum class CommandEnum
 class CommandFactory
 {
 public:
+	CommandFactory(void)
+	{
+		m_handlers.clear();
+		m_handlers.reserve(static_cast<size_t>(CommandEnum::NUMOFCOMMAND));
+		auto* readObject = new Read();
+		m_handlers.push_back(readObject);
+		auto* writeObject = new Write();
+		m_handlers.push_back(writeObject);
+		m_handlers.push_back(new FullRead(readObject));
+		m_handlers.push_back(new FullWrite(writeObject));
+		m_handlers.push_back(new Help());
+		m_handlers.push_back(new Exit());
+	}
+	~CommandFactory(void)
+	{
+		for (auto& handler : m_handlers)
+		{
+			if(handler != nullptr) delete handler;
+		}
+	}
 	CommandHandler* create(const string& commandStr)
 	{
 		CommandEnum commandEnum = stringToCommandEnum(commandStr);
-
-		switch (commandEnum)
-		{
-		case CommandEnum::READ:
-			return new Read();
-		case CommandEnum::WRITE:
-			return new Write();
-		case CommandEnum::FULLREAD:
-			return new FullRead(new Read());
-		case CommandEnum::FULLWRITE:
-			return new FullWrite(new Write());
-		case CommandEnum::HELP:
-			return new Help();
-		case CommandEnum::EXIT:
-			return new Exit();
-		default:
-			return nullptr;
-		}
+		if (commandEnum == CommandEnum::NUMOFCOMMAND) return nullptr;
+		return m_handlers[static_cast<size_t>(commandEnum)];
 	}
 private:
 	CommandEnum stringToCommandEnum(const string& commandStr)
@@ -65,4 +69,5 @@ private:
 			return CommandEnum::EXIT;
 		return CommandEnum::NUMOFCOMMAND;
 	}
+	vector<CommandHandler*> m_handlers{};
 };
