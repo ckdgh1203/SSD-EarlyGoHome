@@ -34,9 +34,10 @@ protected:
         return fetchedString;
     }
 
-    void runAndExpect(string& input, string& expected)
+    void runAndExpect(const string& input, string& expected)
     {
-        shell.run(istringstream(input));
+        auto ss = istringstream(input);
+        shell.run(ss);
         EXPECT_EQ(expected, fetchOutput());
     }
 
