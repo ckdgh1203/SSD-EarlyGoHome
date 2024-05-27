@@ -25,7 +25,9 @@ public:
 
 	Progress doCommand(const vector<string>& args) override
 	{
-		cout << "Do Read!!!" << endl;
+		string arguments = "R " + args[1];
+		m_ssdHelper.execute(arguments);
+		m_outputStream << m_ssdHelper.getResult() << endl;
 		return Progress::Continue;
 	}
 

@@ -136,7 +136,7 @@ TEST_F(ShellTestFixture, RunAndExit)
     runAndExpect(inputString, expected);
 }
 
-TEST_F(ShellTestFixture, DISABLED_RunAndRead)
+TEST_F(ShellTestFixture, RunAndRead)
 {
     constexpr int NUMBER_OF_OPERATION = 2;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
@@ -151,7 +151,7 @@ TEST_F(ShellTestFixture, DISABLED_RunAndRead)
         "\nshell> "
         "0x00000000"
         "\nshell> "
-        "Testable Exit\n";
+        "Exit from Shell\n";
     runAndExpect(inputString, expected);
 }
 
