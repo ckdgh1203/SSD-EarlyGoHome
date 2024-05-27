@@ -16,8 +16,25 @@ const string RESULT_FILE_FOR_TEST = "../Data/result.txt";
 class SSDFile : public iFile
 {
 public:
+	/*SSDFile(string file)
+	{
+		filePath = file;
+	}*/
+
+	void initTxtFiles()
+	{
+		vector<string> buf;
+		for (int i = 0; i < 100; i++)
+		{
+			buf.push_back(DEFAULT_DATA);
+		}
+		writeToNANDTxt(buf);
+		writeToResultTxt(DEFAULT_DATA);
+	}
+
 	string readFromNANDTxt(int lba) override
 	{
+		// ifstream file(filePath + NAND_FILE);
 		ifstream file(NAND_FILE);
 		string ret = DEFAULT_DATA;
 
@@ -95,6 +112,8 @@ private:
 			targetLine++;
 		}
 	}
+
+	string filePath;
 };
 
 class SSDFileTest : public iFile
