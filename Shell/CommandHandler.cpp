@@ -14,7 +14,7 @@ public:
 	virtual void doCommand(const vector<string>& args) = 0;
 	virtual void usage() = 0;
 
-	~CommandHandler() {};
+	virtual ~CommandHandler() {};
 private:
 protected:
 	const static int startLBA = 0;

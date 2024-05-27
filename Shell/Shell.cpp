@@ -42,7 +42,7 @@ public:
 
     void helpMessasge()
     {
-        m_outputStream << "This is Help Message" << endl;
+        m_outputStream << m_helpMessage;
     }
 
     void exit()
@@ -58,17 +58,17 @@ public:
     void run(istream& inputStream)
     {
         string userInput;
-        CommandFactory commandFactory;
+        CommandFactory commandFactory{_exit};
         CommandHandler *commandHandler;
 
         while (true)
         {
-            m_outputStream << "\nshell> ";
+            m_outputStream << "shell> ";
 
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            commandHandler = commandFactory.create(args[0], _exit);
+            commandHandler = commandFactory.create(args[0]);
             if (commandHandler == nullptr)
             {
                 m_outputStream << "\nINVALID COMMAND";
@@ -107,9 +107,9 @@ public:
             m_outputStream << "Out of Lba";
             return;
         }
-        string arguments = "R " + to_string(lba) + "\n";
+        string arguments = "R " + to_string(lba);
         m_ssdExcutable->execute(arguments);
-        m_outputStream << m_ssdResult->get();
+        m_outputStream << m_ssdResult->get() << endl;
     }
 
     void write(unsigned int lba, const string& inputData)
@@ -179,6 +179,13 @@ public:
         m_outputStream << "testapp2 : Done test, written data is same with read data :)" << endl;
     }
 
+protected:
+    const string m_helpMessage = "Help:\n"
+        "\tread [LBA]\n"
+        "\twrite [LBA] [DATA]\n"
+        "\tfullread\n"
+        "\tfullwrite [DATA]\n";
+
 private:
     iExit* _exit;
     ISsdExecutable* m_ssdExcutable{};
@@ -231,7 +238,7 @@ private:
         string referenceData = "";
         for (unsigned int iter = 0; iter < lbaBound; iter++)
         {
-            referenceData += inputData;
+            referenceData += inputData + "\n";
         }
 
         ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
