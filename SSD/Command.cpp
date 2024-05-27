@@ -3,6 +3,7 @@
 #include <iostream>
 #include "iSSD.h"
 #include "iFile.h"
+#include "FileSingleton.cpp"
 using namespace std;
 
 class Command
@@ -27,10 +28,10 @@ protected:
 class WriteCommand : public Command
 {
 public:
-	WriteCommand(iFile* m_file, int lba, const string& data)
-		: m_file(m_file), lba(lba), data(data)
+	WriteCommand(int lba, const string& data)
+		: lba(lba), data(data)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidLbaRange(lba) || isInvalidData(data))
@@ -48,16 +49,18 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		m_file->writeToNANDTxt(buf);
+		FileSingleton::getInstance().writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
 		string targetData;
+
 		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
 		{
-			targetData = m_file->readFromNANDTxt(currentLBA);
+			targetData = FileSingleton::getInstance().readFromNANDTxt(currentLBA);
+
 			buf.push_back(targetData);
 		}
 		return buf;
@@ -89,19 +92,17 @@ public:
 	}
 
 private:
-	iFile* m_file;
 	int lba;
 	string data;
-
 };
 
 class ReadCommand : public Command
 {
 public:
-	ReadCommand(iFile* m_file, int lba)
-		: m_file(m_file), lba(lba)
+	ReadCommand(int lba)
+		: lba(lba)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidLbaRange(lba))
@@ -110,25 +111,23 @@ public:
 		vector<string> nandTxt;
 		for (int i = 0; i < MAX_LBA_RANGE; i++)
 		{
-			nandTxt.push_back(m_file->readFromNANDTxt(i));
+			nandTxt.push_back(FileSingleton::getInstance().readFromNANDTxt(i));
 		}
 
-		m_file->writeToResultTxt(nandTxt[lba]);
+		FileSingleton::getInstance().writeToResultTxt(nandTxt[lba]);
 	}
 
 private:
-	iFile* m_file;
 	int lba;
-
 };
 
 class EraseCommand : public Command
 {
 public:
-	EraseCommand(iFile* m_file, int lba, int size)
-		: m_file(m_file), lba(lba), size(size)
+	EraseCommand(int lba, int size)
+		: lba(lba), size(size)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidEraseSize() || isInvalidLbaRange(lba))
@@ -159,7 +158,7 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		m_file->writeToNANDTxt(buf);
+		FileSingleton::getInstance().writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
@@ -168,14 +167,13 @@ public:
 		string targetData;
 		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
 		{
-			targetData = m_file->readFromNANDTxt(currentLBA);
+			targetData = FileSingleton::getInstance().readFromNANDTxt(currentLBA);
 			buf.push_back(targetData);
 		}
 		return buf;
 	}
 
 private:
-	iFile* m_file;
 	int lba;
 	int size;
 };
