@@ -18,7 +18,7 @@ class MockFile : public iFile
 public:
 	MOCK_METHOD(string, readFromNANDTxt, (int), (override));
 	MOCK_METHOD(void, writeToNANDTxt, (vector<string> buf), (override));
-	MOCK_METHOD(string, readFromResultTxt, (int), (override));
+	MOCK_METHOD(string, readFromResultTxt, (), (override));
 	MOCK_METHOD(void, writeToResultTxt, (string), (override));
 };
 
@@ -129,56 +129,66 @@ TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
 	ssd->executeCommand();
 }
 
-TEST(SSD_Test, CommandExecute_Write)
+TEST_F(WriteMockFileFixture, CommandExecute_Write)
 {
-	NiceMock<MockFile> mFile;
-	WriteCommand wCmd{&mFile, 0, "0x00000000"};
-	SSD ssd{&wCmd};
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToNANDTxt)
+		.Times(1);
 
-	ssd.executeCommand();
-
+	ssd->executeCommand();
 }
 
-TEST(SSD_Test, CommandExecute_Read)
+TEST_F(ReadMockFileFixture, CommandExecute_Read)
 {
-	NiceMock<MockFile> mFile;
-	ReadCommand rCmd{&mFile, 0};
-	SSD ssd{&rCmd };
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToResultTxt(_))
+		.Times(1);
 
-	ssd.executeCommand();
-
+	ssd->executeCommand();
 }
 
-TEST(SSD_Test, CommandExecute_ChangeCommand)
+TEST_F(ReadMockFileFixture, CommandExecute_ChangeCommand)
 {
-	NiceMock<MockFile> mFile;
-	ReadCommand rCmd{ &mFile, 0 };
-	SSD ssd{&rCmd };
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToNANDTxt)
+		.Times(1);
+	EXPECT_CALL(mFile, writeToResultTxt(_))
+		.Times(0);
+
 	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
-	ssd.setCommand(&wCmd);
-	ssd.executeCommand();
+
+	ssd->setCommand(&wCmd);
+	ssd->executeCommand();
 }
 
-TEST(SSD_Test, CommandFactory_CreateWriteCommand)
+TEST_F(WriteMockFileFixture, CommandFactory_CreateWriteCommand)
 {
-	SSD ssd;
-	NiceMock<MockFile> mFile;
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToNANDTxt)
+		.Times(1);
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
 	
-	ssd.setCommand(cmd);
-	ssd.executeCommand();
+	ssd->setCommand(cmd);
+	ssd->executeCommand();
 }
 
-TEST(SSD_Test, CommandFactory_CreateReadCommand)
+TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 {
-	SSD ssd;
-	NiceMock<MockFile> mFile;
+	EXPECT_CALL(mFile, readFromNANDTxt)
+		.Times(100);
+	EXPECT_CALL(mFile, writeToResultTxt(_))
+		.Times(1);
+	
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0);
 
-	ssd.setCommand(cmd);
-	ssd.executeCommand();
+	ssd->setCommand(cmd);
+	ssd->executeCommand();
 }
 
 TEST_F(FileTestFixture, Actual_Read_NAND_Success)
@@ -190,7 +200,7 @@ TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
 	expected[0] = DEFAULT_DATA;
-	actual[0] = sFile.readFromResultTxt(0);
+	actual[0] = sFile.readFromResultTxt();
 }
 
 TEST_F(FileTestFixture, Actual_Write_NAND_Success)
