@@ -7,6 +7,8 @@
 #include "FullWrite.cpp"
 #include "Help.cpp"
 #include "Exit.cpp"
+#include "SsdHelper.h"
+
 #include <iostream>
 #include <string>
 
@@ -26,18 +28,18 @@ enum class CommandEnum
 class CommandFactory
 {
 public:
-	CommandFactory(ostream& _out)
+	CommandFactory(ostream& _out, SsdHelper& _ssd)
 	{
 		m_handlers.clear();
 		m_handlers.reserve(static_cast<size_t>(CommandEnum::NUMOFCOMMAND));
-		auto* readObject = new Read(_out);
+		auto* readObject = new Read(_out, _ssd);
 		m_handlers.push_back(readObject);
-		auto* writeObject = new Write(_out);
+		auto* writeObject = new Write(_out, _ssd);
 		m_handlers.push_back(writeObject);
-		m_handlers.push_back(new FullRead(_out, readObject));
-		m_handlers.push_back(new FullWrite(_out, writeObject));
-		m_handlers.push_back(new Help(_out));
-		m_handlers.push_back(new Exit(_out));
+		m_handlers.push_back(new FullRead(_out, _ssd, readObject));
+		m_handlers.push_back(new FullWrite(_out, _ssd, writeObject));
+		m_handlers.push_back(new Help(_out, _ssd));
+		m_handlers.push_back(new Exit(_out, _ssd));
 	}
 
 	CommandHandler* create(const string& commandStr)

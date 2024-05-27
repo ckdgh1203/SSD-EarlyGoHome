@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SsdHelper.h"
 #include <string>
 #include <vector>
 
@@ -14,7 +15,8 @@ enum class Progress
 class CommandHandler
 {
 public:
-	CommandHandler(ostream& _out) : m_outputStream(_out){};
+	CommandHandler(ostream& _out, SsdHelper& _ssd) :
+		m_outputStream(_out), m_ssdHelper(_ssd) {};
 
 	virtual bool isValidArgs(const vector<string>& args) = 0;
 	virtual Progress doCommand(const vector<string>& args) = 0;
@@ -30,4 +32,5 @@ protected:
 	const static bool INVALID = false;
 
 	ostream& m_outputStream;
+	SsdHelper& m_ssdHelper;
 };

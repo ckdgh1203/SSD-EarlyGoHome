@@ -9,7 +9,7 @@ using namespace std;
 class Write : public CommandHandler
 {
 public:
-	Write(ostream& _out) : CommandHandler(_out) {};
+	Write(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
 	// write 123 0x12345678
 	bool isValidArgs(const vector<string>& args) override

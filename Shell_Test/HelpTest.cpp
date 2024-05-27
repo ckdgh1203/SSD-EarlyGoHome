@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "../Shell/Help.cpp"
+#include "SsdMock.h"
 
 using namespace testing;
 
@@ -10,7 +11,10 @@ public:
     class TestableHelp : public Help
     {
     public:
-        TestableHelp(ostream& _out) : Help(_out) {}
+        NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
+        NiceMock<SsdResultMock> ssdResultMock{};
+        SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
+        TestableHelp(ostream& _out) : Help(_out, ssd) {}
         const string& helpMessage(void)
         {
             return m_helpMessage;
