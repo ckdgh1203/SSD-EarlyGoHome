@@ -61,19 +61,9 @@ public:
         }
     }
 
-    void fullwrite(const string& inputData)
-    {
-        //if (false == IsInputDataWithPrefix(inputData))	return;
-        //if (false == IsInputDataWithValidRange(inputData)) return;
-        for (int iter = 0; iter < 100; iter++)
-        {
-            //write(iter, inputData);
-        }
-    }
-
 	void doTestApp1()
 	{
-		fullwrite("0xDEADC0DE");
+		//fullwrite("0xDEADC0DE");
 		//fullread();
 
 		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
