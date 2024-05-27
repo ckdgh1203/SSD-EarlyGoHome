@@ -6,23 +6,26 @@
 #include <iostream>
 
 using namespace std;
-
-class Read : public CommandHandler
+class Erase : public CommandHandler
 {
 public:
-	Read(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
-
+	Erase(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 	bool isValidArgs(const vector<string>& args) override
 	{
-		if (isInvalidNumberOfArguments(args)) return INVALID;
-		if (m_lbaRangeVerifier.isLbaOutOfRange(stoi(args[1]))) return INVALID;
+		if (args.size() != 3)
+			return INVALID;
+		auto startLba = stoi(args[1]);
+		if (m_lbaRangeVerifier.isLbaOutOfRange(startLba)) return INVALID;
+		auto endLba = stoi(args[2]) + startLba - 1;
+		if (m_lbaRangeVerifier.isLbaOutOfRange(endLba)) return INVALID;
+		
 		return VALID;
 	}
 
 	Progress doCommand(const vector<string>& args) override
 	{
 		logger.print("Command : " + sliceString(args, 0));
-		string arguments = "R " + args[1];
+		string arguments = "E " + args[1] + " " + args[2];
 		m_ssdHelper.execute(arguments);
 		m_outputStream << m_ssdHelper.getResult() << endl;
 		return Progress::Continue;
@@ -30,12 +33,7 @@ public:
 
 	void usage() override {};
 
-	~Read() {};
+	~Erase() {};
 private:
 	LbaRangeVerifier m_lbaRangeVerifier;
-
-	bool isInvalidNumberOfArguments(const std::vector<std::string>& args)
-	{
-		return (args.size() != 2);
-	}
 };

@@ -1,71 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="소스 파일\CommandList">
-      <UniqueIdentifier>{8d005933-33cd-4237-a7fd-da172751811a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\ScriptList">
-      <UniqueIdentifier>{66978895-e99e-46ee-9d61-2e1930d98d57}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="Logger.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptHandler.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Shell.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CommandHandler.cpp">
-      <Filter>소스 파일\CommandList</Filter>
+    <ClCompile Include="TestApp1.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Help.cpp">
-      <Filter>소스 파일\CommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="Exit.cpp">
-      <Filter>소스 파일\CommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="Read.cpp">
-      <Filter>소스 파일\CommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="Write.cpp">
-      <Filter>소스 파일\CommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="FullWrite.cpp">
-      <Filter>소스 파일\CommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="FullRead.cpp">
-      <Filter>소스 파일\CommandList</Filter>
+    <ClCompile Include="TestApp2.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CommandFactory.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Command</Filter>
     </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>소스 파일</Filter>
-    <ClCompile Include="ScriptHandler.cpp">
-      <Filter>소스 파일\ScriptList</Filter>
+    <ClCompile Include="CommandHandler.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Erase.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Exit.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="FullRead.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="FullWrite.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Help.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Read.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Write.cpp">
+      <Filter>소스 파일\Command</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SsdResult.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SsdExcutable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SsdHelper.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SsdResult.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DataFormatVerifier.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LbaRangeVerifier.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{77707b1d-98ae-4bd6-a173-10f8254baa39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{9aa0c1d5-1cf7-4d18-b3a3-bc95c4e3a74c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Command">
+      <UniqueIdentifier>{35fee1c5-7b13-43d5-bd4f-0bc20fbd342c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

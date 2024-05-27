@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="gtest_main.cc" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gtest\gtest-all.cc" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gmock\gmock-all.cc" />
+    <ClCompile Include="test.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandFactoryTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="EraseTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ExitTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="FullReadTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="FullWriteTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="HelpTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="WriteTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{c2a0ee20-3cce-46f6-9b1d-f2174d416ee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{2445e626-01d7-4aa9-a113-0bef20e40a18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\CommandTest">
+      <UniqueIdentifier>{593993f1-55ff-4058-ad33-b14b2c4f73df}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SsdMock.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
