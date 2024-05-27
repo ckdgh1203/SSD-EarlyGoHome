@@ -16,7 +16,7 @@ public:
 		if (args.size() != 1)
 			return INVALID;
 
-		for (int lba = startLBA; lba < endLBA; lba++)
+		for (int lba = START_LBA; lba < END_LBA; lba++)
 		{
 			nArgs.push_back({ "read", to_string(lba)});
 			if (!read->isValidArgs(nArgs[lba]))
@@ -29,7 +29,7 @@ public:
 	Progress doCommand(const vector<string>& args) override
 	{
 		logger.print("Command : " + sliceString(args, 0));
-		for (int lba = startLBA; lba < endLBA; lba++)
+		for (int lba = START_LBA; lba < END_LBA; lba++)
 		{
 			read->doCommand(nArgs[lba]);
 		}

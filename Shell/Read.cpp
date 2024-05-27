@@ -11,15 +11,10 @@ class Read : public CommandHandler
 public:
 	Read(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
-	// read 99
 	bool isValidArgs(const vector<string>& args) override
 	{
-		if (args.size() != 2)
-			return INVALID;
-
-		if (stoi(args[1]) < 0 || stoi(args[1]) > 99)
-			return INVALID;
-
+		if (isInvalidNumberOfArguments(args)) return INVALID;
+		if (isLbaOutOfRange(args[1])) return INVALID;
 		return VALID;
 	}
 
@@ -36,4 +31,14 @@ public:
 
 	~Read() {};
 private:
+
+	bool isLbaOutOfRange(const string& lbaString)
+	{
+		return stoi(lbaString) < 0 || stoi(lbaString) > 99;
+	}
+
+	bool isInvalidNumberOfArguments(const std::vector<std::string>& args)
+	{
+		return (args.size() != 2);
+	}
 };

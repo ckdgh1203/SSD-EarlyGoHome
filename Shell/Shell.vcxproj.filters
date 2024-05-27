@@ -1,26 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CommandFactory.cpp" />
-    <ClCompile Include="CommandHandler.cpp" />
-    <ClCompile Include="Exit.cpp" />
-    <ClCompile Include="FullRead.cpp" />
-    <ClCompile Include="FullWrite.cpp" />
-    <ClCompile Include="Help.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Read.cpp" />
-    <ClCompile Include="ScriptFactory.cpp" />
-    <ClCompile Include="ScriptHandler.cpp" />
-    <ClCompile Include="Shell.cpp" />
-    <ClCompile Include="TestApp1.cpp" />
-    <ClCompile Include="TestApp2.cpp" />
-    <ClCompile Include="Write.cpp" />
-    <ClCompile Include="Erase.cpp" />
+    <ClCompile Include="Logger.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptHandler.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Shell.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp1.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp2.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandFactory.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandHandler.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Erase.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Exit.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="FullRead.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="FullWrite.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Help.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Read.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Write.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SsdExcutable.h" />
-    <ClInclude Include="SsdHelper.h" />
-    <ClInclude Include="SsdResult.h" />
+    <ClInclude Include="SsdExcutable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SsdHelper.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SsdResult.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{77707b1d-98ae-4bd6-a173-10f8254baa39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{9aa0c1d5-1cf7-4d18-b3a3-bc95c4e3a74c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Command">
+      <UniqueIdentifier>{35fee1c5-7b13-43d5-bd4f-0bc20fbd342c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
