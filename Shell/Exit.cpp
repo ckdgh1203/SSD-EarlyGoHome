@@ -3,17 +3,19 @@
 #include "CommandHandler.cpp"
 
 #include <iostream>
+#include <mutex>
 
 using namespace std;
 
-class iExit
+class iExit : public CommandHandler
 {
 public:
     virtual void doExit() = 0;
+    virtual bool isTest() = 0;
 private:
 };
 
-class Exit : public iExit, public CommandHandler
+class Exit : public iExit
 {
 public:
     Exit() {};
@@ -31,13 +33,18 @@ public:
         exit(0);
     }
 
+    void doExit() override
+    {
+        exit(0);
+    }
+
     void usage() override {};
 
     ~Exit() {};
 
-    void doExit() override
+    bool isTest() override
     {
-        exit(0);
+        return false;
     }
 private:
 };

@@ -28,6 +28,13 @@ public:
         _exit = new Exit();
     }
 
+    Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out, iExit *iExit) :
+        m_ssdExcutable(executable), m_ssdResult(result),
+        m_outputStream(_out)
+    {
+        _exit = iExit;
+    }
+
     void help()
     {
         helpMessasge();
@@ -51,7 +58,7 @@ public:
     void run(istream& inputStream)
     {
         string userInput;
-        CommandFactory commandFactory;
+        CommandFactory commandFactory{_exit};
         CommandHandler *commandHandler;
 
         while (true)
@@ -76,6 +83,8 @@ public:
             }
 
             commandHandler->doCommand(args);
+            if (_exit->isTest())
+                break;
         }
     }
 

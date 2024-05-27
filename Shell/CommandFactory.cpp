@@ -26,7 +26,7 @@ enum class CommandEnum
 class CommandFactory
 {
 public:
-	CommandFactory(void)
+	CommandFactory(iExit *_exit)
 	{
 		m_handlers.clear();
 		m_handlers.reserve(static_cast<size_t>(CommandEnum::NUMOFCOMMAND));
@@ -37,15 +37,9 @@ public:
 		m_handlers.push_back(new FullRead(readObject));
 		m_handlers.push_back(new FullWrite(writeObject));
 		m_handlers.push_back(new Help());
-		m_handlers.push_back(new Exit());
+		m_handlers.push_back(_exit);
 	}
-	~CommandFactory(void)
-	{
-		for (auto& handler : m_handlers)
-		{
-			if(handler != nullptr) delete handler;
-		}
-	}
+
 	CommandHandler* create(const string& commandStr)
 	{
 		CommandEnum commandEnum = stringToCommandEnum(commandStr);

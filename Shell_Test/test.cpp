@@ -5,21 +5,10 @@
 
 #include "../Shell/Shell.cpp"
 #include "SsdMock.h"
+#include "TestableExitActor.h"
 
 using namespace std;
 using namespace testing;
-
-class TestableExitActor : public iExit
-{
-public:
-    TestableExitActor(ostream& _out) : m_outputStream(_out) {}
-    void doExit() override
-    {
-        m_outputStream << "Testable Exit" << endl;
-    }
-private:
-    ostream& m_outputStream;
-};
 
 class ShellTestFixture : public Test
 {
@@ -27,8 +16,8 @@ protected:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
 
-    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput };
     TestableExitActor testableExitActor{ redirectedOutput };
+    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput, &testableExitActor };
 
     static constexpr int INVALID_LBA = 100;
     static constexpr int VALID_LBA = 99;

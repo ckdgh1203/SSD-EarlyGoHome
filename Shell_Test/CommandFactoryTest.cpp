@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "../Shell/CommandFactory.cpp"
+#include "TestableExitActor.h"
 
 using namespace testing;
 
@@ -12,7 +13,9 @@ public:
 
 TEST_F(CommandFactoryTest, ConstructorAndCreate)
 {
-	CommandFactory factory{};
+	TestableExitActor testableExitActor{ std::cout };
+	CommandFactory factory{ &testableExitActor };
+
 	EXPECT_NE(nullptr, factory.create("read"));
 	EXPECT_NE(nullptr, factory.create("write"));
 	EXPECT_NE(nullptr, factory.create("fullread"));
