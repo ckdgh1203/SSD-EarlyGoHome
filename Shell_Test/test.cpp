@@ -69,13 +69,6 @@ TEST_F(ShellTestFixture, DISABLED_FullWrite_100TimesSuccessfully)
     shell.fullwrite("0xABCD1234");
 }
 
-TEST_F(ShellTestFixture, DISABLED_FullRead_100TimesSuccessfully)
-{
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
-
-    shell.fullread();
-}
-
 TEST_F(ShellTestFixture, RunAndExit)
 {
     constexpr int NUMBER_OF_OPERATION = 0;

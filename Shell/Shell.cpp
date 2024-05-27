@@ -71,18 +71,10 @@ public:
         }
     }
 
-    void fullread()
-    {
-        for (int iter = 0; iter < 100; iter++)
-        {
-            //read(iter);
-        }
-    }
-
 	void doTestApp1()
 	{
 		fullwrite("0xDEADC0DE");
-		fullread();
+		//fullread();
 
 		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
 
