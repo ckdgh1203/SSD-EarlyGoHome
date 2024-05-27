@@ -139,8 +139,6 @@ TEST_F(ShellTestFixture, RunAndHelp)
 
 TEST_F(ShellTestFixture, DISABLED_TestApp1FailureCase)
 {
-    string expected = "[WARNING] testapp1 : written data is different with read data!!!\n";
-
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
     EXPECT_CALL(ssdResultMock, get())
         .WillOnce(Return(testData))
@@ -148,43 +146,53 @@ TEST_F(ShellTestFixture, DISABLED_TestApp1FailureCase)
         .WillOnce(Return(testData))
         .WillRepeatedly(Return(dataZero));
 
-    shell.doTestApp1();
+    string inputString = "testapp1\n"
+        "exit\n";
 
-    EXPECT_THAT(fetchOutput(), Eq(expected));
+    string expected = "[WARNING] testapp1 : written data is different with read data!!!\n"
+        "shell> Testable Exit\n";
+
+    runAndExpect(inputString, expected);
 }
 
 TEST_F(ShellTestFixture, DISABLED_TestApp1SuccessCase)
 {
-    string expected = "testapp1 : Done test, written data is same with read data :)\n";
-
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
     EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return(testData));
 
-    shell.doTestApp1();
+    string inputString = "testapp1\n"
+        "exit\n";
 
-    EXPECT_THAT(fetchOutput(), Eq(expected));
+    string expected = "testapp1 : Done test, written data is same with read data :)\n"
+        "shell> Testable Exit\n";
+
+    runAndExpect(inputString, expected);
 }
 
 TEST_F(ShellTestFixture, DISABLED_TestApp2FailureCase)
 {
-    string expected = "[WARNING] testapp2 : written data is different with read data!!!\n";
-
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(192);
     EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0xAAAABBBB"));
 
-    shell.doTestApp2();
+    string inputString = "testapp2\n"
+        "exit\n";
 
-    EXPECT_THAT(fetchOutput(), Eq(expected));
+    string expected = "[WARNING] testapp2 : written data is different with read data!!!\n"
+        "shell> Testable Exit\n";
+
+    runAndExpect(inputString, expected);
 }
 
 TEST_F(ShellTestFixture, DISABLED_TestApp2SuccessCase)
 {
-    string expected = "testapp2 : Done test, written data is same with read data :)\n";
-
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(192);
     EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0x12345678"));
 
-    shell.doTestApp2();
+    string inputString = "testapp2\n"
+        "exit\n";
 
-    EXPECT_THAT(fetchOutput(), Eq(expected));
+    string expected = "testapp2 : Done test, written data is same with read data :)\n"
+        "shell> Testable Exit\n";
+
+    runAndExpect(inputString, expected);
 }

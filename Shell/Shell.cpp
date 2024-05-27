@@ -3,6 +3,8 @@
 #include "SsdHelper.h"
 #include "CommandHandler.cpp"
 #include "CommandFactory.cpp"
+#include "ScriptHandler.cpp"
+#include "ScriptFactory.cpp"
 #include "Exit.cpp"
 
 #include <iostream>
@@ -24,12 +26,31 @@ public:
 
     void run(istream& inputStream)
     {
+        ScriptFactory scriptFactory;
+        ScriptHandler* scriptHandler;
+
         while (true)
         {
             m_outputStream << "shell> ";
 
             vector<string> args{};
             parseArguments(inputStream, args);
+
+            scriptHandler = scriptFactory.create(args[0], m_commandFactory, m_outputStream);
+            if (scriptHandler != nullptr)
+            {
+                scriptHandler->doScript();
+                delete scriptHandler;
+                continue;
+            }
+
+            scriptHandler = scriptFactory.create(args[0], m_commandFactory, m_outputStream);
+            if (scriptHandler != nullptr)
+            {
+                scriptHandler->doScript();
+                delete scriptHandler;
+                continue;
+            }
 
             auto* commandHandler = m_commandFactory.create(args[0]);
             if (commandHandler == nullptr)
@@ -112,7 +133,7 @@ private:
     bool readCompare(const string& inputData, unsigned int lbaBound)
     {
         string referenceData = "";
-        for (int iter = 0; iter < lbaBound; iter++)
+        for (unsigned int iter = 0; iter < lbaBound; iter++)
         {
             referenceData += inputData + "\n";
         }
