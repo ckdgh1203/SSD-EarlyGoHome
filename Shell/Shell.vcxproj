@@ -131,8 +131,11 @@
     <ClCompile Include="CommandHandler.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="FullRead.cpp" />
+    <ClCompile Include="FullRead10AndCompare.cpp" />
     <ClCompile Include="FullWrite.cpp" />
+    <ClCompile Include="FullWriteAndReadCompare.cpp" />
     <ClCompile Include="Help.cpp" />
+    <ClCompile Include="LoopWriteAndReadCompare.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Read.cpp" />
     <ClCompile Include="ScriptFactory.cpp" />
@@ -141,6 +144,7 @@
     <ClCompile Include="TestApp1.cpp" />
     <ClCompile Include="TestApp2.cpp" />
     <ClCompile Include="Write.cpp" />
+    <ClCompile Include="Write10AndCompare.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SsdExcutable.h" />

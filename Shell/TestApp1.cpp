@@ -14,7 +14,7 @@ public:
     void doScript() override
     {
 		doFullWrite("0xDEADC0DE");
-		duFullRead();
+		doFullRead();
 
 		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
 

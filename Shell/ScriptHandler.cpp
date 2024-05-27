@@ -79,7 +79,7 @@ protected:
         fullwriteCmd->doCommand(fullwriteArgument);
     }
 
-    void duFullRead()
+    void doFullRead()
     {
         vector<string> fullreadArgument;
         fullreadArgument.push_back("fullread");

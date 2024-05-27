@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <vector>
 
 using namespace std;
@@ -97,6 +98,42 @@ public:
             commandHandler->doCommand(args);
             if (_exit->isTest())
                 break;
+        }
+    }
+
+    void run(char* listFileName[])
+    {
+        const char* fileName = listFileName[1];
+        ifstream file(fileName);
+
+        if (!(file.is_open()))
+        {
+            m_outputStream << "\nINVALID FILENAME";
+            return;
+        }
+
+        string scriptLine;
+
+        while (getline(file, scriptLine))
+        {
+            m_outputStream << scriptLine << "   ---   ";
+            
+            CommandFactory commandFactory{ _exit };
+            CommandHandler* commandHandler;
+            ScriptFactory scriptFactory;
+            ScriptHandler* scriptHandler = scriptFactory.create(scriptLine, commandFactory, m_outputStream);
+
+            if (scriptHandler == nullptr)
+            {
+                m_outputStream << "\nINVALID SCRIPT";
+                return;
+            }
+
+            m_outputStream << "Run...";
+            scriptHandler->doScript();
+
+            m_outputStream << "Pass\n";
+            delete scriptHandler;
         }
     }
 
