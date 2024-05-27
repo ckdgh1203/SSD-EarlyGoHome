@@ -133,6 +133,7 @@
     <ClCompile Include="FullRead.cpp" />
     <ClCompile Include="FullWrite.cpp" />
     <ClCompile Include="Help.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Read.cpp" />
     <ClCompile Include="Shell.cpp" />

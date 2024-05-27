@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "Logger.cpp"
 
 using namespace std;
 
@@ -22,4 +23,6 @@ protected:
 
 	const static bool VALID = true;
 	const static bool INVALID = false;
+
+	//Logger logger;
 };
