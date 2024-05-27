@@ -21,6 +21,9 @@ public:
 
     void print(string msg, const std::source_location& loc = std::source_location::current())
     {
+        if (msg.empty())
+            return;
+
         string buf(30, ' ');
         string callFunction = extractClassName(loc.function_name());
         formattingCallFunction(buf, callFunction);
