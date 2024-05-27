@@ -130,17 +130,11 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
-		//size invalidity check
 		if (isInvalidEraseSize())
 			return;
 
-		//nand.txt 열어서 
 		vector<string> buf = dataReadFromNand();
-
-		//lba부터 size 만큼 0x00000000 으로 쓰고
 		dataEraseToTargetLba(buf);
-
-		//nand.txt 쓰기
 		dataWriteToNand(buf);
 	}
 
