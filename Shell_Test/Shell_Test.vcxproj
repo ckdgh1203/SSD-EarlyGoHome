@@ -107,6 +107,7 @@
     <ClCompile Include="HelpTest.cpp" />
     <ClCompile Include="ReadTest.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="ScriptTest.cpp" />
     <ClCompile Include="WriteTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,10 +116,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="SsdMock.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SsdMock.h" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

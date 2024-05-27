@@ -10,10 +10,10 @@ using namespace std;
 class ScriptHandler
 {
 public:
-    explicit ScriptHandler(CommandFactory& commandFactory, ostream& outputStream)
+    ScriptHandler(CommandFactory& commandFactory, ostream& outputStream)
         : m_CommandFactory(commandFactory), m_outputStream(outputStream)
     {
-
+        clearOutputStreamBuffer();
     }
 
     virtual void doScript() = 0;
@@ -22,20 +22,25 @@ protected:
     CommandFactory& m_CommandFactory;
     ostream& m_outputStream;
 
+    void clearOutputStreamBuffer()
+    {
+        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
+        redirectedOutput->str("");
+        redirectedOutput->clear();
+    }
+
     bool readCompare(const string& inputData, unsigned int lbaBound)
     {
         string referenceData = "";
         for (unsigned int iter = 0; iter < lbaBound; iter++)
         {
-            referenceData += inputData;
+            referenceData += (inputData + "\n");
         }
 
-        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
-        string readData = redirectedOutput->str();
-        redirectedOutput->str("");
-        redirectedOutput->clear();
+        string readData = dynamic_cast<ostringstream*>(&m_outputStream)->str();
+        clearOutputStreamBuffer();
 
-        return (referenceData == readData);
+        return (readData == referenceData);
     }
 
     void readRepeatedly(const unsigned int lbaBound)
