@@ -37,11 +37,6 @@ public:
 		}
 	}
 
-	string invalidArgsMsg(const vector<string> &args)
-	{
-		return "FullRead!!";
-	}
-
 	void usage() override 
 	{
 		cout << "fullread" << endl;

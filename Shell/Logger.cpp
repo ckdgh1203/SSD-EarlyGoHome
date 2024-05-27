@@ -21,64 +21,15 @@ class Logger
 public:
 	Logger() { };
 
-	void print(string msg, const std::source_location& loc = std::source_location::current())
+	void print(string msg, const std::source_location& caller = std::source_location::current())
 	{
 		if (msg.empty())
 			return;
 
-		string buf(30, ' ');
-		string callFunction = extractClassName(loc.function_name());
-		callFunction += "()";
-		formattingCallFunction(buf, callFunction);
-		string result = "[" + getCurrentTimeLogFormatted() + "] " + buf + " : " + msg + "\n";
+		string contents = "[" + getCurrentTimeLogFormatted() + "] " + formatCallFunction(extractCallerName(caller.function_name())) + " : " + msg + "\n";
 
-		if (fs::exists(LOGFILE))
-		{
-			long long fileSize = getFileSize(LOGFILE);
-			if (fileSize > TEN_KB)
-			{
-				string oldFileName = LOGFILE;
-				string newFileName = getSaveFileName();
-				std::wstring oldWstr(oldFileName.begin(), oldFileName.end());
-				std::wstring newWstr(newFileName.begin(), newFileName.end());
-				MoveFile(oldWstr.c_str(), newWstr.c_str());
-				logFileQueue.push(newFileName);
-				if (logFileQueue.size() == 2)
-				{
-					zip();
-				}
-			}
-			cout << "FileSize : " << fileSize << endl;
-		}
-		ofstream* latest;
-		latest = new ofstream(LOGFILE, ios::app);
-		latest->write(result.c_str(), result.size());
-		latest->close();
-
-		delete latest;
-	}
-
-	string getSaveFileName()
-	{
-		string result = "until_" + getCurrentTimeFileFormatted() + ".log";
-		
-		return result;
-	}
-
-	void zip()
-	{
-		string oldFileName = logFileQueue.front(); logFileQueue.pop();
-		string newFileName = oldFileName;
-		size_t dotIndex = newFileName.find_last_of('.');
-		if (dotIndex != string::npos)
-		{
-			newFileName.replace(dotIndex, newFileName.size() - dotIndex, ".zip");
-		}
-		std::wstring oldWstr(oldFileName.begin(), oldFileName.end());
-		std::wstring newWstr(newFileName.begin(), newFileName.end());
-		MoveFile(oldWstr.c_str(), newWstr.c_str());
-
-		cout << "Zip From" << oldFileName << " to " << newFileName << endl;
+		writeToLogFile(contents);
+		agingLogFile();
 	}
 
 	~Logger() { };
@@ -107,22 +58,23 @@ private:
 		return ss.str();
 	}
 
-	string extractClassName(const char* funcSig)
+	string extractCallerName(const char* funcSig)
 	{
 		std::string sig(funcSig);
 		size_t start = sig.find(" ") + 1;
 		start = sig.find(" ", start) + 1;
 		size_t end = sig.find("::", start);
-		return sig.substr(start, end - start);
+		return sig.substr(start, end - start) + "()";
 	}
 
-	string formattingCallFunction(string& buf, string callFunction)
+	string formatCallFunction(string callFunction)
 	{
+		string formatCallFunction(30, ' ');
 		size_t length = callFunction.size();
 		if (length > 30)
 			callFunction.resize(30);
-		buf.replace(0, length, callFunction);
-		return buf;
+		formatCallFunction.replace(0, length, callFunction);
+		return formatCallFunction;
 	}
 
 	long long getFileSize(const std::string& filename)
@@ -131,9 +83,68 @@ private:
 		if (!file.is_open())
 		{
 			std::cerr << "Error: Unable to open file." << std::endl;
-			return -1; // 파일 열기 실패
+			return -1;
 		}
-		return file.tellg(); // 현재 위치가 파일의 끝인 파일 포인터의 위치를 반환하여 파일 크기를 구함
+		return file.tellg();
+	}
+
+	string getSaveFileName()
+	{
+		string result = "until_" + getCurrentTimeFileFormatted() + ".log";
+
+		return result;
+	}
+
+	bool changeFileName(string from, string to)
+	{
+		std::wstring oldWstr(from.begin(), from.end());
+		std::wstring newWstr(to.begin(), to.end());
+		
+		return MoveFile(oldWstr.c_str(), newWstr.c_str());
+	}
+
+	void writeToLogFile(string contents)
+	{
+		ofstream* latest;
+		latest = new ofstream(LOGFILE, ios::app);
+		latest->write(contents.c_str(), contents.size());
+		latest->close();
+		delete latest;
+	}
+
+	void agingLogFile()
+	{
+		if (fs::exists(LOGFILE))
+		{
+			if (getFileSize(LOGFILE) > TEN_KB)
+			{
+				string oldFileName = LOGFILE;
+				string newFileName = getSaveFileName();
+				if (changeFileName(oldFileName, newFileName))
+				{
+					logFileQueue.push(newFileName);
+					if (logFileQueue.size() == 2)
+					{
+						doZip();
+					}
+				}
+			}
+		}
+	}
+
+	void doZip()
+	{
+		string oldFileName = logFileQueue.front();
+		string newFileName = oldFileName;
+		size_t dotIndex = newFileName.find_last_of('.');
+		if (dotIndex != string::npos)
+		{
+			newFileName.replace(dotIndex, newFileName.size() - dotIndex, ".zip");
+		}
+		if (changeFileName(oldFileName, newFileName))
+		{
+			logFileQueue.pop();
+		}
 	}
 
 	const string LOGFILE = "latest.log";
