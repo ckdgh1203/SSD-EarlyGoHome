@@ -49,6 +49,11 @@ public:
 class FileTestFixture : public testing::Test
 {
 public:
+	void SetUp() override
+	{
+		sFileTest.initTxtFiles();
+	}
+
 	void TearDown() override
 	{
 		for (int i = 0; i < FILE_TEST_NUM; i++)
@@ -57,12 +62,12 @@ public:
 		}
 	}
 
-	void ValidateFileTest(const string actualValue, const string expectedValue)
+	void ValidateFileTest(const string expectedValue, const string actualValue)
 	{
-		EXPECT_EQ(actualValue, expectedValue);
+		EXPECT_EQ(expectedValue, actualValue);
 	}
 
-	SSDFile sFile;
+	SSDFileTest sFileTest;
 
 protected:
 	string expected[FILE_TEST_NUM];
@@ -187,19 +192,34 @@ TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 
 TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 {
-	expected[0] = "0x00000000";
-	actual[0] = sFile.readFromNANDTxt(0);
+	expected[99] = DEFAULT_DATA;
+	actual[99] = sFileTest.readFromNANDTxt(99);
 }
 
 TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
-	expected[0] = "0x00000000";
+	expected[0] = DEFAULT_DATA;
 	actual[0] = sFile.readFromResultTxt();
 }
 
-TEST_F(FileTestFixture, DISABLED_Actual_Write_NAND_Success)
+TEST_F(FileTestFixture, Actual_Write_NAND_Success)
 {
-	// 1. Write는 파일에 직접 접근해서 값 확인 및 비교 
-	// 2. 테스트 의존성 문제는 데이터 초기화 부분 추가
+	vector<string> buf;
+	for (int i = 0; i < 100; i++)
+	{
+		buf.push_back("0x00000001");
+	}
+	sFileTest.writeToNANDTxt(buf);
+
+	expected[99] = "0x00000001";
+	actual[99] = sFileTest.readFromNANDTxt(99);
+}
+
+TEST_F(FileTestFixture, Actual_Write_RESULT_Success)
+{
+	sFileTest.writeToResultTxt("0x00000001");
+
+	expected[0] = "0x00000001";
+	actual[0] = sFileTest.readFromResultTxt(0);
 }
 
