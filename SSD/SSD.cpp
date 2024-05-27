@@ -8,6 +8,7 @@
 #include "iFile.h"
 #include <iostream>
 #include "CommandFactory.cpp"
+#include "CommandBuffer.cpp"
 using namespace std;
 
 class SSD
@@ -33,5 +34,5 @@ public:
 
 private:
 	Command* command;
-
+	CommandBuffer commandBuffer;
 };
