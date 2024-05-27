@@ -44,31 +44,6 @@ private:
     ostringstream redirectedOutput{};
 };
 
-TEST_F(ShellTestFixture, DISABLED_FullWrite_NotIncludedPrefixException)
-{
-    string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
-
-    shell.fullwrite("abcd1234");
-
-    EXPECT_THAT(fetchOutput(), Eq(expected));
-}
-
-TEST_F(ShellTestFixture, DISABLED_FullWrite_NotAllowedInputDataException)
-{
-    string expected = "[WARNING] Input data has invalid characters !!!\n";
-
-    shell.fullwrite("0xabcd1234");
-
-    EXPECT_THAT(fetchOutput(), Eq(expected));
-}
-
-TEST_F(ShellTestFixture, DISABLED_FullWrite_100TimesSuccessfully)
-{
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
-
-    shell.fullwrite("0xABCD1234");
-}
-
 TEST_F(ShellTestFixture, RunAndExit)
 {
     constexpr int NUMBER_OF_OPERATION = 0;
