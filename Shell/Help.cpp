@@ -18,11 +18,16 @@ public:
 
 	void doCommand(const vector<string>& args) override
 	{
-		cout << "Do Help!!!" << endl;
+		cout << m_helpMessage;
 	}
 
 	void usage() override {};
 
 	~Help() {};
 private:
+	const string m_helpMessage = "Help:\n"
+		"\tread [LBA]\n"
+		"\twrite [LBA] [DATA]\n"
+		"\tfullread\n"
+		"\tfullwrite [DATA]\n";
 };
