@@ -117,3 +117,21 @@ private:
 	int lba;
 
 };
+
+class EraseCommand : public Command
+{
+public:
+	EraseCommand(iFile* m_file, int lba, int size)
+		: m_file(m_file), lba(lba), size(size)
+	{}
+	// Command을(를) 통해 상속됨
+	void executeCommand() override
+	{
+
+	}
+
+private:
+	iFile* m_file;
+	int lba;
+	int size;
+};

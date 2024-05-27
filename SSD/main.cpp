@@ -26,6 +26,11 @@ int main(int argc, char* argv[])
 		string data = argv[3];
 		ssd.setCommand(commandFactory.createCommand(&file, lba, data));
 	}
+	if (cmd == "E")
+	{
+		int size = stoi(argv[3]);
+		ssd.setCommand(commandFactory.createCommand(&file, lba, size));
+	}
 	ssd.executeCommand();
 
 	return 0;
