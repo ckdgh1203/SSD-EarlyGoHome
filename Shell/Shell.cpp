@@ -16,23 +16,20 @@ class Shell
 {
 public:
 
-    Shell(void) : m_outputStream(cout)
+    Shell(void) : m_outputStream(cout), _exit(new Exit()), m_commandFactory(_exit)
     {
-        _exit = new Exit();
     }
 
     Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out) :
         m_ssdExcutable(executable), m_ssdResult(result),
-        m_outputStream(_out)
+        m_outputStream(_out), _exit(new Exit()), m_commandFactory(_exit)
     {
-        _exit = new Exit();
     }
 
-    Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out, iExit *iExit) :
+    Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out, iExit *_exit) :
         m_ssdExcutable(executable), m_ssdResult(result),
-        m_outputStream(_out)
+        m_outputStream(_out), m_commandFactory(_exit)
     {
-        _exit = iExit;
     }
 
     void help()
@@ -45,22 +42,8 @@ public:
         m_outputStream << m_helpMessage;
     }
 
-    void exit()
-    { 
-        _exit->doExit();
-    }
-
-    void setExit(iExit *newExit)
-    {
-        _exit = newExit;
-    }
-
     void run(istream& inputStream)
     {
-        string userInput;
-        CommandFactory commandFactory{_exit};
-        CommandHandler *commandHandler;
-
         while (true)
         {
             m_outputStream << "shell> ";
@@ -68,7 +51,7 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            commandHandler = commandFactory.create(args[0]);
+            auto* commandHandler = m_commandFactory.create(args[0]);
             if (commandHandler == nullptr)
             {
                 m_outputStream << "\nINVALID COMMAND";
@@ -191,6 +174,7 @@ private:
     ISsdExecutable* m_ssdExcutable{};
     ISsdResult* m_ssdResult{};
     ostream& m_outputStream;
+    CommandFactory m_commandFactory;
 
     bool verifyLba(unsigned int lba)
     {
