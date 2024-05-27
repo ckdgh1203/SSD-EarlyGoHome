@@ -14,7 +14,7 @@ public:
 
 	bool insertCommandToCommandBuffer(CommandPacket cmdPacket)
 	{
-		FileSingleton::getInstance().readFromResultxt(cmdBuf, cmdCnt);
+		FileSingleton::getInstance().readFromBuffertxt(cmdBuf, cmdCnt);
 
 		if (cmdPacket.command == "R")
 		{

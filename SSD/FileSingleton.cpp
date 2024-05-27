@@ -110,7 +110,7 @@ public:
 		file.close();
 	}
 
-	void readFromResultxt(vector<CommandPacket>& cmdBuf, int& cmdCnt)
+	void readFromBuffertxt(vector<CommandPacket>& cmdBuf, int& cmdCnt)
 	{
 		ifstream file(filePath + BUFFER_FILE);
 		string line;
