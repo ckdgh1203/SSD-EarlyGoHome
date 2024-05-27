@@ -35,25 +35,25 @@ TEST_F(FullWriteTest, DoCommand)
     EXPECT_EQ(Progress::Continue, fullWrite.doCommand(args));
 }
 
-TEST_F(FullWriteTest, DISABLED_FullWrite_NotIncludedPrefixException)
+TEST_F(FullWriteTest, FullWrite_NotIncludedPrefixException)
 {
     string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
 
     vector<string> args;
-    args.push_back("write");
-    args.push_back("abcd1234");
+    args.push_back("fullwrite");
+    args.push_back("abcd123456");
 
     EXPECT_FALSE(fullWrite.isValidArgs(args));
 
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(FullWriteTest, DISABLED_FullWrite_NotAllowedInputDataException)
+TEST_F(FullWriteTest, FullWrite_NotAllowedInputDataException)
 {
     string expected = "[WARNING] Input data has invalid characters !!!\n";
 
     vector<string> args;
-    args.push_back("write");
+    args.push_back("fullwrite");
     args.push_back("0xabcd1234");
 
     EXPECT_FALSE(fullWrite.isValidArgs(args));

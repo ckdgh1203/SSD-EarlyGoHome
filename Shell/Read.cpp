@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommandHandler.cpp"
+#include "LbaRangeVerifier.h"
 
 #include <iostream>
 
@@ -14,7 +15,7 @@ public:
 	bool isValidArgs(const vector<string>& args) override
 	{
 		if (isInvalidNumberOfArguments(args)) return INVALID;
-		if (isLbaOutOfRange(args[1])) return INVALID;
+		if (m_lbaRangeVerifier.isLbaOutOfRange(stoi(args[1]))) return INVALID;
 		return VALID;
 	}
 
@@ -31,11 +32,7 @@ public:
 
 	~Read() {};
 private:
-
-	bool isLbaOutOfRange(const string& lbaString)
-	{
-		return stoi(lbaString) < 0 || stoi(lbaString) > 99;
-	}
+	LbaRangeVerifier m_lbaRangeVerifier;
 
 	bool isInvalidNumberOfArguments(const std::vector<std::string>& args)
 	{

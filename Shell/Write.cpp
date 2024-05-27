@@ -2,6 +2,7 @@
 
 #include "CommandHandler.cpp"
 #include "DataFormatVerifier.h"
+#include "LbaRangeVerifier.h"
 #include <iostream>
 
 using namespace std;
@@ -15,7 +16,7 @@ public:
 	bool isValidArgs(const vector<string>& args) override
 	{
 		if (isInvalidNumberOfArguments(args)) return INVALID;
-		if (isLbaOutOfRange(args[1])) return INVALID;
+		if (m_lbaRangeVerifier.isLbaOutOfRange(stoi(args[1]))) return INVALID;
 		if (m_dataFormatVerifier.isInvalidDataFormat(args[2])) return INVALID;
 
 		return VALID;
@@ -38,10 +39,7 @@ public:
 		return (args.size() != 3);
 	}
 
-	bool isLbaOutOfRange(const string& lbaString)
-	{
-		return stoi(lbaString) < 0 || stoi(lbaString) > 99;
-	}
 private:
 	DataFormatVerifier m_dataFormatVerifier;
+	LbaRangeVerifier m_lbaRangeVerifier;
 };

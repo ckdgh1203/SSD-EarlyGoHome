@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommandHandler.cpp"
+#include "LbaRangeVerifier.h"
 
 #include <iostream>
 
@@ -14,11 +15,10 @@ public:
 		if (args.size() != 3)
 			return INVALID;
 		auto startLba = stoi(args[1]);
-		if (startLba < 0 || startLba > 99)
-			return INVALID;
+		if (m_lbaRangeVerifier.isLbaOutOfRange(startLba)) return INVALID;
 		auto endLba = stoi(args[2]) + startLba - 1;
-		if (endLba < 0 || endLba > 99)
-			return INVALID;
+		if (m_lbaRangeVerifier.isLbaOutOfRange(endLba)) return INVALID;
+		
 		return VALID;
 	}
 
@@ -35,4 +35,5 @@ public:
 
 	~Erase() {};
 private:
+	LbaRangeVerifier m_lbaRangeVerifier;
 };
