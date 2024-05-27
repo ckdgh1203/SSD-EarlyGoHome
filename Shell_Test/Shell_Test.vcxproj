@@ -99,8 +99,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandFactoryTest.cpp" />
+    <ClCompile Include="ExitTest.cpp" />
+    <ClCompile Include="FullReadTest.cpp" />
+    <ClCompile Include="FullWriteTest.cpp" />
     <ClCompile Include="gtest_main.cc" />
+    <ClCompile Include="HelpTest.cpp" />
+    <ClCompile Include="ReadTest.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="WriteTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shell\Shell.vcxproj">
@@ -112,7 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SsdMock.h" />
-    <ClInclude Include="TestableExitActor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

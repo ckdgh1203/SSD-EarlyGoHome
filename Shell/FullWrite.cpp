@@ -11,8 +11,7 @@ using namespace std;
 class FullWrite : public CommandHandler
 {
 public:
-	FullWrite(Write* _write) : write(_write) {};
-
+	FullWrite(ostream& _out, SsdHelper& _ssd, Write* _write) : CommandHandler(_out, _ssd), write(_write){};
 	// fullwrite 0x12345678
 	bool isValidArgs(const vector<string>& args) override
 	{
@@ -29,12 +28,13 @@ public:
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	Progress doCommand(const vector<string>& args) override
 	{
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			write->doCommand(nArgs[lba]);
 		}
+		return Progress::Continue;
 	}
 
 	void usage() override {}
