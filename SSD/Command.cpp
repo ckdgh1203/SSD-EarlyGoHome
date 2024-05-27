@@ -28,8 +28,8 @@ protected:
 class WriteCommand : public Command
 {
 public:
-	WriteCommand(iFile* m_file, int lba, const string& data)
-		: m_file(m_file), lba(lba), data(data)
+	WriteCommand(int lba, const string& data)
+		: lba(lba), data(data)
 	{}
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
@@ -99,18 +99,17 @@ public:
 	}
 
 private:
-	iFile* m_file;
+	//iFile* m_file;
 	int lba;
 	string data;
 	//FileSingleton& fileSingleton;
-
 };
 
 class ReadCommand : public Command
 {
 public:
-	ReadCommand(iFile* m_file, int lba)
-		: m_file(m_file), lba(lba)
+	ReadCommand(int lba)
+		: lba(lba)
 	{}
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
@@ -131,16 +130,15 @@ public:
 	}
 
 private:
-	iFile* m_file;
+	//iFile* m_file;
 	int lba;
-
 };
 
 class EraseCommand : public Command
 {
 public:
-	EraseCommand(iFile* m_file, int lba, int size)
-		: m_file(m_file), lba(lba), size(size)
+	EraseCommand(int lba, int size)
+		: lba(lba), size(size)
 	{}
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
@@ -191,7 +189,7 @@ public:
 	}
 
 private:
-	iFile* m_file;
+	//iFile* m_file;
 	int lba;
 	int size;
 };

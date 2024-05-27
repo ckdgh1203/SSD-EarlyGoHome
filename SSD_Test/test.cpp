@@ -31,7 +31,7 @@ public:
 		FileSingleton::getInstance().setFilePath("../Data/");
 
 	}
-	WriteCommand wCmd{ &mFile, 0,"0x00000000" };
+	WriteCommand wCmd{ 0,"0x00000000" };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
@@ -44,7 +44,7 @@ public:
 		ssd = new SSD(&rCmd);
 		FileSingleton::getInstance().setFilePath("../Data/");
 	}
-	ReadCommand rCmd{ &mFile, 0 };
+	ReadCommand rCmd{ 0 };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
@@ -99,7 +99,7 @@ TEST_F(ReadMockFileFixture, LBA100_Read_Fail)
 		.Times(0);
 	EXPECT_CALL(mFile, writeToResultTxt)
 		.Times(0);
-	ReadCommand rCmd{ &mFile, 100 };
+	ReadCommand rCmd{ 100 };
 	ssd->setCommand(&rCmd);
 	ssd->executeCommand();
 }
@@ -110,7 +110,7 @@ TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x1234_5678_Success)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(1);
-	WriteCommand wCmd{ &mFile, 0, "0x12345678" };
+	WriteCommand wCmd{ 0, "0x12345678" };
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
 }
@@ -121,7 +121,7 @@ TEST_F(WriteMockFileFixture, LBA100_Write_Fail)
 		.Times(0);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
-	WriteCommand wCmd{ &mFile, 100, "0x12345678" };
+	WriteCommand wCmd{ 100, "0x12345678" };
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
 }
@@ -132,7 +132,7 @@ TEST_F(WriteMockFileFixture, LBA0_Write_Data_0x0000_0000_0000_Fail)
 		.Times(0);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
-	WriteCommand wCmd{ &mFile, 100, "0x000000000000" };
+	WriteCommand wCmd{ 100, "0x000000000000" };
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
 }
@@ -166,7 +166,7 @@ TEST_F(ReadMockFileFixture, CommandExecute_ChangeCommand)
 	EXPECT_CALL(mFile, writeToResultTxt(_))
 		.Times(0);
 
-	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
+	WriteCommand wCmd{ 0, "0x00000000" };
 
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
@@ -179,7 +179,7 @@ TEST_F(WriteMockFileFixture, CommandFactory_CreateWriteCommand)
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(1);
 	CommandFactory& cf = CommandFactory::getInstance();
-	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
+	Command* cmd = cf.createCommand( 0, "0x12345678");
 
 	ssd->setCommand(cmd);
 	ssd->executeCommand();
@@ -193,7 +193,7 @@ TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 		.Times(1);
 
 	CommandFactory& cf = CommandFactory::getInstance();
-	Command* cmd = cf.createCommand(&mFile, 0);
+	Command* cmd = cf.createCommand( 0);
 
 	ssd->setCommand(cmd);
 	ssd->executeCommand();
