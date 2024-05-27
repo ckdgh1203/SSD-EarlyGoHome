@@ -28,6 +28,13 @@ public:
         _exit = new Exit();
     }
 
+    Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out, iExit *iExit) :
+        m_ssdExcutable(executable), m_ssdResult(result),
+        m_outputStream(_out)
+    {
+        _exit = iExit;
+    }
+
     void help()
     {
         helpMessasge();
@@ -61,7 +68,7 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            commandHandler = commandFactory.create(args[0]);
+            commandHandler = commandFactory.create(args[0], _exit);
             if (commandHandler == nullptr)
             {
                 m_outputStream << "\nINVALID COMMAND";
@@ -76,6 +83,8 @@ public:
             }
 
             commandHandler->doCommand(args);
+            if (_exit->isTest())
+                break;
         }
     }
 

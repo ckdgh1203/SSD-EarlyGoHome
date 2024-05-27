@@ -26,7 +26,7 @@ enum class CommandEnum
 class CommandFactory
 {
 public:
-	CommandHandler* create(const string& commandStr)
+	CommandHandler* create(const string& commandStr, iExit *_exit)
 	{
 		CommandEnum commandEnum = stringToCommandEnum(commandStr);
 
@@ -43,7 +43,7 @@ public:
 		case CommandEnum::HELP:
 			return new Help();
 		case CommandEnum::EXIT:
-			return new Exit();
+			return _exit;
 		default:
 			return nullptr;
 		}

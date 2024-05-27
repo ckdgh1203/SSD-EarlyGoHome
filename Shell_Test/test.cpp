@@ -27,9 +27,29 @@ class TestableExitActor : public iExit
 {
 public:
     TestableExitActor(ostream& _out) : m_outputStream(_out) {}
+    bool isValidArgs(const vector<string>& args) override
+    {
+        return true;
+    }
+    void doCommand(const vector<string>& args) override
+    {
+        m_outputStream << "Testable Exit" << endl;
+    }
+    void doCommand()
+    {
+        m_outputStream << "Testable Exit" << endl;
+    }
+    void usage() override
+    {
+        m_outputStream << "Testable Exit Help Message" << endl;
+    }
     void doExit() override
     {
         m_outputStream << "Testable Exit" << endl;
+    }
+    bool isTest() override
+    {
+        return true;
     }
 private:
     ostream& m_outputStream;
@@ -41,8 +61,8 @@ protected:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
 
-    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput };
     TestableExitActor testableExitActor{ redirectedOutput };
+    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput, &testableExitActor };
 
     static constexpr int INVALID_LBA = 100;
     static constexpr int VALID_LBA = 99;
@@ -175,7 +195,7 @@ TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
     shell.fullread();
 }
 
-TEST_F(ShellTestFixture, DISABLED_RunAndExit)
+TEST_F(ShellTestFixture, RunAndExit)
 {
     constexpr int NUMBER_OF_OPERATION = 0;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
@@ -186,7 +206,7 @@ TEST_F(ShellTestFixture, DISABLED_RunAndExit)
     runAndExpect(inputString, expected);
 }
 
-TEST_F(ShellTestFixture, DISABLED_RunAndRead)
+TEST_F(ShellTestFixture, RunAndRead)
 {
     constexpr int NUMBER_OF_OPERATION = 2;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);

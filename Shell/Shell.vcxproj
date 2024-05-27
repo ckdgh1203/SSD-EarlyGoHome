@@ -137,6 +137,8 @@
     <ClCompile Include="Read.cpp" />
     <ClCompile Include="ScriptHandler.cpp" />
     <ClCompile Include="Shell.cpp" />
+    <ClCompile Include="TestApp1.cpp" />
+    <ClCompile Include="TestApp2.cpp" />
     <ClCompile Include="Write.cpp" />
   </ItemGroup>
   <ItemGroup>

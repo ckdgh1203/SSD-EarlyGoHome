@@ -38,7 +38,7 @@ protected:
         return (referenceData == readData);
     }
 
-    void readRepeatedly(const int lbaBound)
+    void readRepeatedly(const unsigned int lbaBound)
     {
         vector<vector<string>> argument;
         for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
@@ -46,14 +46,14 @@ protected:
             argument.push_back({ "read", to_string(lbaIter) });
         }
 
-        CommandHandler* readCommand = m_CommandFactory.create("read");
-        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        CommandHandler* readCommand = m_CommandFactory.create("read", nullptr);
+        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
             readCommand->doCommand(argument[lbaIter]);
         }
     }
 
-    void writeRepeatedly(const string& inputData, const int lbaBound)
+    void writeRepeatedly(const string& inputData, const unsigned int lbaBound)
     {
         vector<vector<string>> argument;
         for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
@@ -61,8 +61,8 @@ protected:
             argument.push_back({ "write", to_string(lbaIter), inputData });
         }
 
-        CommandHandler* writeCommand = m_CommandFactory.create("write");
-        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        CommandHandler* writeCommand = m_CommandFactory.create("write", nullptr);
+        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
             writeCommand->doCommand(argument[lbaIter]);
         }
