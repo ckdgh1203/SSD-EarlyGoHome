@@ -18,14 +18,14 @@ public:
 
 	Progress doCommand(const vector<string>& args) override
 	{
-		cout << m_helpMessage;
+		m_outputStream << m_helpMessage;
 		return Progress::Continue;
 	}
 
 	void usage() override {};
 
 	~Help() {};
-private:
+protected:
 	const string m_helpMessage = "Help:\n"
 		"\tread [LBA]\n"
 		"\twrite [LBA] [DATA]\n"

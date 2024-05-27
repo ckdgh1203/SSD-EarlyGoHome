@@ -10,7 +10,7 @@ public:
 	Exit exit{std::cout};
 };
 
-TEST_F(ExitTest, ConstructorAndCreate)
+TEST_F(ExitTest, DoCommand)
 {
 	vector<string> emptyArgs;
 	EXPECT_EQ(Progress::Done, exit.doCommand(emptyArgs));

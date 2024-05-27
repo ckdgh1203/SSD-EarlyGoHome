@@ -51,17 +51,6 @@ private:
     ostringstream redirectedOutput{};
 };
 
-TEST_F(ShellTestFixture, HelpCallTest)
-{
-    shell.help();
-    auto& helpMessage = fetchOutput();
-
-    shell.helpMessasge();
-    auto& expectedMessage = fetchOutput();
-    
-    EXPECT_EQ(expectedMessage, helpMessage);
-}
-
 TEST_F(ShellTestFixture, OutOfLbaRead)
 {
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);

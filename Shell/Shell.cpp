@@ -22,16 +22,6 @@ public:
     {
     }
 
-    void help()
-    {
-        helpMessasge();
-    }
-
-    void helpMessasge()
-    {
-        m_outputStream << m_helpMessage;
-    }
-
     void run(istream& inputStream)
     {
         while (true)
@@ -149,13 +139,6 @@ public:
         }
         m_outputStream << "testapp2 : Done test, written data is same with read data :)" << endl;
     }
-
-protected:
-    const string m_helpMessage = "Help:\n"
-        "\tread [LBA]\n"
-        "\twrite [LBA] [DATA]\n"
-        "\tfullread\n"
-        "\tfullwrite [DATA]\n";
 
 private:
     ISsdExecutable* m_ssdExcutable{};

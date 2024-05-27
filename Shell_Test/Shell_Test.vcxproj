@@ -101,6 +101,7 @@
     <ClCompile Include="CommandFactoryTest.cpp" />
     <ClCompile Include="ExitTest.cpp" />
     <ClCompile Include="gtest_main.cc" />
+    <ClCompile Include="HelpTest.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
