@@ -30,10 +30,14 @@ public:
 		writeToResultTxt(DEFAULT_DATA);
 	}
 
-	string readFromNANDTxt(int lba) override
+	vector<string> readFromNANDTxt(int lba) override
 	{
 		ifstream file(filePath + NAND_FILE);
-		string ret = DEFAULT_DATA;
+		vector<string> ret;
+		for (int i = 0; i < 100; i++)
+		{
+			ret.push_back(DEFAULT_DATA);
+		}
 
 		if (!file.is_open())
 		{
@@ -99,17 +103,13 @@ public:
 	}
 
 private:
-	void getLBAData(int lba, ifstream& file, string& ret)
+	void getLBAData(int lba, ifstream& file, vector<string>& ret)
 	{
 		int targetLine = 0;
 		string buf;
 		while (getline(file, buf))
 		{
-			if (targetLine == lba)
-			{
-				ret = buf;
-			}
-			targetLine++;
+			ret[targetLine++] = buf;
 		}
 	}
 	

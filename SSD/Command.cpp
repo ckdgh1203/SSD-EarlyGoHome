@@ -54,12 +54,7 @@ public:
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
-		string targetData;
-		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
-		{
-			targetData = m_file->readFromNANDTxt(currentLBA);
-			buf.push_back(targetData);
-		}
+		buf = m_file->readFromNANDTxt(0);
 		return buf;
 	}
 
@@ -108,11 +103,7 @@ public:
 			return;
 
 		vector<string> nandTxt;
-		for (int i = 0; i < MAX_LBA_RANGE; i++)
-		{
-			nandTxt.push_back(m_file->readFromNANDTxt(i));
-		}
-
+		nandTxt = m_file->readFromNANDTxt(0);
 		m_file->writeToResultTxt(nandTxt[lba]);
 	}
 
@@ -165,12 +156,7 @@ public:
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
-		string targetData;
-		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
-		{
-			targetData = m_file->readFromNANDTxt(currentLBA);
-			buf.push_back(targetData);
-		}
+		buf = m_file->readFromNANDTxt(0);
 		return buf;
 	}
 
