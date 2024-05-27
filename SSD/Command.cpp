@@ -131,20 +131,30 @@ public:
 	void executeCommand() override
 	{
 		//size invalidity check
-		if (size > MAX_ERASE_SIZE)
+		if (isInvalidEraseSize())
 			return;
 
 		//nand.txt 열어서 
 		vector<string> buf = dataReadFromNand();
 
 		//lba부터 size 만큼 0x00000000 으로 쓰고
+		dataEraseToTargetLba(buf);
+
+		//nand.txt 쓰기
+		dataWriteToNand(buf);
+	}
+
+	void dataEraseToTargetLba(std::vector<std::string>& buf)
+	{
 		for (int i = lba; i < lba + size; i++)
 		{
 			dataWriteToTargetLba(buf, i, ERASE_DATA);
 		}
+	}
 
-		//nand.txt 쓰기
-		dataWriteToNand(buf);
+	bool isInvalidEraseSize()
+	{
+		return size > MAX_ERASE_SIZE;
 	}
 
 	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
