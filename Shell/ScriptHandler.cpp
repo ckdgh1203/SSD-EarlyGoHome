@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include "CommandFactory.cpp"
 
 using namespace std;
@@ -24,7 +25,7 @@ protected:
     bool readCompare(const string& inputData, unsigned int lbaBound)
     {
         string referenceData = "";
-        for (int iter = 0; iter < lbaBound; iter++)
+        for (unsigned int iter = 0; iter < lbaBound; iter++)
         {
             referenceData += inputData;
         }
@@ -39,18 +40,31 @@ protected:
 
     void readRepeatedly(const int lbaBound)
     {
+        vector<vector<string>> argument;
+        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        {
+            argument.push_back({ "read", to_string(lbaIter) });
+        }
+
         CommandHandler* readCommand = m_CommandFactory.create("read");
         for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
-            readCommand->doCommand(lbaIter);
+            readCommand->doCommand(argument[lbaIter]);
         }
     }
 
     void writeRepeatedly(const string& inputData, const int lbaBound)
     {
+        vector<vector<string>> argument;
+        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        {
+            argument.push_back({ "write", to_string(lbaIter), inputData });
+        }
+
+        CommandHandler* writeCommand = m_CommandFactory.create("write");
         for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
-            write(lbaIter, inputData);
+            writeCommand->doCommand(argument[lbaIter]);
         }
     }
 };

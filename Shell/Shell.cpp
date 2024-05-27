@@ -220,7 +220,7 @@ private:
     bool readCompare(const string& inputData, unsigned int lbaBound)
     {
         string referenceData = "";
-        for (int iter = 0; iter < lbaBound; iter++)
+        for (unsigned int iter = 0; iter < lbaBound; iter++)
         {
             referenceData += inputData;
         }

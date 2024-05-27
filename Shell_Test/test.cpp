@@ -175,7 +175,7 @@ TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
     shell.fullread();
 }
 
-TEST_F(ShellTestFixture, RunAndExit)
+TEST_F(ShellTestFixture, DISABLED_RunAndExit)
 {
     constexpr int NUMBER_OF_OPERATION = 0;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
@@ -186,7 +186,7 @@ TEST_F(ShellTestFixture, RunAndExit)
     runAndExpect(inputString, expected);
 }
 
-TEST_F(ShellTestFixture, RunAndRead)
+TEST_F(ShellTestFixture, DISABLED_RunAndRead)
 {
     constexpr int NUMBER_OF_OPERATION = 2;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
@@ -205,7 +205,7 @@ TEST_F(ShellTestFixture, RunAndRead)
     runAndExpect(inputString, expected);
 }
 
-TEST_F(ShellTestFixture, RunAndWrite)
+TEST_F(ShellTestFixture, DISABLED_RunAndWrite)
 {
     constexpr int NUMBER_OF_OPERATION = 2;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);

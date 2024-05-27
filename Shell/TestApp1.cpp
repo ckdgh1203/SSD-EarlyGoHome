@@ -8,8 +8,19 @@ public:
     // ScriptHandler을(를) 통해 상속됨
     void doScript() override
     {
-		fullwrite("0xDEADC0DE");
-		fullread();
+		vector<string> fullwriteArgument;
+		fullwriteArgument.push_back({ "fullwrite","0xDEADC0DE" });
+
+		CommandHandler* fullwriteCmd = m_CommandFactory.create("fullwrite");
+		fullwriteCmd->isValidArgs(fullwriteArgument);
+		fullwriteCmd->doCommand(fullwriteArgument);
+
+		vector<string> fullreadArgument;
+		fullreadArgument.push_back("fullread");
+
+		CommandHandler* fullreadCmd = m_CommandFactory.create("fullread");
+		fullreadCmd->isValidArgs(fullreadArgument);
+		fullreadCmd->doCommand(fullreadArgument);
 
 		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
 
