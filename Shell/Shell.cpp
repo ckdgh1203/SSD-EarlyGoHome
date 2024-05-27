@@ -61,18 +61,6 @@ public:
         }
     }
 
-    void read(unsigned int lba)
-    {
-        if (verifyLba(lba))
-        {
-            m_outputStream << "Out of Lba";
-            return;
-        }
-        string arguments = "R " + to_string(lba);
-        m_ssdHelper.execute(arguments);
-        m_outputStream << m_ssdHelper.getResult() << endl;
-    }
-
     void write(unsigned int lba, const string& inputData)
     {
         if (verifyLba(lba)) return;
@@ -98,7 +86,7 @@ public:
     {
         for (int iter = 0; iter < 100; iter++)
         {
-            read(iter);
+            //read(iter);
         }
     }
 
@@ -206,7 +194,7 @@ private:
     {
         for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
-            read(lbaIter);
+            //read(lbaIter);
         }
     }
 

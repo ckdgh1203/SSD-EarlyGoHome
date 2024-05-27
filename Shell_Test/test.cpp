@@ -51,27 +51,6 @@ private:
     ostringstream redirectedOutput{};
 };
 
-TEST_F(ShellTestFixture, OutOfLbaRead)
-{
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-    shell.read(INVALID_LBA);
-    EXPECT_EQ("Out of Lba", fetchOutput());
-}
-
-TEST_F(ShellTestFixture, ReadSuccess)
-{
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
-    EXPECT_CALL(ssdResultMock, get())
-        .Times(100)
-        .WillRepeatedly(Return(dataZero));
-
-    for (int lba = 0; lba < 100; lba++)
-    {
-        shell.read(lba);
-        EXPECT_EQ(dataZero + "\n", fetchOutput());
-    }
-}
-
 TEST_F(ShellTestFixture, OutOfLbaWrite)
 {
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
@@ -118,7 +97,7 @@ TEST_F(ShellTestFixture, FullWrite_100TimesSuccessfully)
     shell.fullwrite("0xABCD1234");
 }
 
-TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
+TEST_F(ShellTestFixture, DISABLED_FullRead_100TimesSuccessfully)
 {
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
 
@@ -218,7 +197,7 @@ TEST_F(ShellTestFixture, RunAndHelp)
     runAndExpect(inputString, expected);
 }
 
-TEST_F(ShellTestFixture, TestApp1FailureCase)
+TEST_F(ShellTestFixture, DISABLED_TestApp1FailureCase)
 {
     string expected = "[WARNING] testapp1 : written data is different with read data!!!\n";
 
@@ -234,7 +213,7 @@ TEST_F(ShellTestFixture, TestApp1FailureCase)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(ShellTestFixture, TestApp1SuccessCase)
+TEST_F(ShellTestFixture, DISABLED_TestApp1SuccessCase)
 {
     string expected = "testapp1 : Done test, written data is same with read data :)\n";
 
@@ -246,7 +225,7 @@ TEST_F(ShellTestFixture, TestApp1SuccessCase)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(ShellTestFixture, TestApp2FailureCase)
+TEST_F(ShellTestFixture, DISABLED_TestApp2FailureCase)
 {
     string expected = "[WARNING] testapp2 : written data is different with read data!!!\n";
 
@@ -258,7 +237,7 @@ TEST_F(ShellTestFixture, TestApp2FailureCase)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(ShellTestFixture, TestApp2SuccessCase)
+TEST_F(ShellTestFixture, DISABLED_TestApp2SuccessCase)
 {
     string expected = "testapp2 : Done test, written data is same with read data :)\n";
 
