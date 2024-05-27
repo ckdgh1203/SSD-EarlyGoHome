@@ -23,9 +23,14 @@ public:
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	void commandBody(const vector<string>& args) override
 	{
 		cout << "Do Read!!!" << endl;
+	}
+
+	string defaultLogMsg() override
+	{
+		return "Read";
 	}
 
 	void usage() override {};

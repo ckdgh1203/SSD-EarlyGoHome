@@ -9,9 +9,13 @@ public:
     {
         return true;
     }
-    void doCommand(const vector<string>& args) override
+    void commandBody(const vector<string>& args) override
     {
         m_outputStream << "Testable Exit" << endl;
+    }
+    string defaultLogMsg() override
+    {
+        return "Testable Exit";
     }
     void doCommand()
     {

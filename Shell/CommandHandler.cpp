@@ -12,9 +12,12 @@ public:
 	CommandHandler() {};
 
 	virtual bool isValidArgs(const vector<string>& args) = 0;
-	virtual void doCommand(const vector<string>& args) = 0;
 	virtual void usage() = 0;
-
+	void doCommand(const vector<string>& args)
+	{
+		logger.print(defaultLogMsg());
+		commandBody(args);
+	}
 	virtual ~CommandHandler() {};
 private:
 protected:
@@ -24,5 +27,7 @@ protected:
 	const static bool VALID = true;
 	const static bool INVALID = false;
 
-	//Logger logger;
+	Logger logger;
+	virtual void commandBody(const vector<string>& args) = 0;
+	virtual string defaultLogMsg() = 0;
 };

@@ -28,12 +28,17 @@ public:
 		return VALID;
 	}
 
-	void doCommand(const vector<string>& args) override
+	void commandBody(const vector<string>& args) override
 	{
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			read->doCommand(nArgs[lba]);
 		}
+	}
+
+	string defaultLogMsg() override
+	{
+		return "FullRead!!";
 	}
 
 	void usage() override 
