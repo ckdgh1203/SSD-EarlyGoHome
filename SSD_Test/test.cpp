@@ -199,7 +199,7 @@ TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
 	expected[0] = DEFAULT_DATA;
-	actual[0] = sFile.readFromResultTxt();
+	actual[0] = sFileTest.readFromResultTxt();
 }
 
 TEST_F(FileTestFixture, Actual_Write_NAND_Success)
@@ -220,5 +220,5 @@ TEST_F(FileTestFixture, Actual_Write_RESULT_Success)
 	sFileTest.writeToResultTxt("0x00000001");
 
 	expected[0] = "0x00000001";
-	actual[0] = sFileTest.readFromResultTxt(0);
+	actual[0] = sFileTest.readFromResultTxt();
 }

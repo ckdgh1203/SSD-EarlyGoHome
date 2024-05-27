@@ -148,10 +148,11 @@ public:
 		file.close();
 	}
 
-	string readFromResultTxt(int lba) override
+	string readFromResultTxt() override
 	{
 		ifstream file(RESULT_FILE_FOR_TEST);
-		string ret = DEFAULT_DATA;
+		string ret;
+		string temp;
 
 		if (!file.is_open())
 		{
@@ -159,7 +160,9 @@ public:
 			return ret;
 		}
 
-		getLBAData(lba, file, ret);
+		getline(file, temp);
+		ret = temp;
+
 		file.close();
 
 		return ret;
