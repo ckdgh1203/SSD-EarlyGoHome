@@ -200,7 +200,7 @@ TEST_F(ShellTestFixture, DISABLED_RunAndFullWrite)
 }
 
 
-TEST_F(ShellTestFixture, DISABLED_RunAndHelp)
+TEST_F(ShellTestFixture, RunAndHelp)
 {
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
     EXPECT_CALL(ssdResultMock, get()).Times(0);
@@ -213,7 +213,7 @@ TEST_F(ShellTestFixture, DISABLED_RunAndHelp)
         "\twrite [LBA] [DATA]\n"
         "\tfullread\n"
         "\tfullwrite [DATA]\n"
-        "shell> " "Testable Exit\n";
+        "shell> " "Exit from Shell\n";
 
     runAndExpect(inputString, expected);
 }
