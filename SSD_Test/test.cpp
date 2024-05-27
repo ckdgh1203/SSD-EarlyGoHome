@@ -29,7 +29,7 @@ public:
 	{
 		ssd = new SSD(&wCmd);
 	}
-	WriteCommand wCmd{&mFile, 0,"0x00000000" };
+	WriteCommand wCmd{ &mFile, 0,"0x00000000" };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
@@ -41,7 +41,7 @@ public:
 	{
 		ssd = new SSD(&rCmd);
 	}
-	ReadCommand rCmd{ &mFile, 0};
+	ReadCommand rCmd{ &mFile, 0 };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
@@ -90,7 +90,7 @@ TEST_F(ReadMockFileFixture, LBA100_Read_Fail)
 		.Times(0);
 	EXPECT_CALL(mFile, writeToResultTxt)
 		.Times(0);
-	ReadCommand rCmd{ &mFile, 100};
+	ReadCommand rCmd{ &mFile, 100 };
 	ssd->setCommand(&rCmd);
 	ssd->executeCommand();
 }
@@ -171,7 +171,7 @@ TEST_F(WriteMockFileFixture, CommandFactory_CreateWriteCommand)
 		.Times(1);
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
-	
+
 	ssd->setCommand(cmd);
 	ssd->executeCommand();
 }
@@ -182,7 +182,7 @@ TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToResultTxt(_))
 		.Times(1);
-	
+
 	CommandFactory& cf = CommandFactory::getInstance();
 	Command* cmd = cf.createCommand(&mFile, 0);
 
@@ -199,7 +199,7 @@ TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
 	expected[0] = DEFAULT_DATA;
-	actual[0] = sFile.readFromResultTxt();
+	actual[0] = sFileTest.readFromResultTxt();
 }
 
 TEST_F(FileTestFixture, Actual_Write_NAND_Success)
@@ -220,6 +220,5 @@ TEST_F(FileTestFixture, Actual_Write_RESULT_Success)
 	sFileTest.writeToResultTxt("0x00000001");
 
 	expected[0] = "0x00000001";
-	actual[0] = sFileTest.readFromResultTxt(0);
+	actual[0] = sFileTest.readFromResultTxt();
 }
-
