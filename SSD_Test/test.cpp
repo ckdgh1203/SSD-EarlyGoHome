@@ -18,7 +18,7 @@ class MockFile : public iFile
 public:
 	MOCK_METHOD(string, readFromNANDTxt, (int), (override));
 	MOCK_METHOD(void, writeToNANDTxt, (vector<string> buf), (override));
-	MOCK_METHOD(string, readFromResultTxt, (int), (override));
+	MOCK_METHOD(string, readFromResultTxt, (), (override));
 	MOCK_METHOD(void, writeToResultTxt, (string), (override));
 };
 
@@ -194,7 +194,7 @@ TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
 	expected[0] = "0x00000000";
-	actual[0] = sFile.readFromResultTxt(99);
+	actual[0] = sFile.readFromResultTxt();
 }
 
 TEST_F(FileTestFixture, DISABLED_Actual_Write_NAND_Success)
