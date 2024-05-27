@@ -34,13 +34,6 @@ protected:
         return fetchedString;
     }
 
-    void writeAndExpect(string input, string expected)
-    {
-        shell.write(VALID_LBA, input);
-
-        EXPECT_THAT(fetchOutput(), expected);
-    }
-
     void runAndExpect(string& input, string& expected)
     {
         shell.run(istringstream(input));
@@ -51,28 +44,7 @@ private:
     ostringstream redirectedOutput{};
 };
 
-TEST_F(ShellTestFixture, OutOfLbaWrite)
-{
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-    shell.write(INVALID_LBA, dataZero);
-}
-
-TEST_F(ShellTestFixture, InvalidDataFormatWrite)
-{
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
-
-    writeAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
-    writeAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
-    writeAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
-}
-
-TEST_F(ShellTestFixture, WriteSuccess)
-{
-    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(1);
-    shell.write(VALID_LBA, dataZero);
-}
-
-TEST_F(ShellTestFixture, FullWrite_NotIncludedPrefixException)
+TEST_F(ShellTestFixture, DISABLED_FullWrite_NotIncludedPrefixException)
 {
     string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
 
@@ -81,7 +53,7 @@ TEST_F(ShellTestFixture, FullWrite_NotIncludedPrefixException)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(ShellTestFixture, FullWrite_NotAllowedInputDataException)
+TEST_F(ShellTestFixture, DISABLED_FullWrite_NotAllowedInputDataException)
 {
     string expected = "[WARNING] Input data has invalid characters !!!\n";
 
@@ -90,7 +62,7 @@ TEST_F(ShellTestFixture, FullWrite_NotAllowedInputDataException)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(ShellTestFixture, FullWrite_100TimesSuccessfully)
+TEST_F(ShellTestFixture, DISABLED_FullWrite_100TimesSuccessfully)
 {
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
 

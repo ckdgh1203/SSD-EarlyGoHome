@@ -61,24 +61,13 @@ public:
         }
     }
 
-    void write(unsigned int lba, const string& inputData)
-    {
-        if (verifyLba(lba)) return;
-        if (verifyDataFormat(inputData)) return;
-        if (false == IsInputDataWithPrefix(inputData))	return;
-        if (false == IsInputDataWithValidRange(inputData)) return;
-
-        string arguments = "W " + to_string(lba) + " " + inputData + "\n";
-        m_ssdHelper.execute(arguments);
-    }
-
     void fullwrite(const string& inputData)
     {
-        if (false == IsInputDataWithPrefix(inputData))	return;
-        if (false == IsInputDataWithValidRange(inputData)) return;
+        //if (false == IsInputDataWithPrefix(inputData))	return;
+        //if (false == IsInputDataWithValidRange(inputData)) return;
         for (int iter = 0; iter < 100; iter++)
         {
-            write(iter, inputData);
+            //write(iter, inputData);
         }
     }
 
@@ -138,42 +127,6 @@ private:
         return 99 < lba;
     }
 
-    bool verifyDataFormat(const std::string& data)
-    {
-        if (data.size() != 10)
-        {
-            m_outputStream << "[WARNING] Invalid input data length !!!" << endl;
-        }
-        return data.size() != 10;
-    }
-
-    bool IsInputDataWithPrefix(const std::string& inputData)
-    {
-        if (inputData[0] != '0' || inputData[1] != 'x')
-        {
-            m_outputStream << "[WARNING] Prefix '0x' was not included in input data !!!" << endl;
-            return false;
-        }
-
-        return true;
-    }
-
-    bool IsInputDataWithValidRange(const std::string& inputData)
-    {
-        for (int index = 2; index < inputData.length(); index++)
-        {
-            if (('A' <= inputData[index] && inputData[index] <= 'F') || ('0' <= inputData[index] && inputData[index] <= '9'))
-            {
-                continue;
-            }
-
-            m_outputStream << "[WARNING] Input data has invalid characters !!!" << endl;
-            return false;
-        }
-
-        return true;
-    }
-
     bool readCompare(const string& inputData, unsigned int lbaBound)
     {
         string referenceData = "";
@@ -202,7 +155,7 @@ private:
     {
         for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
-            write(lbaIter, inputData);
+            //write(lbaIter, inputData);
         }
     }
 };

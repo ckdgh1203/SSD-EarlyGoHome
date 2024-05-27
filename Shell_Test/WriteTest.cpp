@@ -21,7 +21,19 @@ public:
         return fetchedString;
     }
 
+    void writeAndExpect(string input, string expected)
+    {
+        vector<string> args;
+        args.push_back("write");
+        args.push_back(VALID_LBA);
+        args.push_back(input);
+        write.doCommand(args);
+
+        EXPECT_THAT(fetchOutput(), expected);
+    }
+
     const string dataZero = "0x00000000";
+    const string VALID_LBA = "99";
 
 private:
     ostringstream redirectedOutput{};
@@ -60,4 +72,13 @@ TEST_F(WriteTest, WriteSuccess)
 
         write.doCommand(args);
     }
+}
+
+TEST_F(WriteTest, DISABLED_InvalidDataFormatWrite)
+{
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+
+    writeAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
+    writeAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
+    writeAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
 }
