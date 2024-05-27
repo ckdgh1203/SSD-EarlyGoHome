@@ -6,13 +6,13 @@
 #include "iFile.h"
 
 using namespace std;
+const string DEFAULT_DATA = "0x00000000";
 
 class FileSingleton : public iFile
 {
 public:
 	const string NAND_FILE = "nand.txt";
 	const string RESULT_FILE = "result.txt";
-	const string DEFAULT_DATA = "0x00000000";
 
 	static FileSingleton& getInstance()
 	{

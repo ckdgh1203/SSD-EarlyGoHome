@@ -49,7 +49,8 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		m_file->writeToNANDTxt(buf);
+		//m_file->writeToNANDTxt(buf);
+		FileSingleton::getInstance().writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
@@ -120,10 +121,13 @@ public:
 		vector<string> nandTxt;
 		for (int i = 0; i < MAX_LBA_RANGE; i++)
 		{
-			nandTxt.push_back(m_file->readFromNANDTxt(i));
+			//nandTxt.push_back(m_file->readFromNANDTxt(i));
+			nandTxt.push_back(FileSingleton::getInstance().readFromNANDTxt(i));
+
 		}
 
-		m_file->writeToResultTxt(nandTxt[lba]);
+		//m_file->writeToResultTxt(nandTxt[lba]);
+		FileSingleton::getInstance().writeToResultTxt(nandTxt[lba]);
 	}
 
 private:
@@ -169,7 +173,8 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		m_file->writeToNANDTxt(buf);
+		//m_file->writeToNANDTxt(buf);
+		FileSingleton::getInstance().writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
@@ -178,7 +183,8 @@ public:
 		string targetData;
 		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
 		{
-			targetData = m_file->readFromNANDTxt(currentLBA);
+			//targetData = m_file->readFromNANDTxt(currentLBA);
+			targetData = FileSingleton::getInstance().readFromNANDTxt(currentLBA);
 			buf.push_back(targetData);
 		}
 		return buf;

@@ -6,7 +6,7 @@
 #include <fstream>
 #include "../SSD/iFile.h"
 #include "../SSD/SSD.cpp"
-#include "../SSD/File.cpp"
+//#include "../SSD/File.cpp"
 
 using namespace std;
 using namespace testing;
