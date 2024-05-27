@@ -17,7 +17,7 @@ public:
 		if (args.size() != 3)
 			return INVALID;
 		unsigned long test = stoul(args[1]);
-		cout << test << endl;
+
 		if (stoi(args[1]) < 0 || stoi(args[1]) > 99)
 			return INVALID;
 

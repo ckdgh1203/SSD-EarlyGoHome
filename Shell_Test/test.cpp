@@ -168,7 +168,7 @@ TEST_F(ShellTestFixture, RunAndWrite)
     runAndExpect(inputString, expected);
 }
 
-TEST_F(ShellTestFixture, DISABLED_RunAndFullRead)
+TEST_F(ShellTestFixture, RunAndFullRead)
 {
     constexpr int NUMBER_OF_OPERATION = 100;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
@@ -183,11 +183,11 @@ TEST_F(ShellTestFixture, DISABLED_RunAndFullRead)
     {
         expected += "0x00000000\n";
     }
-    expected += "shell> " "Testable Exit\n";
+    expected += "shell> " "Exit from Shell\n";
     runAndExpect(inputString, expected);
 }
 
-TEST_F(ShellTestFixture, DISABLED_RunAndFullWrite)
+TEST_F(ShellTestFixture, RunAndFullWrite)
 {
     constexpr int NUMBER_OF_OPERATION = 100;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
@@ -195,7 +195,7 @@ TEST_F(ShellTestFixture, DISABLED_RunAndFullWrite)
     string inputString = "fullwrite 0xDEADBEEF\n"
         "exit\n";
 
-    string expected = "shell> " "shell> " "Testable Exit\n";
+    string expected = "shell> " "shell> " "Exit from Shell\n";
     runAndExpect(inputString, expected);
 }
 
