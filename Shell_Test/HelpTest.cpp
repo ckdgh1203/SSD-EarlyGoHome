@@ -38,7 +38,7 @@ TEST_F(HelpTest, DoCommand)
 {
 	vector<string> emptyArgs;
 	EXPECT_EQ(Progress::Continue, help.doCommand(emptyArgs));
-    auto& commandOutput = fetchOutput();
+    auto commandOutput = fetchOutput();
 
     EXPECT_EQ(help.helpMessage(), commandOutput);
 }

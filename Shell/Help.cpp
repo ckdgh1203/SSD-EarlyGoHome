@@ -18,6 +18,7 @@ public:
 
 	Progress doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		m_outputStream << m_helpMessage;
 		return Progress::Continue;
 	}

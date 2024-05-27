@@ -28,6 +28,7 @@ public:
 
 	Progress doCommand(const vector<string>& args) override
 	{
+		logger.print("Command : " + sliceString(args, 0));
 		for (int lba = startLBA; lba < endLBA; lba++)
 		{
 			read->doCommand(nArgs[lba]);
