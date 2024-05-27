@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include "iFile.h"
+#include "iSSD.h"
 
 using namespace std;
 const string DEFAULT_DATA = "0x00000000";
@@ -13,6 +14,7 @@ class FileSingleton : public iFile
 public:
 	const string NAND_FILE = "nand.txt";
 	const string RESULT_FILE = "result.txt";
+	const string BUFFER_FILE = "buffer.txt";
 
 	static FileSingleton& getInstance()
 	{
@@ -108,6 +110,29 @@ public:
 		file.close();
 	}
 
+	void readFromResultxt(vector<CommandPacket>& cmdBuf, int& cmdCnt)
+	{
+		ifstream file(filePath + BUFFER_FILE);
+		string line;
+
+		if (!file.is_open())
+		{
+			cmdCnt = 0;
+			return;
+		}
+
+		if (getline(file, line))
+			cmdCnt = stoi(line);
+
+		while (getline(file, line))
+		{
+			vector<string> words = splitBySpace(line);
+			cmdBuf.push_back(CommandPacket{ words[0]/*command*/, stoi(words[1]) /*startLba*/, stoi(words[2])/*endLba*/, words[3]/*data*/ });
+		}
+		file.close();
+
+		return;
+	}
 
 private:
 	FileSingleton() {}
@@ -123,5 +148,32 @@ private:
 			ret[targetLine++] = buf;
 		}
 	}
+
+	vector<string> splitBySpace(const string& str)
+	{
+		vector<string> words;
+		string word;
+		for (char ch : str)
+		{
+			if (ch == ' ')
+			{
+				if (!word.empty())
+				{
+					words.push_back(word);
+					word.clear();
+				}
+			}
+			else
+			{
+				word += ch;
+			}
+		}
+		if (!word.empty())
+		{
+			words.push_back(word);
+		}
+		return words;
+	}
+
 	string filePath;
 };
