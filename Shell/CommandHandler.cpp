@@ -1,19 +1,27 @@
 #pragma once
 
+#include "SsdHelper.h"
 #include <string>
 #include <vector>
 #include "Logger.cpp"
 
 using namespace std;
 
+enum class Progress
+{
+	Continue = 0,
+	Done = 1,
+};
+
 class CommandHandler
 {
 public:
-	CommandHandler() {};
+	CommandHandler(ostream& _out, SsdHelper& _ssd) :
+		m_outputStream(_out), m_ssdHelper(_ssd) {};
 
 	virtual bool isValidArgs(const vector<string>& args) = 0;
+	virtual Progress doCommand(const vector<string>& args) = 0;
 	virtual void usage() = 0;
-	virtual void doCommand(const vector<string>& args) = 0;
 	virtual ~CommandHandler() {};
 private:
 protected:
@@ -37,5 +45,7 @@ protected:
 		return result;
 	}
 
+	ostream& m_outputStream;
+	SsdHelper& m_ssdHelper;
 	Logger logger;
 };
