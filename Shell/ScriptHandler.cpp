@@ -10,7 +10,7 @@ using namespace std;
 class ScriptHandler
 {
 public:
-    ScriptHandler(CommandFactory& commandFactory, ostream& outputStream)
+    explicit ScriptHandler(CommandFactory& commandFactory, ostream& outputStream)
         : m_CommandFactory(commandFactory), m_outputStream(outputStream)
     {
 
@@ -46,7 +46,7 @@ protected:
             argument.push_back({ "read", to_string(lbaIter) });
         }
 
-        CommandHandler* readCommand = m_CommandFactory.create("read", nullptr);
+        CommandHandler* readCommand = m_CommandFactory.create("read");
         for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
             readCommand->doCommand(argument[lbaIter]);
@@ -61,10 +61,31 @@ protected:
             argument.push_back({ "write", to_string(lbaIter), inputData });
         }
 
-        CommandHandler* writeCommand = m_CommandFactory.create("write", nullptr);
+        CommandHandler* writeCommand = m_CommandFactory.create("write");
         for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
         {
             writeCommand->doCommand(argument[lbaIter]);
         }
+    }
+
+    void doFullWrite(const string& inputData)
+    {
+        vector<string> fullwriteArgument;
+        fullwriteArgument.push_back("fullwrite");
+        fullwriteArgument.push_back(inputData);
+
+        CommandHandler* fullwriteCmd = m_CommandFactory.create("fullwrite");
+        fullwriteCmd->isValidArgs(fullwriteArgument);
+        fullwriteCmd->doCommand(fullwriteArgument);
+    }
+
+    void duFullRead()
+    {
+        vector<string> fullreadArgument;
+        fullreadArgument.push_back("fullread");
+
+        CommandHandler* fullreadCmd = m_CommandFactory.create("fullread");
+        fullreadCmd->isValidArgs(fullreadArgument);
+        fullreadCmd->doCommand(fullreadArgument);
     }
 };

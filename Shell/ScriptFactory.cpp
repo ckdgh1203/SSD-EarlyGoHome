@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ScriptHandler.cpp"
-#include "testapp1.cpp"
-#include "testapp2.cpp"
+#include "TestApp1.cpp"
+#include "TestApp2.cpp"
 
 #include <iostream>
 #include <sstream>
@@ -12,15 +12,15 @@ using namespace std;
 class ScriptFactory
 {
 public:
-	ScriptFactory* create(const string& scriptStr)
+	ScriptHandler* create(const string& scriptStr, CommandFactory& commandFactory, ostream& outputStream)
 	{
 		ScriptEnum scriptEnum = CovertStrToScriptEnum(scriptStr);
 		switch (scriptEnum)
 		{
 		case TESTAPP1:
-			return new TestApp1();
+			return new TestApp1(commandFactory, outputStream);
 		case TESTAPP2:
-			return new TestApp2();
+			return new TestApp2(commandFactory, outputStream);
 		default:
 			return nullptr;
 		}

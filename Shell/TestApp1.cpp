@@ -5,27 +5,11 @@
 class TestApp1 : public ScriptHandler
 {
 public:
-	void doFullWrite(const string& inputData)
+	TestApp1(CommandFactory& commandFactory, ostream& outputStream)
+		: ScriptHandler(commandFactory, outputStream)
 	{
-		vector<string> fullwriteArgument;
-		fullwriteArgument.push_back("fullwrite");
-		fullwriteArgument.push_back(inputData);
 
-		CommandHandler* fullwriteCmd = m_CommandFactory.create("fullwrite", nullptr);
-		fullwriteCmd->isValidArgs(fullwriteArgument);
-		fullwriteCmd->doCommand(fullwriteArgument);
 	}
-
-	void duFullRead()
-	{
-		vector<string> fullreadArgument;
-		fullreadArgument.push_back("fullread");
-
-		CommandHandler* fullreadCmd = m_CommandFactory.create("fullread", nullptr);
-		fullreadCmd->isValidArgs(fullreadArgument);
-		fullreadCmd->doCommand(fullreadArgument);
-	}
-
 	// ScriptHandler을(를) 통해 상속됨
     void doScript() override
     {

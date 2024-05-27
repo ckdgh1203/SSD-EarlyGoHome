@@ -4,6 +4,8 @@
 #include "SsdResult.h"
 #include "CommandHandler.cpp"
 #include "CommandFactory.cpp"
+#include "ScriptHandler.cpp"
+#include "ScriptFactory.cpp"
 #include "Exit.cpp"
 
 #include <iostream>
@@ -61,12 +63,21 @@ public:
         CommandFactory commandFactory{_exit};
         CommandHandler *commandHandler;
 
+
         while (true)
         {
             m_outputStream << "shell> ";
 
             vector<string> args{};
             parseArguments(inputStream, args);
+
+            if (args[0] == "testapp1" || args[0] == "testapp2")
+            {
+                ScriptFactory scriptFactory;
+                ScriptHandler* scriptHandler = scriptFactory.create(args[0], commandFactory, m_outputStream);
+                scriptHandler->doScript();
+                continue;
+            }
 
             commandHandler = commandFactory.create(args[0]);
             if (commandHandler == nullptr)
