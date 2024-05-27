@@ -28,7 +28,7 @@ private:
 TEST_F(FullWriteTest, DoCommand)
 {
     vector<string> args;
-    args.push_back("write");
+    args.push_back("fullwrite");
     args.push_back("0xABCD1234");
 
     EXPECT_TRUE(fullWrite.isValidArgs(args));

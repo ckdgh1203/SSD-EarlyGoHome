@@ -11,27 +11,13 @@ class Write : public CommandHandler
 public:
 	Write(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
-	// write 123 0x12345678
 	bool isValidArgs(const vector<string>& args) override
 	{
-		if (args.size() != 3)
-			return INVALID;
-		unsigned long test = stoul(args[1]);
-
-		if (stoi(args[1]) < 0 || stoi(args[1]) > 99)
-			return INVALID;
-
-		if (args[2].size() != 10)
-			return INVALID;
-
-		if (args[2][0] != '0' || args[2][1] != 'x')
-			return INVALID;
-
-		for (int i = 2; i < 10; i++)
-		{
-			if (!isxdigit(args[2][i]))
-				return INVALID;
-		}
+		if (isInvalidNumberOfArguments(args)) return INVALID;
+		if (isLbaOutOfRange(args[1])) return INVALID;
+		if (isInvalidLengthOfData(args[2])) return INVALID;
+		if (isInvalidPrefix(args[2])) return INVALID;
+		if (hasInvalidCharater(args[2])) return INVALID;
 
 		return VALID;
 	}
@@ -39,7 +25,7 @@ public:
 	Progress doCommand(const vector<string>& args) override
 	{
 		logger.print("Command : " + sliceString(args, 0));
-		string arguments = "W " + args[1] + " " + args[2] + "\n";
+		string arguments = "W " + args[1] + " " + args[2];
 		m_ssdHelper.execute(arguments);
 		return Progress::Continue;
 	}
@@ -49,27 +35,27 @@ public:
 	~Write() {};
 private:
 
-    bool verifyDataFormat(const std::string& data)
+    bool isInvalidLengthOfData(const std::string& data)
     {
         if (data.size() != 10)
         {
             m_outputStream << "[WARNING] Invalid input data length !!!" << endl;
+			return true;
         }
-        return data.size() != 10;
+        return false;
     }
 
-    bool IsInputDataWithPrefix(const std::string& inputData)
+    bool isInvalidPrefix(const std::string& inputData)
     {
         if (inputData[0] != '0' || inputData[1] != 'x')
         {
             m_outputStream << "[WARNING] Prefix '0x' was not included in input data !!!" << endl;
-            return false;
+            return true;
         }
-
-        return true;
+        return false;
     }
 
-    bool IsInputDataWithValidRange(const std::string& inputData)
+    bool hasInvalidCharater(const std::string& inputData)
     {
         for (int index = 2; index < inputData.length(); index++)
         {
@@ -79,9 +65,19 @@ private:
             }
 
             m_outputStream << "[WARNING] Input data has invalid characters !!!" << endl;
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
+
+	bool isInvalidNumberOfArguments(const std::vector<std::string>& args)
+	{
+		return (args.size() != 3);
+	}
+
+	bool isLbaOutOfRange(const string& lbaString)
+	{
+		return stoi(lbaString) < 0 || stoi(lbaString) > 99;
+	}
 };

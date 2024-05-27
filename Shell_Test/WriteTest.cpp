@@ -21,13 +21,13 @@ public:
         return fetchedString;
     }
 
-    void writeAndExpect(string input, string expected)
+    void VerifyDataAndExpect(string input, string expected)
     {
         vector<string> args;
         args.push_back("write");
         args.push_back(VALID_LBA);
         args.push_back(input);
-        write.doCommand(args);
+        write.isValidArgs(args);
 
         EXPECT_THAT(fetchOutput(), expected);
     }
@@ -74,11 +74,11 @@ TEST_F(WriteTest, WriteSuccess)
     }
 }
 
-TEST_F(WriteTest, DISABLED_InvalidDataFormatWrite)
+TEST_F(WriteTest, InvalidDataFormatWrite)
 {
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
 
-    writeAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
-    writeAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
-    writeAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
+    VerifyDataAndExpect("0x0", "[WARNING] Invalid input data length !!!\n");
+    VerifyDataAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
+    VerifyDataAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
 }
