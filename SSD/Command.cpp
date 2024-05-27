@@ -3,6 +3,7 @@
 #include <iostream>
 #include "iSSD.h"
 #include "iFile.h"
+#include "FileSingleton.cpp"
 using namespace std;
 
 class Command
@@ -55,9 +56,17 @@ public:
 	{
 		vector<string> buf;
 		string targetData;
+		//for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
+		//{
+		//	targetData = m_file->readFromNANDTxt(currentLBA);
+
+		//	buf.push_back(targetData);
+		//}
+		FileSingleton& fileSingleton = FileSingleton::getInstance();
 		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
 		{
-			targetData = m_file->readFromNANDTxt(currentLBA);
+			targetData = fileSingleton.readFromNANDTxt(currentLBA);
+
 			buf.push_back(targetData);
 		}
 		return buf;
@@ -92,6 +101,7 @@ private:
 	iFile* m_file;
 	int lba;
 	string data;
+	//FileSingleton& fileSingleton;
 
 };
 

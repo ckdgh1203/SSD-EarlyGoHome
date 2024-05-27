@@ -28,6 +28,8 @@ public:
 	void SetUp() override
 	{
 		ssd = new SSD(&wCmd);
+		FileSingleton::getInstance().setFilePath("../Data/");
+
 	}
 	WriteCommand wCmd{ &mFile, 0,"0x00000000" };
 	NiceMock<MockFile> mFile;
@@ -40,6 +42,7 @@ public:
 	void SetUp() override
 	{
 		ssd = new SSD(&rCmd);
+		FileSingleton::getInstance().setFilePath("../Data/");
 	}
 	ReadCommand rCmd{ &mFile, 0 };
 	NiceMock<MockFile> mFile;
@@ -51,7 +54,12 @@ class FileTestFixture : public testing::Test
 public:
 	void SetUp() override
 	{
-		sFile.initTxtFiles();
+		//sFile.initTxtFiles();
+		//sFile = FileSingleton::getInstance();
+		//sFile.setFilePath("../Data/");
+		//sFile.initTxtFiles();
+		FileSingleton::getInstance().setFilePath("../Data/");
+		FileSingleton::getInstance().initTxtFiles();
 	}
 
 	void TearDown() override
@@ -67,8 +75,8 @@ public:
 		EXPECT_EQ(expectedValue, actualValue);
 	}
 
-	string filePath = "../Data/";
-	SSDFile sFile{ filePath };
+	//string filePath = "../Data/";
+	//SSDFile sFile{ filePath };
 	
 protected:
 	string expected[FILE_TEST_NUM];
@@ -194,13 +202,15 @@ TEST_F(ReadMockFileFixture, CommandFactory_CreateReadCommand)
 TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 {
 	expected[99] = DEFAULT_DATA;
-	actual[99] = sFile.readFromNANDTxt(99);
+	//actual[99] = sFile.readFromNANDTxt(99);
+	actual[99] = FileSingleton::getInstance().readFromNANDTxt(99);
 }
 
 TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
 	expected[0] = DEFAULT_DATA;
-	actual[0] = sFile.readFromResultTxt();
+	//actual[0] = sFile.readFromResultTxt();
+	actual[0] = FileSingleton::getInstance().readFromResultTxt();
 }
 
 TEST_F(FileTestFixture, Actual_Write_NAND_Success)
@@ -210,16 +220,20 @@ TEST_F(FileTestFixture, Actual_Write_NAND_Success)
 	{
 		buf.push_back("0x00000001");
 	}
-	sFile.writeToNANDTxt(buf);
+	//sFile.writeToNANDTxt(buf);
+	FileSingleton::getInstance().writeToNANDTxt(buf);
 
 	expected[99] = "0x00000001";
-	actual[99] = sFile.readFromNANDTxt(99);
+	//actual[99] = sFile.readFromNANDTxt(99);
+	actual[99] = FileSingleton::getInstance().readFromNANDTxt(99);
 }
 
 TEST_F(FileTestFixture, Actual_Write_RESULT_Success)
 {
-	sFile.writeToResultTxt("0x00000001");
+	//sFile.writeToResultTxt("0x00000001");
+	FileSingleton::getInstance().writeToResultTxt("0x00000001");
 
 	expected[0] = "0x00000001";
-	actual[0] = sFile.readFromResultTxt();
+	//actual[0] = sFile.readFromResultTxt();
+	actual[0] = FileSingleton::getInstance().readFromResultTxt();
 }

@@ -4,19 +4,25 @@
 #include <fstream>
 #include <iostream>
 #include "iFile.h"
-//#include "FileSingleton.cpp"
 
 using namespace std;
 
-const string NAND_FILE = "nand.txt";
-const string RESULT_FILE = "result.txt";
-const string DEFAULT_DATA = "0x00000000";
-
-class SSDFile : public iFile
+class FileSingleton : public iFile
 {
 public:
-	SSDFile(string file)
+	const string NAND_FILE = "nand.txt";
+	const string RESULT_FILE = "result.txt";
+	const string DEFAULT_DATA = "0x00000000";
+
+	static FileSingleton& getInstance()
 	{
+		static FileSingleton instance{};
+		return instance;
+	}
+
+	void setFilePath(string file)
+	{
+		//cout << "set file path" << endl;
 		filePath = file;
 	}
 
@@ -36,6 +42,8 @@ public:
 		ifstream file(filePath + NAND_FILE);
 		string ret = DEFAULT_DATA;
 
+		//cout << filePath << endl;
+		//cout << filePath + NAND_FILE << endl;
 		if (!file.is_open())
 		{
 			cout << "read file open fail" << endl;
@@ -99,7 +107,12 @@ public:
 		file.close();
 	}
 
+
 private:
+	FileSingleton() {}
+	FileSingleton& operator=(const FileSingleton& other) = delete;
+	FileSingleton(const FileSingleton& other) = delete;
+
 	void getLBAData(int lba, ifstream& file, string& ret)
 	{
 		int targetLine = 0;
@@ -113,6 +126,5 @@ private:
 			targetLine++;
 		}
 	}
-	
 	string filePath;
 };
