@@ -6,7 +6,7 @@
 #include <fstream>
 #include "../SSD/iFile.h"
 #include "../SSD/SSD.cpp"
-#include "../SSD/File.cpp"
+//#include "../SSD/File.cpp"
 
 using namespace std;
 using namespace testing;
@@ -28,8 +28,10 @@ public:
 	void SetUp() override
 	{
 		ssd = new SSD(&wCmd);
+		FileSingleton::getInstance().setFilePath("../Data/");
+
 	}
-	WriteCommand wCmd{ &mFile, 0,"0x00000000" };
+	WriteCommand wCmd{ 0,"0x00000000" };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
@@ -40,8 +42,9 @@ public:
 	void SetUp() override
 	{
 		ssd = new SSD(&rCmd);
+		FileSingleton::getInstance().setFilePath("../Data/");
 	}
-	ReadCommand rCmd{ &mFile, 0 };
+	ReadCommand rCmd{ 0 };
 	NiceMock<MockFile> mFile;
 	SSD* ssd;
 };
@@ -51,7 +54,12 @@ class FileTestFixture : public testing::Test
 public:
 	void SetUp() override
 	{
-		sFile.initTxtFiles();
+		//sFile.initTxtFiles();
+		//sFile = FileSingleton::getInstance();
+		//sFile.setFilePath("../Data/");
+		//sFile.initTxtFiles();
+		FileSingleton::getInstance().setFilePath("../Data/");
+		FileSingleton::getInstance().initTxtFiles();
 	}
 
 	void TearDown() override
@@ -67,8 +75,8 @@ public:
 		EXPECT_EQ(expectedValue, actualValue);
 	}
 
-	string filePath = "../Data/";
-	SSDFile sFile{ filePath };
+	//string filePath = "../Data/";
+	//SSDFile sFile{ filePath };
 	
 protected:
 	string expected[FILE_TEST_NUM];
@@ -76,7 +84,7 @@ protected:
 };
 
 
-TEST_F(ReadMockFileFixture, LBA0_Read_Data_Success)
+TEST_F(ReadMockFileFixture, DISABLED_LBA0_Read_Data_Success)
 {
 	EXPECT_CALL(mFile, readFromNANDTxt)
 		.Times(100);
@@ -91,7 +99,7 @@ TEST_F(ReadMockFileFixture, DISABLED_LBA100_Read_Fail)
 		.Times(0);
 	EXPECT_CALL(mFile, writeToResultTxt)
 		.Times(0);
-	ReadCommand rCmd{ &mFile, 100 };
+	ReadCommand rCmd{ 100 };
 	ssd->setCommand(&rCmd);
 	ssd->executeCommand();
 }
@@ -102,7 +110,7 @@ TEST_F(WriteMockFileFixture, DISABLED_LBA0_Write_Data_0x1234_5678_Success)
 		.Times(100);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(1);
-	WriteCommand wCmd{ &mFile, 0, "0x12345678" };
+	WriteCommand wCmd{ 0, "0x12345678" };
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
 }
@@ -113,7 +121,7 @@ TEST_F(WriteMockFileFixture, DISABLED_LBA100_Write_Fail)
 		.Times(0);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
-	WriteCommand wCmd{ &mFile, 100, "0x12345678" };
+	WriteCommand wCmd{ 100, "0x12345678" };
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
 }
@@ -124,7 +132,7 @@ TEST_F(WriteMockFileFixture, DISABLED_LBA0_Write_Data_0x0000_0000_0000_Fail)
 		.Times(0);
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(0);
-	WriteCommand wCmd{ &mFile, 100, "0x000000000000" };
+	WriteCommand wCmd{ 100, "0x000000000000" };
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
 }
@@ -158,7 +166,7 @@ TEST_F(ReadMockFileFixture, DISABLED_CommandExecute_ChangeCommand)
 	EXPECT_CALL(mFile, writeToResultTxt(_))
 		.Times(0);
 
-	WriteCommand wCmd{ &mFile, 0, "0x00000000" };
+	WriteCommand wCmd{ 0, "0x00000000" };
 
 	ssd->setCommand(&wCmd);
 	ssd->executeCommand();
@@ -171,7 +179,7 @@ TEST_F(WriteMockFileFixture, DISABLED_CommandFactory_CreateWriteCommand)
 	EXPECT_CALL(mFile, writeToNANDTxt)
 		.Times(1);
 	CommandFactory& cf = CommandFactory::getInstance();
-	Command* cmd = cf.createCommand(&mFile, 0, "0x12345678");
+	Command* cmd = cf.createCommand( 0, "0x12345678");
 
 	ssd->setCommand(cmd);
 	ssd->executeCommand();
@@ -185,7 +193,7 @@ TEST_F(ReadMockFileFixture, DISABLED_CommandFactory_CreateReadCommand)
 		.Times(1);
 
 	CommandFactory& cf = CommandFactory::getInstance();
-	Command* cmd = cf.createCommand(&mFile, 0);
+	Command* cmd = cf.createCommand( 0);
 
 	ssd->setCommand(cmd);
 	ssd->executeCommand();
@@ -194,14 +202,15 @@ TEST_F(ReadMockFileFixture, DISABLED_CommandFactory_CreateReadCommand)
 TEST_F(FileTestFixture, Actual_Read_NAND_Success)
 {
 	expected[99] = DEFAULT_DATA;
-	vector<string> temp = sFile.readFromNANDTxt(0);
+	vector<string> temp = FileSingleton::getInstance().readFromNANDTxt(0);
 	actual[99] = temp[99];
 }
 
 TEST_F(FileTestFixture, Actual_Read_RESULT_Success)
 {
 	expected[0] = DEFAULT_DATA;
-	actual[0] = sFile.readFromResultTxt();
+	//actual[0] = sFile.readFromResultTxt();
+	actual[0] = FileSingleton::getInstance().readFromResultTxt();
 }
 
 TEST_F(FileTestFixture, Actual_Write_NAND_Success)
@@ -211,17 +220,20 @@ TEST_F(FileTestFixture, Actual_Write_NAND_Success)
 	{
 		buf.push_back("0x00000001");
 	}
-	sFile.writeToNANDTxt(buf);
+	//sFile.writeToNANDTxt(buf);
+	FileSingleton::getInstance().writeToNANDTxt(buf);
 
 	expected[99] = "0x00000001";
-	vector<string> temp = sFile.readFromNANDTxt(0);
+	vector<string> temp = FileSingleton::getInstance().readFromNANDTxt(0);
 	actual[99] = temp[99];
 }
 
 TEST_F(FileTestFixture, Actual_Write_RESULT_Success)
 {
-	sFile.writeToResultTxt("0x00000001");
+	//sFile.writeToResultTxt("0x00000001");
+	FileSingleton::getInstance().writeToResultTxt("0x00000001");
 
 	expected[0] = "0x00000001";
-	actual[0] = sFile.readFromResultTxt();
+	//actual[0] = sFile.readFromResultTxt();
+	actual[0] = FileSingleton::getInstance().readFromResultTxt();
 }

@@ -6,15 +6,21 @@
 #include "iFile.h"
 
 using namespace std;
-
-const string NAND_FILE = "nand.txt";
-const string RESULT_FILE = "result.txt";
 const string DEFAULT_DATA = "0x00000000";
 
-class SSDFile : public iFile
+class FileSingleton : public iFile
 {
 public:
-	SSDFile(string file)
+	const string NAND_FILE = "nand.txt";
+	const string RESULT_FILE = "result.txt";
+
+	static FileSingleton& getInstance()
+	{
+		static FileSingleton instance{};
+		return instance;
+	}
+
+	void setFilePath(string file)
 	{
 		filePath = file;
 	}
@@ -102,7 +108,12 @@ public:
 		file.close();
 	}
 
+
 private:
+	FileSingleton() {}
+	FileSingleton& operator=(const FileSingleton& other) = delete;
+	FileSingleton(const FileSingleton& other) = delete;
+
 	void getLBAData(int lba, ifstream& file, vector<string>& ret)
 	{
 		int targetLine = 0;
@@ -112,6 +123,5 @@ private:
 			ret[targetLine++] = buf;
 		}
 	}
-	
 	string filePath;
 };

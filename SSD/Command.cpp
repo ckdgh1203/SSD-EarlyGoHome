@@ -3,6 +3,7 @@
 #include <iostream>
 #include "iSSD.h"
 #include "iFile.h"
+#include "FileSingleton.cpp"
 using namespace std;
 
 class Command
@@ -27,10 +28,10 @@ protected:
 class WriteCommand : public Command
 {
 public:
-	WriteCommand(iFile* m_file, int lba, const string& data)
-		: m_file(m_file), lba(lba), data(data)
+	WriteCommand(int lba, const string& data)
+		: lba(lba), data(data)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidLbaRange(lba) || isInvalidData(data))
@@ -48,13 +49,13 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		m_file->writeToNANDTxt(buf);
+		FileSingleton::getInstance().writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
-		buf = m_file->readFromNANDTxt(0);
+		buf = FileSingleton::getInstance().readFromNANDTxt(0);
 		return buf;
 	}
 
@@ -84,42 +85,38 @@ public:
 	}
 
 private:
-	iFile* m_file;
 	int lba;
 	string data;
-
 };
 
 class ReadCommand : public Command
 {
 public:
-	ReadCommand(iFile* m_file, int lba)
-		: m_file(m_file), lba(lba)
+	ReadCommand(int lba)
+		: lba(lba)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidLbaRange(lba))
 			return;
 
 		vector<string> nandTxt;
-		nandTxt = m_file->readFromNANDTxt(0);
-		m_file->writeToResultTxt(nandTxt[lba]);
+		nandTxt = FileSingleton::getInstance().readFromNANDTxt(0);
+		FileSingleton::getInstance().writeToResultTxt(nandTxt[lba]);
 	}
 
 private:
-	iFile* m_file;
 	int lba;
-
 };
 
 class EraseCommand : public Command
 {
 public:
-	EraseCommand(iFile* m_file, int lba, int size)
-		: m_file(m_file), lba(lba), size(size)
+	EraseCommand(int lba, int size)
+		: lba(lba), size(size)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidEraseSize() || isInvalidLbaRange(lba))
@@ -150,18 +147,17 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		m_file->writeToNANDTxt(buf);
+		FileSingleton::getInstance().writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
-		buf = m_file->readFromNANDTxt(0);
+		buf = FileSingleton::getInstance().readFromNANDTxt(0);
 		return buf;
 	}
 
 private:
-	iFile* m_file;
 	int lba;
 	int size;
 };

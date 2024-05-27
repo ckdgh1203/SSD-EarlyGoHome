@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include "SSD.cpp"
-#include "File.cpp"
 
 using namespace std;
 
@@ -11,26 +10,27 @@ int main(int argc, char* argv[])
 		return 0;
 
 	CommandFactory& commandFactory = CommandFactory::getInstance();
-	string filePath = "Data/";
-	SSDFile file{ filePath };
+	FileSingleton& fileSingleton = FileSingleton::getInstance();
+	fileSingleton.setFilePath("Data/");
+
 	SSD ssd{};
 	string cmd = argv[1];
 	int lba = lba = stoi(argv[2]);
 
 	if (cmd == "R")
 	{
-		ssd.setCommand(commandFactory.createCommand(&file, lba));
+		ssd.setCommand(commandFactory.createCommand(lba));
 	}
 	
 	if (cmd == "W")
 	{
 		string data = argv[3];
-		ssd.setCommand(commandFactory.createCommand(&file, lba, data));
+		ssd.setCommand(commandFactory.createCommand(lba, data));
 	}
 	if (cmd == "E")
 	{
 		int size = stoi(argv[3]);
-		ssd.setCommand(commandFactory.createCommand(&file, lba, size));
+		ssd.setCommand(commandFactory.createCommand(lba, size));
 	}
 	ssd.executeCommand();
 
