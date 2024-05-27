@@ -17,6 +17,10 @@ public:
 	{
 		return new WriteCommand{file, lba, data };
 	}
+	Command* createCommand(iFile* file, int lba, int size)
+	{
+		return new EraseCommand{file, lba, size };
+	}
 
 private:
 	CommandFactory() {}
