@@ -60,6 +60,9 @@
     <ClInclude Include="SsdResult.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="DataFormatVerifier.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="헤더 파일">

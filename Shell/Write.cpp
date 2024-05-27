@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommandHandler.cpp"
-
+#include "DataFormatVerifier.h"
 #include <iostream>
 
 using namespace std;
@@ -9,15 +9,14 @@ using namespace std;
 class Write : public CommandHandler
 {
 public:
-	Write(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
+	Write(ostream& _out, SsdHelper& _ssd) :
+		CommandHandler(_out, _ssd), m_dataFormatVerifier(_out){};
 
 	bool isValidArgs(const vector<string>& args) override
 	{
 		if (isInvalidNumberOfArguments(args)) return INVALID;
 		if (isLbaOutOfRange(args[1])) return INVALID;
-		if (isInvalidLengthOfData(args[2])) return INVALID;
-		if (isInvalidPrefix(args[2])) return INVALID;
-		if (hasInvalidCharater(args[2])) return INVALID;
+		if (m_dataFormatVerifier.isInvalidDataFormat(args[2])) return INVALID;
 
 		return VALID;
 	}
@@ -33,43 +32,6 @@ public:
 	void usage() override {};
 
 	~Write() {};
-private:
-
-    bool isInvalidLengthOfData(const std::string& data)
-    {
-        if (data.size() != 10)
-        {
-            m_outputStream << "[WARNING] Invalid input data length !!!" << endl;
-			return true;
-        }
-        return false;
-    }
-
-    bool isInvalidPrefix(const std::string& inputData)
-    {
-        if (inputData[0] != '0' || inputData[1] != 'x')
-        {
-            m_outputStream << "[WARNING] Prefix '0x' was not included in input data !!!" << endl;
-            return true;
-        }
-        return false;
-    }
-
-    bool hasInvalidCharater(const std::string& inputData)
-    {
-        for (int index = 2; index < inputData.length(); index++)
-        {
-            if (('A' <= inputData[index] && inputData[index] <= 'F') || ('0' <= inputData[index] && inputData[index] <= '9'))
-            {
-                continue;
-            }
-
-            m_outputStream << "[WARNING] Input data has invalid characters !!!" << endl;
-            return true;
-        }
-
-        return false;
-    }
 
 	bool isInvalidNumberOfArguments(const std::vector<std::string>& args)
 	{
@@ -80,4 +42,6 @@ private:
 	{
 		return stoi(lbaString) < 0 || stoi(lbaString) > 99;
 	}
+private:
+	DataFormatVerifier m_dataFormatVerifier;
 };
