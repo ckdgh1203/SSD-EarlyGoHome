@@ -38,7 +38,8 @@ public:
 
 	Progress doCommand(const vector<string>& args) override
 	{
-		cout << "Do Write!!!" << endl;
+		string arguments = "W " + args[1] + " " + args[2] + "\n";
+		m_ssdHelper.execute(arguments);
 		return Progress::Continue;
 	}
 
