@@ -22,7 +22,6 @@ public:
 
 	void setFilePath(string file)
 	{
-		//cout << "set file path" << endl;
 		filePath = file;
 	}
 
@@ -42,8 +41,6 @@ public:
 		ifstream file(filePath + NAND_FILE);
 		string ret = DEFAULT_DATA;
 
-		//cout << filePath << endl;
-		//cout << filePath + NAND_FILE << endl;
 		if (!file.is_open())
 		{
 			cout << "read file open fail" << endl;
