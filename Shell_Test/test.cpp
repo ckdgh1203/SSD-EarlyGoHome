@@ -14,8 +14,8 @@ class ShellTestFixture : public Test
 protected:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
-
-    Shell shell{ &ssdExecutableMock, &ssdResultMock, redirectedOutput};
+    SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
+    Shell shell{&ssd, redirectedOutput};
 
     static constexpr int INVALID_LBA = 100;
     static constexpr int VALID_LBA = 99;

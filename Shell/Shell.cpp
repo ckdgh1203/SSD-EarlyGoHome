@@ -1,7 +1,6 @@
 #pragma once
 
-#include "SsdExcutable.h"
-#include "SsdResult.h"
+#include "SsdHelper.h"
 #include "CommandHandler.cpp"
 #include "CommandFactory.cpp"
 #include "Exit.cpp"
@@ -16,8 +15,9 @@ class Shell
 {
 public:
 
-    Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out) :
-        m_ssdExcutable(executable), m_ssdResult(result), m_commandFactory(_out),
+    Shell(SsdHelper* _ssd, ostream& _out) :
+        m_commandFactory(_out),
+        m_ssdHelper(_ssd),
         m_outputStream(_out)
     {
     }
@@ -69,8 +69,8 @@ public:
             return;
         }
         string arguments = "R " + to_string(lba);
-        m_ssdExcutable->execute(arguments);
-        m_outputStream << m_ssdResult->get() << endl;
+        m_ssdHelper->execute(arguments);
+        m_outputStream << m_ssdHelper->getResult() << endl;
     }
 
     void write(unsigned int lba, const string& inputData)
@@ -81,7 +81,7 @@ public:
         if (false == IsInputDataWithValidRange(inputData)) return;
 
         string arguments = "W " + to_string(lba) + " " + inputData + "\n";
-        m_ssdExcutable->execute(arguments);
+        m_ssdHelper->execute(arguments);
     }
 
     void fullwrite(const string& inputData)
@@ -141,9 +141,8 @@ public:
     }
 
 private:
-    ISsdExecutable* m_ssdExcutable{};
-    ISsdResult* m_ssdResult{};
     ostream& m_outputStream;
+    SsdHelper* m_ssdHelper;
     CommandFactory m_commandFactory;
 
     bool verifyLba(unsigned int lba)
