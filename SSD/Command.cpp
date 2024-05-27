@@ -18,6 +18,7 @@ protected:
 	const int MAX_LBA_RANGE = 100;
 	const int MAX_DATA_LENGTH = 10;
 	const int START_LBA = 0;
+
 };
 
 class WriteCommand : public Command
@@ -127,7 +128,44 @@ public:
 	// Command을(를) 통해 상속됨
 	void executeCommand() override
 	{
+		//size invalidity check
+		if (size > 10)
+			return;
 
+		//nand.txt 열어서 
+		vector<string> buf = dataReadFromNand();
+
+		string erase_data = "0x00000000";
+		//lba부터 size 만큼 0x00000000 으로 쓰고
+		for (int i = lba; i < lba + size; i++)
+		{
+			dataWriteToTargetLba(buf, i, erase_data);
+		}
+
+		//nand.txt 쓰기
+		dataWriteToNand(buf);
+	}
+
+	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
+	{
+		buf[lba] = data;
+	}
+
+	void dataWriteToNand(std::vector<std::string>& buf)
+	{
+		m_file->writeToNANDTxt(buf);
+	}
+
+	vector<string> dataReadFromNand()
+	{
+		vector<string> buf;
+		string targetData;
+		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
+		{
+			targetData = m_file->readFromNANDTxt(currentLBA);
+			buf.push_back(targetData);
+		}
+		return buf;
 	}
 
 private:
