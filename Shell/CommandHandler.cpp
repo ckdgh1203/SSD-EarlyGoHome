@@ -14,7 +14,7 @@ enum class Progress
 class CommandHandler
 {
 public:
-	CommandHandler() {};
+	CommandHandler(ostream& _out) : m_outputStream(_out){};
 
 	virtual bool isValidArgs(const vector<string>& args) = 0;
 	virtual Progress doCommand(const vector<string>& args) = 0;
@@ -28,4 +28,6 @@ protected:
 
 	const static bool VALID = true;
 	const static bool INVALID = false;
+
+	ostream& m_outputStream;
 };

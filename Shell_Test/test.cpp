@@ -24,7 +24,6 @@ protected:
 
     void SetUp(void) override
     {
-        //shell.setExit(&testableExitActor);
     }
 
     string fetchOutput(void)
@@ -137,14 +136,14 @@ TEST_F(ShellTestFixture, FullRead_100TimesSuccessfully)
     shell.fullread();
 }
 
-TEST_F(ShellTestFixture, DISABLED_RunAndExit)
+TEST_F(ShellTestFixture, RunAndExit)
 {
     constexpr int NUMBER_OF_OPERATION = 0;
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(NUMBER_OF_OPERATION);
     EXPECT_CALL(ssdResultMock, get()).Times(NUMBER_OF_OPERATION);
     string inputString = "exit\n";
     string expected = "shell> "
-        "Testable Exit\n";
+        "Exit from Shell\n";
     runAndExpect(inputString, expected);
 }
 

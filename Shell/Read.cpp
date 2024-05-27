@@ -9,7 +9,7 @@ using namespace std;
 class Read : public CommandHandler
 {
 public:
-	Read() {};
+	Read(ostream& _out) : CommandHandler(_out) {};
 
 	// read 99
 	bool isValidArgs(const vector<string>& args) override

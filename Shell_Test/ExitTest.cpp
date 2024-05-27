@@ -7,7 +7,7 @@ using namespace testing;
 class ExitTest : public Test
 {
 public:
-	Exit exit{};
+	Exit exit{std::cout};
 };
 
 TEST_F(ExitTest, ConstructorAndCreate)

@@ -26,18 +26,18 @@ enum class CommandEnum
 class CommandFactory
 {
 public:
-	CommandFactory(void)
+	CommandFactory(ostream& _out)
 	{
 		m_handlers.clear();
 		m_handlers.reserve(static_cast<size_t>(CommandEnum::NUMOFCOMMAND));
-		auto* readObject = new Read();
+		auto* readObject = new Read(_out);
 		m_handlers.push_back(readObject);
-		auto* writeObject = new Write();
+		auto* writeObject = new Write(_out);
 		m_handlers.push_back(writeObject);
-		m_handlers.push_back(new FullRead(readObject));
-		m_handlers.push_back(new FullWrite(writeObject));
-		m_handlers.push_back(new Help());
-		m_handlers.push_back(new Exit());
+		m_handlers.push_back(new FullRead(_out, readObject));
+		m_handlers.push_back(new FullWrite(_out, writeObject));
+		m_handlers.push_back(new Help(_out));
+		m_handlers.push_back(new Exit(_out));
 	}
 
 	CommandHandler* create(const string& commandStr)

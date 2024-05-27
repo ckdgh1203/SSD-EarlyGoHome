@@ -10,8 +10,7 @@ using namespace std;
 class FullRead : public CommandHandler
 {
 public:
-	FullRead(Read* _read) : read(_read) {};
-
+	FullRead(ostream& _out, Read* _read) : CommandHandler(_out), read(_read){};
 	// fullread
 	bool isValidArgs(const vector<string>& args) override
 	{

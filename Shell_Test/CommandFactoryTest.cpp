@@ -12,7 +12,7 @@ public:
 
 TEST_F(CommandFactoryTest, ConstructorAndCreate)
 {
-	CommandFactory factory{};
+	CommandFactory factory{std::cout};
 
 	EXPECT_NE(nullptr, factory.create("read"));
 	EXPECT_NE(nullptr, factory.create("write"));

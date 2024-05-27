@@ -11,8 +11,7 @@ using namespace std;
 class FullWrite : public CommandHandler
 {
 public:
-	FullWrite(Write* _write) : write(_write) {};
-
+	FullWrite(ostream& _out, Write* _write) : CommandHandler(_out), write(_write){};
 	// fullwrite 0x12345678
 	bool isValidArgs(const vector<string>& args) override
 	{

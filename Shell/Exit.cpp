@@ -10,7 +10,8 @@ using namespace std;
 class Exit : public CommandHandler
 {
 public:
-    Exit() {};
+    Exit(ostream& _out) : CommandHandler(_out) {};
+
 
     bool isValidArgs(const vector<string>& args) override
     {
@@ -22,6 +23,7 @@ public:
 
     Progress doCommand(const vector<string>& args) override
     {
+        m_outputStream << "Exit from Shell" << endl;
         return Progress::Done;
     }
 

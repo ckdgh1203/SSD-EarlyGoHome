@@ -16,12 +16,8 @@ class Shell
 {
 public:
 
-    Shell(void) : m_outputStream(cout)
-    {
-    }
-
     Shell(ISsdExecutable* executable, ISsdResult* result, ostream& _out) :
-        m_ssdExcutable(executable), m_ssdResult(result),
+        m_ssdExcutable(executable), m_ssdResult(result), m_commandFactory(_out),
         m_outputStream(_out)
     {
     }
@@ -165,7 +161,7 @@ private:
     ISsdExecutable* m_ssdExcutable{};
     ISsdResult* m_ssdResult{};
     ostream& m_outputStream;
-    CommandFactory m_commandFactory{};
+    CommandFactory m_commandFactory;
 
     bool verifyLba(unsigned int lba)
     {

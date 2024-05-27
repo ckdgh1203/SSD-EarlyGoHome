@@ -9,7 +9,7 @@ using namespace std;
 class Help : public CommandHandler
 {
 public:
-	Help() {};
+	Help(ostream& _out) : CommandHandler(_out) {};
 
 	bool isValidArgs(const vector<string>& args) override
 	{
