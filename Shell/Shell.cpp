@@ -4,6 +4,8 @@
 #include "SsdResult.h"
 #include "CommandHandler.cpp"
 #include "CommandFactory.cpp"
+#include "ScriptHandler.cpp"
+#include "ScriptFactory.cpp"
 #include "Exit.cpp"
 
 #include <iostream>
@@ -60,6 +62,8 @@ public:
         string userInput;
         CommandFactory commandFactory{_exit};
         CommandHandler *commandHandler;
+        ScriptFactory scriptFactory;
+        ScriptHandler* scriptHandler;
 
         while (true)
         {
@@ -67,6 +71,14 @@ public:
 
             vector<string> args{};
             parseArguments(inputStream, args);
+
+            scriptHandler = scriptFactory.create(args[0], commandFactory, m_outputStream);
+            if (scriptHandler != nullptr)
+            {
+                scriptHandler->doScript();
+                delete scriptHandler;
+                continue;
+            }
 
             commandHandler = commandFactory.create(args[0]);
             if (commandHandler == nullptr)
@@ -236,7 +248,7 @@ private:
     bool readCompare(const string& inputData, unsigned int lbaBound)
     {
         string referenceData = "";
-        for (int iter = 0; iter < lbaBound; iter++)
+        for (unsigned int iter = 0; iter < lbaBound; iter++)
         {
             referenceData += inputData + "\n";
         }
