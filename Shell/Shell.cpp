@@ -62,7 +62,8 @@ public:
         string userInput;
         CommandFactory commandFactory{_exit};
         CommandHandler *commandHandler;
-
+        ScriptFactory scriptFactory;
+        ScriptHandler* scriptHandler;
 
         while (true)
         {
@@ -71,11 +72,11 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            if (args[0] == "testapp1" || args[0] == "testapp2")
+            scriptHandler = scriptFactory.create(args[0], commandFactory, m_outputStream);
+            if (scriptHandler != nullptr)
             {
-                ScriptFactory scriptFactory;
-                ScriptHandler* scriptHandler = scriptFactory.create(args[0], commandFactory, m_outputStream);
                 scriptHandler->doScript();
+                delete scriptHandler;
                 continue;
             }
 

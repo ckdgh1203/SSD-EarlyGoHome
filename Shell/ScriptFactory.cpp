@@ -33,10 +33,10 @@ private:
 		MAX_SCRIPT
 	} ScriptEnum;
 
-	ScriptEnum CovertStrToScriptEnum(const string& commandStr)
+	ScriptEnum CovertStrToScriptEnum(const string& scriptStr)
 	{
-		if (commandStr == "testapp1") return TESTAPP1;
-		if (commandStr == "testapp2") return TESTAPP2;
+		if (scriptStr == "testapp1") return TESTAPP1;
+		if (scriptStr == "testapp2") return TESTAPP2;
 
 		return MAX_SCRIPT;
 	}
