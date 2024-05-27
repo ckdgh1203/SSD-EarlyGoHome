@@ -11,7 +11,8 @@ int main(int argc, char* argv[])
 		return 0;
 
 	CommandFactory& commandFactory = CommandFactory::getInstance();
-	SSDFile file;
+	string filePath = "Data/";
+	SSDFile file{ filePath };
 	SSD ssd{};
 	string cmd = argv[1];
 	int lba = lba = stoi(argv[2]);
