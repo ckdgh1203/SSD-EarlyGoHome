@@ -1,16 +1,41 @@
 #pragma once
 
 #include <string>
+
+using namespace std;
+
 class ISsdResult
 {
 public:
-    virtual std::string get(void) = 0;
+    virtual string get(void) = 0;
+    virtual void setResultFilePath(string) = 0;
 };
 
 class SsdResult : public ISsdResult
 {
-    std::string get(void) override
+public:
+    string get(void) override
     {
-        return std::string();
+        if (resultFilePath.empty())
+            return std::string();
+
+        ifstream file(resultFilePath);
+        if (!file.is_open())
+            return std::string();
+
+        string buf;
+        while (getline(file, buf))
+            cout << buf << endl;
+
+        file.close();
+
+        return buf;
     }
+
+    void setResultFilePath(string path)
+    {
+        resultFilePath = path;
+    }
+private:
+    string resultFilePath;
 };

@@ -8,7 +8,10 @@ class SsdHelper
 public:
     SsdHelper(ISsdExecutable* executable, ISsdResult* result) :
         m_ssdExcutable(executable), m_ssdResult(result)
-    {}
+    {
+        m_ssdExcutable->execute("G");
+        m_ssdResult->setResultFilePath(m_ssdExcutable->getResultFilePath());
+    }
     bool execute(const string& arguments)
     {
         return m_ssdExcutable->execute(arguments);
