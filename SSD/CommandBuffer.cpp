@@ -87,14 +87,14 @@ private:
 
 	void fastWrite(CommandPacket cmdPacket)
 	{
-		ignore(cmdPacket);
+		ignorePreviousCommand(cmdPacket);
 		cmdBuf.push_back(cmdPacket);
 		cmdCnt++;
 	}
 
 	void fastErase(CommandPacket cmdPacket)
 	{
-		ignore(cmdPacket);
+		ignorePreviousCommand(cmdPacket);
 		cmdBuf.push_back(cmdPacket);
 		cmdCnt++;
 	}
