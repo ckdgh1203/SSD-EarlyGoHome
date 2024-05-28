@@ -72,7 +72,7 @@ long long Logger::getFileSize(const std::string& filename)
 	return file.tellg();
 }
 
-std::string Logger::getSaveFileName()
+std::string& Logger::getSaveFileName()
 {
 	std::string result = "until_" + getCurrentTimeFileFormatted() + ".log";
 
@@ -107,10 +107,13 @@ void Logger::agingLogFile()
 			if (changeFileName(oldFileName, newFileName))
 			{
 				logFileQueue.push(newFileName);
+
+				std::cout << "Enqueue!!! : " << newFileName << " : " << logFileQueue.size() << std::endl;
 				if (logFileQueue.size() == 2)
 				{
 					doZip();
 				}
+				std::cout << "Enqueue and...!!! : " << newFileName << " : " << logFileQueue.size() << std::endl;
 			}
 		}
 	}
@@ -118,9 +121,14 @@ void Logger::agingLogFile()
 
 void Logger::doZip()
 {
+	if (logFileQueue.empty())
+	{
+		return;
+	}
 	std::string oldFileName = logFileQueue.front();
 	std::string newFileName = oldFileName;
 	size_t dotIndex = newFileName.find_last_of('.');
+	std::cout << "Dozip : " << oldFileName << std::endl;
 	if (dotIndex != std::string::npos)
 	{
 		newFileName.replace(dotIndex, newFileName.size() - dotIndex, ".zip");
@@ -128,5 +136,16 @@ void Logger::doZip()
 	if (changeFileName(oldFileName, newFileName))
 	{
 		logFileQueue.pop();
+	}
+}
+
+void Logger::clean()
+{
+	std::cout << "Cleanup : " << logFileQueue.size() << std::endl;
+
+	while (!logFileQueue.empty())
+	{
+		std::cout << "????" << std::endl;
+		doZip();
 	}
 }

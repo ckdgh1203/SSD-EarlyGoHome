@@ -11,6 +11,7 @@ public:
 	Logger() { };
 
 	void print(std::string msg, const std::source_location& caller = std::source_location::current());
+	void clean();
 
 	~Logger() { };
 
@@ -20,7 +21,7 @@ private:
 	std::string extractCallerName(const char* funcSig);
 	std::string formatCallFunction(std::string callFunction);
 	long long getFileSize(const std::string& filename);
-	std::string getSaveFileName();
+	std::string& getSaveFileName();
 	bool changeFileName(std::string from, std::string to);
 	void writeToLogFile(std::string contents);
 	void agingLogFile();
