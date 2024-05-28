@@ -4,7 +4,7 @@
     <ClCompile Include="gtest_main.cc" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gtest\gtest-all.cc" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gmock\gmock-all.cc" />
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="ShellTest.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CommandFactoryTest.cpp">
@@ -33,6 +33,9 @@
     </ClCompile>
     <ClCompile Include="EraseRangeTest.cpp">
       <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptTest.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

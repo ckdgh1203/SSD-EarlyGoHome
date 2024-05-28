@@ -1,35 +1,13 @@
-#pragma once
+#include "Help.h"
 
-#include "CommandHandler.cpp"
-
-#include <iostream>
-
-using namespace std;
-
-class Help : public CommandHandler
+bool Help::isValidArgs(const vector<string>& args)
 {
-public:
-	Help(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
+	return VALID;
+}
 
-	bool isValidArgs(const vector<string>& args) override
-	{
-		return VALID;
-	}
-
-	Progress doCommand(const vector<string>& args) override
-	{
-		logger.print("Command : " + sliceString(args, 0));
-		m_outputStream << m_helpMessage;
-		return Progress::Continue;
-	}
-
-	void usage() override {};
-
-	~Help() {};
-protected:
-	const string m_helpMessage = "Help:\n"
-		"\tread [LBA]\n"
-		"\twrite [LBA] [DATA]\n"
-		"\tfullread\n"
-		"\tfullwrite [DATA]\n";
-};
+Progress Help::doCommand(const vector<string>& args)
+{
+	logger.print("Command : " + sliceString(args, 0));
+	m_outputStream << m_helpMessage;
+	return Progress::Continue;
+}

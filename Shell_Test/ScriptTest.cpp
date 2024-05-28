@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include "../Shell/ScriptHandler.cpp"
+#include "../Shell/ScriptFactory.cpp"
 #include "../Shell/TestApp1.cpp"
 #include "../Shell/TestApp2.cpp"
 #include "SsdMock.h"

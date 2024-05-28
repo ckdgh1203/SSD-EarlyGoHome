@@ -27,6 +27,9 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <EnableUnitySupport>true</EnableUnitySupport>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="Shared" />
@@ -60,10 +63,12 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeaderOutputFile />
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,7 +113,7 @@
     <ClCompile Include="gtest_main.cc" />
     <ClCompile Include="HelpTest.cpp" />
     <ClCompile Include="ReadTest.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="ShellTest.cpp" />
     <ClCompile Include="ScriptTest.cpp" />
     <ClCompile Include="WriteTest.cpp" />
   </ItemGroup>
