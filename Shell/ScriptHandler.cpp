@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include "CommandFactory.cpp"
+#include "CommandFactory.h"
 
 using namespace std;
 

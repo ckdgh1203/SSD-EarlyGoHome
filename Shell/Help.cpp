@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommandHandler.cpp"
+#include "CommandHandler.h"
 
 #include <iostream>
 
@@ -11,17 +11,9 @@ class Help : public CommandHandler
 public:
 	Help(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
-	bool isValidArgs(const vector<string>& args) override
-	{
-		return VALID;
-	}
+	bool isValidArgs(const vector<string>& args) override;
 
-	Progress doCommand(const vector<string>& args) override
-	{
-		logger.print("Command : " + sliceString(args, 0));
-		m_outputStream << m_helpMessage;
-		return Progress::Continue;
-	}
+	Progress doCommand(const vector<string>& args) override;
 
 	void usage() override {};
 
@@ -33,3 +25,15 @@ protected:
 		"\tfullread\n"
 		"\tfullwrite [DATA]\n";
 };
+
+inline bool Help::isValidArgs(const vector<string>& args)
+{
+	return VALID;
+}
+
+inline Progress Help::doCommand(const vector<string>& args)
+{
+	logger.print("Command : " + sliceString(args, 0));
+	m_outputStream << m_helpMessage;
+	return Progress::Continue;
+}

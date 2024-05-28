@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommandHandler.cpp"
+#include "CommandHandler.h"
 
 #include <iostream>
 #include <mutex>
@@ -13,20 +13,9 @@ public:
     Exit(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
 
 
-    bool isValidArgs(const vector<string>& args) override
-    {
-        if (args.size() != 1)
-            return INVALID;
+    bool isValidArgs(const vector<string>& args) override;
 
-        return VALID;
-    }
-
-    Progress doCommand(const vector<string>& args) override
-    {
-        m_outputStream << "Exit from Shell" << endl;
-        logger.print("Command : " + sliceString(args, 0));
-        return Progress::Done;
-    }
+    Progress doCommand(const vector<string>& args) override;
 
     void usage() override {};
 
@@ -34,3 +23,18 @@ public:
 
 private:
 };
+
+inline bool Exit::isValidArgs(const vector<string>& args)
+{
+    if (args.size() != 1)
+        return INVALID;
+
+    return VALID;
+}
+
+inline Progress Exit::doCommand(const vector<string>& args)
+{
+    m_outputStream << "Exit from Shell" << endl;
+    logger.print("Command : " + sliceString(args, 0));
+    return Progress::Done;
+}

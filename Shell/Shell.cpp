@@ -1,8 +1,8 @@
 #pragma once
 
 #include "SsdHelper.h"
-#include "CommandHandler.cpp"
-#include "CommandFactory.cpp"
+#include "CommandHandler.h"
+#include "CommandFactory.h"
 #include "ScriptHandler.cpp"
 #include "ScriptFactory.cpp"
 #include "Exit.cpp"

@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "Write.cpp"
-#include "CommandHandler.cpp"
+#include "CommandHandler.h"
 
 using namespace std;
 
@@ -12,31 +12,10 @@ class FullWrite : public CommandHandler
 {
 public:
 	FullWrite(ostream& _out, SsdHelper& _ssd, Write* _write) : CommandHandler(_out, _ssd), write(_write){};
-	// fullwrite 0x12345678
-	bool isValidArgs(const vector<string>& args) override
-	{
-		if (args.size() != 2)
-			return INVALID;
 
-		for (int lba = START_LBA; lba < END_LBA; lba++)
-		{
-			nArgs.push_back({ "write", to_string(lba), args[1]});
-			if (!write->isValidArgs(nArgs[lba]))
-				return INVALID;
-		}
+	bool isValidArgs(const vector<string>& args) override;
 
-		return VALID;
-	}
-
-	Progress doCommand(const vector<string>& args) override
-	{
-		logger.print("Command : " + sliceString(args, 0));
-		for (int lba = START_LBA; lba < END_LBA; lba++)
-		{
-			write->doCommand(nArgs[lba]);
-		}
-		return Progress::Continue;
-	}
+	Progress doCommand(const vector<string>& args) override;
 
 	void usage() override {}
 
@@ -45,3 +24,28 @@ private:
 	Write* write;
 	vector<vector<string>> nArgs;
 };
+
+inline bool FullWrite::isValidArgs(const vector<string>& args)
+{
+	if (args.size() != 2)
+		return INVALID;
+
+	for (int lba = START_LBA; lba < END_LBA; lba++)
+	{
+		nArgs.push_back({ "write", to_string(lba), args[1] });
+		if (!write->isValidArgs(nArgs[lba]))
+			return INVALID;
+	}
+
+	return VALID;
+}
+
+inline Progress FullWrite::doCommand(const vector<string>& args)
+{
+	logger.print("Command : " + sliceString(args, 0));
+	for (int lba = START_LBA; lba < END_LBA; lba++)
+	{
+		write->doCommand(nArgs[lba]);
+	}
+	return Progress::Continue;
+}

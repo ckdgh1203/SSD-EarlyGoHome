@@ -69,6 +69,12 @@
     <ClInclude Include="LbaRangeVerifier.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CommandFactory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandHandler.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="헤더 파일">
