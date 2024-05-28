@@ -1,9 +1,11 @@
+#pragma once
 #include <string>
 #include <vector>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include "iFile.h"
+#include "iSSD.h"
 
 using namespace std;
 const string DEFAULT_DATA = "0x00000000";
@@ -13,6 +15,7 @@ class FileSingleton : public iFile
 public:
 	const string NAND_FILE = "nand.txt";
 	const string RESULT_FILE = "result.txt";
+	const string BUFFER_FILE = "buffer.txt";
 
 	static FileSingleton& getInstance()
 	{
@@ -36,10 +39,14 @@ public:
 		writeToResultTxt(DEFAULT_DATA);
 	}
 
-	string readFromNANDTxt(int lba) override
+	vector<string> readFromNANDTxt() override
 	{
 		ifstream file(filePath + NAND_FILE);
-		string ret = DEFAULT_DATA;
+		vector<string> ret;
+		for (int i = 0; i < 100; i++)
+		{
+			ret.push_back(DEFAULT_DATA);
+		}
 
 		if (!file.is_open())
 		{
@@ -47,7 +54,7 @@ public:
 			return ret;
 		}
 
-		getLBAData(lba, file, ret);
+		getLBAData(file, ret);
 		file.close();
 
 		return ret;
@@ -104,24 +111,80 @@ public:
 		file.close();
 	}
 
+	void readFromBuffertxt(vector<CommandPacket>& cmdBuf, int& cmdCnt)
+	{
+		ifstream file(filePath + BUFFER_FILE);
+		string line;
+
+		if (!file.is_open())
+		{
+			cmdCnt = 0;
+			return;
+		}
+
+		if (getline(file, line))
+			cmdCnt = stoi(line);
+
+		while (getline(file, line))
+		{
+			vector<string> words = splitBySpace(line);
+			cmdBuf.push_back(CommandPacket{ words[0]/*command*/, stoi(words[1]) /*startLba*/, stoi(words[2])/*endLba*/, words[3]/*data*/ });
+		}
+		file.close();
+
+		return;
+	}
+
+	void writeToBufferTxt(string data)
+	{
+		ofstream file(BUFFER_FILE);
+		if (file.is_open())
+		{
+			file << data;
+			file.close();
+		}
+	}
 
 private:
 	FileSingleton() {}
 	FileSingleton& operator=(const FileSingleton& other) = delete;
 	FileSingleton(const FileSingleton& other) = delete;
 
-	void getLBAData(int lba, ifstream& file, string& ret)
+	void getLBAData(ifstream& file, vector<string>& ret)
 	{
 		int targetLine = 0;
 		string buf;
 		while (getline(file, buf))
 		{
-			if (targetLine == lba)
-			{
-				ret = buf;
-			}
-			targetLine++;
+			ret[targetLine++] = buf;
 		}
 	}
+
+	vector<string> splitBySpace(const string& str)
+	{
+		vector<string> words;
+		string word;
+		for (char ch : str)
+		{
+			if (ch == ' ')
+			{
+				if (!word.empty())
+				{
+					words.push_back(word);
+					word.clear();
+				}
+			}
+			else
+			{
+				word += ch;
+			}
+		}
+		if (!word.empty())
+		{
+			words.push_back(word);
+		}
+		return words;
+	}
+
 	string filePath;
 };
