@@ -86,11 +86,76 @@ private:
 		cmdCnt = cmdBuf.size();
 	}
 
+	void makeContinousWritePacket(CommandPacket& continuosWrite)
+	{
+		for (int i = 0; i < cmdCnt - 1; i++)
+		{
+			if ((cmdBuf[i].command == WRITE_COMMAND) && (cmdBuf[i].startLba + 1 == continuosWrite.startLba))
+			{
+				continuosWrite.startLba = cmdBuf[i].startLba;
+				makeContinousWritePacket(continuosWrite);
+			}
+
+			if ((cmdBuf[i].command == WRITE_COMMAND) && (cmdBuf[i].startLba - 1 == continuosWrite.endLba))
+			{
+				continuosWrite.endLba = cmdBuf[i].startLba;
+				makeContinousWritePacket(continuosWrite);
+			}
+		}
+	}
+
+	void resizeEraseSize(CommandPacket& continuosWrite)
+	{
+		for (int i = 0; i < cmdCnt; i++)
+		{
+			if (cmdBuf[i].command == ERASE_COMMAND)
+			{
+				// 앞 resize
+				if((cmdBuf[i].startLba <= continuosWrite.endLba) && (cmdBuf[i].startLba >= continuosWrite.startLba))
+				{
+					cmdBuf[i].startLba = continuosWrite.endLba + 1;
+				}
+
+				// 뒤 resize
+				if ((cmdBuf[i].endLba >= continuosWrite.startLba) && (cmdBuf[i].endLba <= continuosWrite.endLba))
+				{
+					cmdBuf[i].endLba = continuosWrite.startLba - 1;
+				}
+			}
+		}
+	}
+
+	void narrowRangeOfErase()
+	{
+		if (cmdCnt < 2)
+		{
+			return;
+		}
+
+		CommandPacket continuosWrite = cmdBuf[cmdCnt - 1];
+		makeContinousWritePacket(continuosWrite);
+		resizeEraseSize(continuosWrite);
+
+		deque<CommandPacket> temp;
+		for (int i = 0; i < cmdCnt; i++)
+		{
+			if (cmdBuf[i].startLba <= cmdBuf[i].endLba)
+			{
+				temp.push_back(cmdBuf[i]);
+			}
+		}
+
+		cmdBuf.clear();
+		cmdBuf = temp;
+		cmdCnt = cmdBuf.size();
+	}
+
 	void fastWrite(CommandPacket cmdPacket)
 	{
 		ignorePreviousCommand(cmdPacket);
 		cmdBuf.push_back(cmdPacket);
 		cmdCnt++;
+		narrowRangeOfErase();
 	}
 
 	CommandPacket mergeCmdPacket(CommandPacket cmdPacket)
