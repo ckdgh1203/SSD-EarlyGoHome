@@ -10,61 +10,70 @@ using namespace std;
 class ScriptHandler
 {
 public:
-    explicit ScriptHandler(CommandFactory& commandFactory, ostream& outputStream)
-        : m_CommandFactory(commandFactory), m_outputStream(outputStream)
+    ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper)
+        : m_CommandFactory(stringStream, ssdHelper), m_stringStream(stringStream)
     {
-
+        clearOutputStreamBuffer();
     }
 
-    virtual void doScript() = 0;
+    virtual bool doScript() = 0;
 
 protected:
-    CommandFactory& m_CommandFactory;
-    ostream& m_outputStream;
-
-    bool readCompare(const string& inputData, unsigned int lbaBound)
+    CommandFactory m_CommandFactory;
+    ostringstream& m_stringStream;
+    
+    string createReferenceData(const string& inputData, const int iteration)
     {
-        string referenceData = "";
-        for (unsigned int iter = 0; iter < lbaBound; iter++)
+        string Data = "";
+        for (int iter = 0; iter < iteration; iter++)
         {
-            referenceData += inputData;
+            Data += (inputData + "\n");
         }
 
-        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
-        string readData = redirectedOutput->str();
-        redirectedOutput->str("");
-        redirectedOutput->clear();
-
-        return (referenceData == readData);
+        return Data;
     }
 
-    void readRepeatedly(const unsigned int lbaBound)
+    void clearOutputStreamBuffer()
+    {
+        m_stringStream.str("");
+        m_stringStream.clear();
+    }
+
+    bool readCompare(const string& inputData, unsigned int startLba, unsigned int endLba)
+    {
+        string readData = m_stringStream.str();
+        clearOutputStreamBuffer();
+
+        return (readData == inputData);
+    }
+
+    void readRepeatedly(unsigned int startLba, unsigned int endLba)
     {
         vector<vector<string>> argument;
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
         {
             argument.push_back({ "read", to_string(lbaIter) });
         }
 
         CommandHandler* readCommand = m_CommandFactory.create("read");
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int Iter = 0; Iter < (endLba - startLba); Iter++)
         {
-            readCommand->doCommand(argument[lbaIter]);
+            readCommand->doCommand(argument[Iter]);
         }
     }
 
-    void writeRepeatedly(const string& inputData, const unsigned int lbaBound)
+    void writeRepeatedly(const string& inputData, unsigned int startLba, unsigned int endLba)
     {
         vector<vector<string>> argument;
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
         {
             argument.push_back({ "write", to_string(lbaIter), inputData });
         }
 
         CommandHandler* writeCommand = m_CommandFactory.create("write");
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int Iter = 0; Iter < (endLba - startLba); Iter++)
         {
-            writeCommand->doCommand(argument[lbaIter]);
+            writeCommand->doCommand(argument[Iter]);
         }
     }
 

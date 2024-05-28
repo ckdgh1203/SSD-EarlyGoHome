@@ -5,32 +5,33 @@
 class TestApp2 : public ScriptHandler
 {
 public:
-    TestApp2(CommandFactory& commandFactory, ostream& outputStream)
-        : ScriptHandler(commandFactory, outputStream)
+    TestApp2(ostringstream& stringStream, SsdHelper& ssdHelper)
+        : ScriptHandler(stringStream, ssdHelper)
     {
 
     }
 
-	// ScriptHandler을(를) 통해 상속됨
-	void doScript() override
+	bool doScript() override
 	{
-        unsigned int lbaBound = 6;
+        unsigned int startLba = 0;
+        unsigned int endLba = 6;
 
-        for (int i = 0; i < 30; i++)
+        for (int iter = 0; iter < 30; iter++)
         {
-            writeRepeatedly("0xAAAABBBB", lbaBound);
+            writeRepeatedly("0xAAAABBBB", startLba, endLba);
         }
 
-        writeRepeatedly("0x12345678", lbaBound);
-        readRepeatedly(lbaBound);
+        writeRepeatedly("0x12345678", startLba, endLba);
+        readRepeatedly(startLba, endLba);
 
-        bool isCompareSuccess = readCompare("0x12345678", lbaBound);
+        string referenceData = createReferenceData("0x12345678", (endLba - startLba));
+        bool isCompareSuccess = readCompare(referenceData, startLba, endLba);
 
         if (false == isCompareSuccess)
         {
-            m_outputStream << "[WARNING] testapp2 : written data is different with read data!!!" << endl;
-            return;
+            return false;
         }
-        m_outputStream << "testapp2 : Done test, written data is same with read data :)" << endl;
+
+        return true;
 	}
 };

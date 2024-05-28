@@ -22,6 +22,8 @@ TEST_F(CommandFactoryTest, ConstructorAndCreate)
 	EXPECT_NE(nullptr, factory.create("write"));
 	EXPECT_NE(nullptr, factory.create("fullread"));
 	EXPECT_NE(nullptr, factory.create("fullwrite"));
+	EXPECT_NE(nullptr, factory.create("erase"));
+	EXPECT_NE(nullptr, factory.create("erase_range"));
 	EXPECT_NE(nullptr, factory.create("help"));
 	EXPECT_NE(nullptr, factory.create("exit"));
 	EXPECT_EQ(nullptr, factory.create("INVALID"));

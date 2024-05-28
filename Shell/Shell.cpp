@@ -28,8 +28,6 @@ public:
 
     void run(istream& inputStream)
     {
-        ScriptFactory scriptFactory;
-
         while (true)
         {
             m_outputStream << "shell> ";
@@ -37,7 +35,7 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            auto* scriptHandler = scriptFactory.create(args[0], m_commandFactory, m_outputStream);
+            auto* scriptHandler = m_scriptFactory.create(args[0], m_ssdHelper);
             if (scriptHandler != nullptr)
             {
                 scriptHandler->doScript();
@@ -63,37 +61,46 @@ public:
         }
     }
 
-    void run(char* listFileName[])
+    void run(const string& fileName)
     {
-        const char* fileName = listFileName[1];
         ifstream file(fileName);
 
         if (!(file.is_open()))
         {
-            m_outputStream << "\nINVALID FILENAME";
+            m_outputStream << "\nINVALID FILENAME\n";
             return;
         }
 
         string scriptLine;
 
+        m_outputStream << "\n";
         while (getline(file, scriptLine))
         {
             m_outputStream << scriptLine << "   ---   ";
             
-            auto* scriptHandler = m_scriptFactory.create(scriptLine, m_commandFactory, m_outputStream);
+            auto* scriptHandler = m_scriptFactory.create(scriptLine, m_ssdHelper);
 
             if (scriptHandler == nullptr)
             {
-                m_outputStream << "\nINVALID SCRIPT";
+                m_outputStream << "\nINVALID SCRIPT\n";
                 return;
             }
 
             m_outputStream << "Run...";
-            scriptHandler->doScript();
+
+            if (false == scriptHandler->doScript())
+            {
+                m_outputStream << "FAIL\n";
+                delete scriptHandler;
+                break;
+            }
 
             m_outputStream << "Pass\n";
             delete scriptHandler;
         }
+        m_outputStream << "\n";
+
+        file.close();
     }
 
     void parseArguments(istream& inputStream, vector<string>& args)

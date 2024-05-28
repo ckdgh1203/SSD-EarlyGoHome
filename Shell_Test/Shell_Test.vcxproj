@@ -100,6 +100,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandFactoryTest.cpp" />
+    <ClCompile Include="EraseRangeTest.cpp" />
+    <ClCompile Include="EraseTest.cpp" />
     <ClCompile Include="ExitTest.cpp" />
     <ClCompile Include="FullReadTest.cpp" />
     <ClCompile Include="FullWriteTest.cpp" />
@@ -107,6 +109,13 @@
     <ClCompile Include="HelpTest.cpp" />
     <ClCompile Include="ReadTest.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="ScriptTestFixture.cpp" />
+    <ClCompile Include="TestApp1Test.cpp" />
+    <ClCompile Include="TestApp2Test.cpp" />
+    <ClCompile Include="TestApp3Test.cpp" />
+    <ClCompile Include="TestApp4Test.cpp" />
+    <ClCompile Include="TestApp5Test.cpp" />
+    <ClCompile Include="TestApp6Test.cpp" />
     <ClCompile Include="WriteTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,10 +124,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="SsdMock.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SsdMock.h" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

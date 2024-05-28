@@ -130,13 +130,15 @@
   <ItemGroup>
     <ClCompile Include="CommandFactory.cpp" />
     <ClCompile Include="CommandHandler.cpp" />
+    <ClCompile Include="Erase.cpp" />
+    <ClCompile Include="EraseRange.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="FullRead.cpp" />
-    <ClCompile Include="FullRead10AndCompare.cpp" />
+    <ClCompile Include="TestApp4.cpp" />
     <ClCompile Include="FullWrite.cpp" />
-    <ClCompile Include="FullWriteAndReadCompare.cpp" />
+    <ClCompile Include="TestApp3.cpp" />
     <ClCompile Include="Help.cpp" />
-    <ClCompile Include="LoopWriteAndReadCompare.cpp" />
+    <ClCompile Include="TestApp6.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Read.cpp" />
@@ -146,9 +148,11 @@
     <ClCompile Include="TestApp1.cpp" />
     <ClCompile Include="TestApp2.cpp" />
     <ClCompile Include="Write.cpp" />
-    <ClCompile Include="Write10AndCompare.cpp" />
+    <ClCompile Include="TestApp5.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataFormatVerifier.h" />
+    <ClInclude Include="LbaRangeVerifier.h" />
     <ClInclude Include="SsdExcutable.h" />
     <ClInclude Include="SsdHelper.h" />
     <ClInclude Include="SsdResult.h" />

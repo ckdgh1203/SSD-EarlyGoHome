@@ -15,7 +15,9 @@ int main(int argc, char* argv[])
     }
     else
     {
-        shell.run(argv);
+        string fileName(argv[1]);
+        string filePath = "../../Data/" + fileName;
+        shell.run(filePath);
     }
 
     return 0;
