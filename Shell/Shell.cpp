@@ -94,7 +94,7 @@ void Shell::parseArguments(istream& inputStream, vector<string>& args)
 
 string Shell::getDirectoryPath(string filePath)
 {
-    size_t lastSlashPos = filePath.find_last_of('/\\');
+    size_t lastSlashPos = filePath.find_last_of(static_cast<char>('/\\'));
     string dirPath = filePath;
     if (lastSlashPos != std::string::npos)
     {
