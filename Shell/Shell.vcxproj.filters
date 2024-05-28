@@ -51,15 +51,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SsdExcutable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SsdHelper.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SsdResult.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -103,10 +94,25 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ScriptFactory.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Script</Filter>
     </ClInclude>
     <ClInclude Include="ScriptHandler.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="SsdExcutable.h">
+      <Filter>헤더 파일\Ssd</Filter>
+    </ClInclude>
+    <ClInclude Include="SsdHelper.h">
+      <Filter>헤더 파일\Ssd</Filter>
+    </ClInclude>
+    <ClInclude Include="SsdResult.h">
+      <Filter>헤더 파일\Ssd</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp1.h">
+      <Filter>헤더 파일\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp2.h">
+      <Filter>헤더 파일\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +130,12 @@
     </Filter>
     <Filter Include="헤더 파일\Command">
       <UniqueIdentifier>{6e85f25d-fabd-457b-9048-e3c3c76d41ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Script">
+      <UniqueIdentifier>{d76a8a6a-b293-4b69-9123-4f1d738b83af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Ssd">
+      <UniqueIdentifier>{f495bded-be92-45cb-b26b-a63220081935}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

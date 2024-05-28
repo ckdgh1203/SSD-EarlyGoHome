@@ -1,6 +1,6 @@
 #include "ScriptFactory.h"
-#include "TestApp1.cpp"
-#include "TestApp2.cpp"
+#include "TestApp1.h"
+#include "TestApp2.h"
 
 ScriptHandler* ScriptFactory::create(const string& scriptStr, SsdHelper& ssdHelper)
 {

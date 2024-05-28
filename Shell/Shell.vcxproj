@@ -164,6 +164,8 @@
     <ClInclude Include="SsdExcutable.h" />
     <ClInclude Include="SsdHelper.h" />
     <ClInclude Include="SsdResult.h" />
+    <ClInclude Include="TestApp1.h" />
+    <ClInclude Include="TestApp2.h" />
     <ClInclude Include="Write.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

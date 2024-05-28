@@ -1,17 +1,24 @@
 #include "Logger.h"
+#include <chrono>
+#include <iostream>
+#include <fstream>
+#include <windows.h>
+#include <filesystem>
 
-void Logger::print(string msg, const std::source_location& caller)
+namespace fs = std::filesystem;
+
+void Logger::print(std::string msg, const std::source_location& caller)
 {
 	if (msg.empty())
 		return;
 
-	string contents = "[" + getCurrentTimeLogFormatted() + "] " + formatCallFunction(extractCallerName(caller.function_name())) + " : " + msg + "\n";
+	std::string contents = "[" + getCurrentTimeLogFormatted() + "] " + formatCallFunction(extractCallerName(caller.function_name())) + " : " + msg + "\n";
 
 	writeToLogFile(contents);
 	agingLogFile();
 }
 
-string Logger::getCurrentTimeLogFormatted()
+std::string Logger::getCurrentTimeLogFormatted()
 {
 	auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
@@ -23,7 +30,7 @@ string Logger::getCurrentTimeLogFormatted()
 	return ss.str();
 }
 
-string Logger::getCurrentTimeFileFormatted()
+std::string Logger::getCurrentTimeFileFormatted()
 {
 	auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
@@ -35,7 +42,7 @@ string Logger::getCurrentTimeFileFormatted()
 	return ss.str();
 }
 
-string Logger::extractCallerName(const char* funcSig)
+std::string Logger::extractCallerName(const char* funcSig)
 {
 	std::string sig(funcSig);
 	size_t start = sig.find(" ") + 1;
@@ -44,9 +51,9 @@ string Logger::extractCallerName(const char* funcSig)
 	return sig.substr(start, end - start) + "()";
 }
 
-string Logger::formatCallFunction(string callFunction)
+std::string Logger::formatCallFunction(std::string callFunction)
 {
-	string formatCallFunction(30, ' ');
+	std::string formatCallFunction(30, ' ');
 	size_t length = callFunction.size();
 	if (length > 30)
 		callFunction.resize(30);
@@ -65,14 +72,14 @@ long long Logger::getFileSize(const std::string& filename)
 	return file.tellg();
 }
 
-string Logger::getSaveFileName()
+std::string Logger::getSaveFileName()
 {
-	string result = "until_" + getCurrentTimeFileFormatted() + ".log";
+	std::string result = "until_" + getCurrentTimeFileFormatted() + ".log";
 
 	return result;
 }
 
-bool Logger::changeFileName(string from, string to)
+bool Logger::changeFileName(std::string from, std::string to)
 {
 	std::wstring oldWstr(from.begin(), from.end());
 	std::wstring newWstr(to.begin(), to.end());
@@ -80,10 +87,10 @@ bool Logger::changeFileName(string from, string to)
 	return MoveFile(oldWstr.c_str(), newWstr.c_str());
 }
 
-void Logger::writeToLogFile(string contents)
+void Logger::writeToLogFile(std::string contents)
 {
-	ofstream* latest;
-	latest = new ofstream(LOGFILE, ios::app);
+	std::ofstream* latest;
+	latest = new std::ofstream(LOGFILE, std::ios::app);
 	latest->write(contents.c_str(), contents.size());
 	latest->close();
 	delete latest;
@@ -95,8 +102,8 @@ void Logger::agingLogFile()
 	{
 		if (getFileSize(LOGFILE) > TEN_KB)
 		{
-			string oldFileName = LOGFILE;
-			string newFileName = getSaveFileName();
+			std::string oldFileName = LOGFILE;
+			std::string newFileName = getSaveFileName();
 			if (changeFileName(oldFileName, newFileName))
 			{
 				logFileQueue.push(newFileName);
@@ -111,10 +118,10 @@ void Logger::agingLogFile()
 
 void Logger::doZip()
 {
-	string oldFileName = logFileQueue.front();
-	string newFileName = oldFileName;
+	std::string oldFileName = logFileQueue.front();
+	std::string newFileName = oldFileName;
 	size_t dotIndex = newFileName.find_last_of('.');
-	if (dotIndex != string::npos)
+	if (dotIndex != std::string::npos)
 	{
 		newFileName.replace(dotIndex, newFileName.size() - dotIndex, ".zip");
 	}
