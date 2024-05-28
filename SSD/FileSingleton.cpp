@@ -10,7 +10,6 @@
 #include "iSSD.h"
 
 using namespace std;
-const string DEFAULT_DATA = "0x00000000";
 
 class FileSingleton : public iFile
 {
@@ -44,7 +43,7 @@ public:
 	void initTxtFiles()
 	{
 		vector<string> buf;
-		for (int i = 0; i < 100; i++)
+		for (int i = START_LBA; i < MAX_LBA_RANGE; i++)
 		{
 			buf.push_back(DEFAULT_DATA);
 		}
@@ -56,14 +55,14 @@ public:
 	{
 		ifstream file(NAND_FILE);
 		vector<string> ret;
-		for (int i = 0; i < 100; i++)
+
+		for (int i = START_LBA; i < MAX_LBA_RANGE; i++)
 		{
 			ret.push_back(DEFAULT_DATA);
 		}
 
 		if (!file.is_open())
 		{
-			cout << "read file open fail" << endl;
 			return ret;
 		}
 
@@ -93,12 +92,11 @@ public:
 	string readFromResultTxt() override
 	{
 		ifstream file(RESULT_FILE);
-		string ret;
+		string ret = DEFAULT_DATA;
 		string temp;
 
 		if (!file.is_open())
 		{
-			cout << "read file open fail" << endl;
 			return ret;
 		}
 
@@ -208,7 +206,6 @@ private:
 		return words;
 	}
 
-
 	string getDirectoryPath(string filePath)
 	{
 		size_t lastSlashPos = filePath.find_last_of('/\\');
@@ -282,6 +279,5 @@ private:
 	string RESULT_FILE = "result.txt";
 	string BUFFER_FILE = "buffer.txt";
 
-	string filePath;
 	bool resultFileExist = false;
 };
