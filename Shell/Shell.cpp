@@ -35,7 +35,7 @@ void Shell::run(istream& inputStream)
     }
 }
 
-void Shell::run(const string & fileName)
+void Shell::runRunner(const string & fileName)
 {
     ifstream file(fileName);
 

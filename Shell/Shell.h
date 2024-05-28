@@ -20,7 +20,7 @@ public:
     {}
 
     void run(istream& inputStream);
-    void run(const string& fileName);
+    void runRunner(const string& fileName);
     void parseArguments(istream& inputStream, vector<string>& args);
 
 private:
