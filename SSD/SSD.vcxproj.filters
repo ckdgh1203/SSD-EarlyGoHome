@@ -21,13 +21,16 @@
     <ClCompile Include="SSD.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="File.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CommandFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandBuffer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSingleton.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
