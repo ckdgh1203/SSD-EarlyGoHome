@@ -26,9 +26,6 @@ public:
 
     void run(istream& inputStream)
     {
-        ScriptFactory scriptFactory;
-        ScriptHandler* scriptHandler;
-
         while (true)
         {
             m_outputStream << "shell> ";
@@ -36,15 +33,7 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            scriptHandler = scriptFactory.create(args[0], m_commandFactory, m_outputStream);
-            if (scriptHandler != nullptr)
-            {
-                scriptHandler->doScript();
-                delete scriptHandler;
-                continue;
-            }
-
-            scriptHandler = scriptFactory.create(args[0], m_commandFactory, m_outputStream);
+            auto* scriptHandler = m_scriptFactory.create(args[0], m_ssdHelper);
             if (scriptHandler != nullptr)
             {
                 scriptHandler->doScript();
@@ -82,83 +71,14 @@ public:
         }
     }
 
-	void doTestApp1()
-	{
-		//fullwrite("0xDEADC0DE");
-		//fullread();
-
-		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
-
-		if (false == isCompareSuccess)
-		{
-			m_outputStream << "[WARNING] testapp1 : written data is different with read data!!!" << endl;
-			return;
-		}
-
-		m_outputStream << "testapp1 : Done test, written data is same with read data :)" << endl;
-	}
-
-    void doTestApp2()
-    {
-        unsigned int lbaBound = 6;
-
-        for (int i = 0; i < 30; i++)
-        {
-            writeRepeatedly("0xAAAABBBB", lbaBound);
-        }
-
-        writeRepeatedly("0x12345678", lbaBound);
-        readRepeatedly(lbaBound);
-
-        bool isCompareSuccess = readCompare("0x12345678", lbaBound);
-
-        if (false == isCompareSuccess)
-        {
-            m_outputStream << "[WARNING] testapp2 : written data is different with read data!!!" << endl;
-            return;
-        }
-        m_outputStream << "testapp2 : Done test, written data is same with read data :)" << endl;
-    }
-
 private:
     ostream& m_outputStream;
     SsdHelper& m_ssdHelper;
     CommandFactory m_commandFactory;
+    ScriptFactory m_scriptFactory;
 
     bool verifyLba(unsigned int lba)
     {
         return 99 < lba;
-    }
-
-    bool readCompare(const string& inputData, unsigned int lbaBound)
-    {
-        string referenceData = "";
-        for (unsigned int iter = 0; iter < lbaBound; iter++)
-        {
-            referenceData += inputData + "\n";
-        }
-
-        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
-        string readData = redirectedOutput->str();
-        redirectedOutput->str("");
-        redirectedOutput->clear();
-
-        return (referenceData == readData);
-    }
-
-    void readRepeatedly(const int lbaBound)
-    {
-        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
-        {
-            //read(lbaIter);
-        }
-    }
-
-    void writeRepeatedly(const string& inputData, const int lbaBound)
-    {
-        for (int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
-        {
-            //write(lbaIter, inputData);
-        }
     }
 };
