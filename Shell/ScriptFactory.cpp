@@ -7,9 +7,6 @@ ScriptHandler* ScriptFactory::create(const string& scriptStr, SsdHelper& ssdHelp
 	ScriptEnum scriptEnum = CovertStrToScriptEnum(scriptStr);
 	switch (scriptEnum)
 	{
-		ScriptEnum scriptEnum = CovertStrToScriptEnum(scriptStr);
-		switch (scriptEnum)
-		{
 		case TESTAPP1:
 			return new TestApp1(m_stringStream, ssdHelper);
 		case TESTAPP2:
@@ -24,7 +21,6 @@ ScriptHandler* ScriptFactory::create(const string& scriptStr, SsdHelper& ssdHelp
 			return new TestApp6(m_stringStream, ssdHelper);
 		default:
 			return nullptr;
-		}
 	}
 }
 

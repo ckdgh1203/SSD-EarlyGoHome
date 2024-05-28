@@ -1,4 +1,4 @@
-#include "ScriptTestFixture.cpp"
+#include "ScriptTestFixture.h"
 #include "../Shell/TestApp6.cpp"
 
 class TestApp6Fixture : public ScriptTestFixture

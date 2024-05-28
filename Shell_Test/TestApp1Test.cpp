@@ -1,5 +1,7 @@
-#include "ScriptTestFixture.cpp"
+#include "ScriptTestFixture.h"
 #include "../Shell/TestApp1.cpp"
+#include "../Shell/ScriptHandler.cpp"
+#include "../Shell/ScriptFactory.cpp"
 
 class TestApp1Fixture : public ScriptTestFixture
 {

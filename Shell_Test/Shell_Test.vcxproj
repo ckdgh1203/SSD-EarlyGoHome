@@ -114,7 +114,6 @@
     <ClCompile Include="HelpTest.cpp" />
     <ClCompile Include="ReadTest.cpp" />
     <ClCompile Include="ShellTest.cpp" />
-    <ClCompile Include="ScriptTestFixture.cpp" />
     <ClCompile Include="TestApp1Test.cpp" />
     <ClCompile Include="TestApp2Test.cpp" />
     <ClCompile Include="TestApp3Test.cpp" />
@@ -129,6 +128,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ScriptTestFixture.h" />
     <ClInclude Include="SsdMock.h" />
   </ItemGroup>
   <ItemGroup>
