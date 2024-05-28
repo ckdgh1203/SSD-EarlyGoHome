@@ -32,15 +32,6 @@ public:
 		command = newCommand;
 	}
 
-	bool isNeedFlush()
-	{
-		return commandBuffer.getBufferedCommandCount() >= 10;
-	}
-
-	bool executeFastRead(CommandPacket cmdPacket)
-	{
-		return commandBuffer.executeFastReadInCommandBuffer(cmdPacket);
-	}
 
 	bool bufferingCommand(CommandPacket cmdPacket)
 	{
