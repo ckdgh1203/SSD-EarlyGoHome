@@ -17,6 +17,5 @@ Progress Erase::doCommand(const vector<string>& args)
 	logger.print("Command : " + sliceString(args, 0));
 	string arguments = "E " + args[1] + " " + args[2];
 	m_ssdHelper.execute(arguments);
-	m_outputStream << m_ssdHelper.getResult() << endl;
 	return Progress::Continue;
 }

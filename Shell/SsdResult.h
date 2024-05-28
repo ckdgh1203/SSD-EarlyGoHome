@@ -24,8 +24,7 @@ public:
             return std::string();
 
         string buf;
-        while (getline(file, buf))
-            cout << buf << endl;
+        getline(file, buf);
 
         file.close();
 
