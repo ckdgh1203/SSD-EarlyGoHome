@@ -44,9 +44,11 @@ public:
 
 	deque<CommandPacket> getCommandFromCommandBuffer()
 	{
+		FileSingleton::getInstance().readFromBuffertxt(cmdBuf, cmdCnt);
 		deque<CommandPacket> ret = cmdBuf;
 		cmdBuf.clear();
 		cmdCnt = 0;
+		saveCmdBuffer();
 		return ret;
 	}
 

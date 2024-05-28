@@ -138,7 +138,7 @@ public:
 
 	void writeToBufferTxt(string data)
 	{
-		ofstream file(filePath + BUFFER_FILE);
+		ofstream file(filePath + BUFFER_FILE, std::ios_base::trunc);
 		if (file.is_open())
 		{
 			file << data;
