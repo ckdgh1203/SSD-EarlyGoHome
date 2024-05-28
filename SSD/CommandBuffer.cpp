@@ -11,13 +11,11 @@ using namespace std;
 class CommandBuffer
 {
 public:
-	const int MAX_BUFFER_SIZE = 10;
-
 	bool insertCommandToCommandBuffer(CommandPacket cmdPacket)
 	{
 		FileSingleton::getInstance().readFromBuffertxt(cmdBuf, cmdCnt);
 
-		if (cmdPacket.command == "R")
+		if (cmdPacket.command == READ_COMMAND)
 		{
 			return fastRead(cmdPacket);
 		}
@@ -27,12 +25,12 @@ public:
 			return false;
 		}
 
-		if (cmdPacket.command == "W")
+		if (cmdPacket.command == WRITE_COMMAND)
 		{
 			fastWrite(cmdPacket);
 		}
 		
-		if (cmdPacket.command == "E")
+		if (cmdPacket.command == ERASE_COMMAND)
 		{
 			fastErase(cmdPacket);
 		}
@@ -55,6 +53,7 @@ public:
 private:
 	deque<CommandPacket> cmdBuf;
 	int cmdCnt = 0;
+	const int MAX_BUFFER_SIZE = 10;
 
 	bool fastRead(CommandPacket cmdPacket)
 	{
@@ -109,14 +108,18 @@ private:
 	{
 		// 연속적이지 않을 경우
 		if (!((cmdBuf[cmdCnt - 1].endLba + 1 >= cmdPacket.startLba) && (cmdBuf[cmdCnt - 1].startLba - 1 <= cmdPacket.endLba)))
+		{
 			return false;
+		}
 
 		int s = min(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
 		int e = max(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
 
 		// 연속적이더라도 사이즈가 10보다 커질 경우
-		if (e - s + 1 > 10)
+		if (e - s + 1 > MAX_ERASE_SIZE)
+		{
 			return false;
+		}
 		
 		return true;
 	}
@@ -125,11 +128,15 @@ private:
 	{
 		deque<CommandPacket> temp;
 		for (int i = 0; i < cmdCnt - 1; i++)
+		{
 			temp.push_back(cmdBuf[i]);
+		}
 
-		if (cmdBuf[cmdCnt - 1].command == "E" && isContinuedLbaRangeCmd(cmdPacket))
+		if (cmdBuf[cmdCnt - 1].command == ERASE_COMMAND && isContinuedLbaRangeCmd(cmdPacket))
+		{
 			// merge 가능하면 merge
 			temp.push_back(mergeCmdPacket(cmdPacket));
+		}
 		else
 		{	// merge 불가능하면 버퍼에 추가
 			temp.push_back(cmdBuf[cmdCnt - 1]);
