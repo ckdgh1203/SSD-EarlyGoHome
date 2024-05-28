@@ -92,7 +92,7 @@ bool argValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* ar
 		cmdPacket.startLba = stoi(argv[2]);
 		int size = stoi(argv[3]);
 		cmdPacket.endLba = cmdPacket.startLba + size - 1;
-		cmdPacket.data = ERASE_DATA;
+		cmdPacket.data = DEFAULT_DATA;
 		if (isInvalidEraseSize(size) || isInvalidLbaRange(cmdPacket.startLba))
 		{
 			cout << "[ERROR] [Invalid argument with Erase Command!]" << endl;
@@ -104,6 +104,14 @@ bool argValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* ar
 		if (argc != 2)
 		{
 			cout << "[ERROR] [Flush Command needs 1 arg!]" << endl;
+			return RETURN_FAIL;
+		}
+	}
+	else if (cmdPacket.command == GETPATH_COMMAND)
+	{
+		if (argc != 2)
+		{
+			cout << "[ERROR] [GetPath Command needs 1 arg!]" << endl;
 			return RETURN_FAIL;
 		}
 	}
@@ -124,20 +132,16 @@ int main(int argc, char* argv[])
 	}
 
 	SSD ssd{};
-	if (cmdPacket.command != "G" && argc < 3 || argc > 4)
-		return 0;
-
 	CommandFactory& commandFactory = CommandFactory::getInstance();
 	FileSingleton& fileSingleton = FileSingleton::getInstance();
 	fileSingleton.setFilePath(__FILE__);
-
-	if (cmdPacket.command == "G")
+	if (cmdPacket.command == GETPATH_COMMAND)
 	{
 		cout << fileSingleton.getResultPath() << endl;
-		return 0;
+		return RETURN_FAIL;
 	}
 
-	if (cmdPacket.command == "F")
+	if (cmdPacket.command == FLUSH_COMMAND)
 	{
 		ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
 		ssd.executeCommand();
@@ -157,12 +161,12 @@ int main(int argc, char* argv[])
 				ssd.executeCommand();
 				if (ssd.bufferingCommand(cmdPacket) == RETURN_FAIL)	
 				{
-					//그럴리가 없는 상태
+					cout << "[ERROR] Command Buffering Fail after Flush!" << endl;
 					return RETURN_FAIL;
 				}
 			}
 		}
 	}
 
-	return 0;
+	return RETURN_SUCCESS;
 }
