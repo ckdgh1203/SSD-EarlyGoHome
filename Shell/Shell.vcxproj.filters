@@ -49,6 +49,9 @@
     <ClCompile Include="Write.cpp">
       <Filter>소스 파일\Command</Filter>
     </ClCompile>
+    <ClCompile Include="EraseRange.cpp">
+      <Filter>소스 파일\Command</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SsdExcutable.h">
