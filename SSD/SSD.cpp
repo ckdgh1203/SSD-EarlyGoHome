@@ -36,25 +36,23 @@ public:
 	{
 		return commandBuffer.insertCommandToCommandBuffer(cmdPacket);
 	}
-
-	void flush()
+	
+	deque<Command*> getBufferedCommand()
 	{
-		//vector<CommandPacket> cmdPacket = {};
-		//int currentBufferedCommandCnt = commandBuffer.getBufferedCommandCount();
-		//for (int i = 0; i < currentBufferedCommandCnt; i++)
-		//{
-		//	cmdPacket = commandBuffer.getCommandFromCommandBuffer();
-		//	if (cmdPacket[i].command == "W")
-		//	{
-		//		setCommand(CommandFactory::getInstance().createCommand(cmdPacket[i].startLba, cmdPacket[i].data));
-		//	}
-		//	else if (cmdPacket[i].command == "U")
-		//	{
-		//		int size = cmdPacket[i].endLba - cmdPacket[i].startLba + 1;
-		//		setCommand(CommandFactory::getInstance().createCommand(cmdPacket[i].startLba, size));
-		//	}
-		//	executeCommand();
-		//}
+		deque<Command*> bufferedCommand = {};
+		deque<CommandPacket> cmdPack = commandBuffer.getCommandFromCommandBuffer();
+		for (deque<CommandPacket>::size_type i = 0; i < cmdPack.size(); i++)
+		{
+			if (cmdPack[i].command == "W")
+			{
+				bufferedCommand.push_back(CommandFactory::getInstance().createCommand(cmdPack[i].startLba, cmdPack[i].data));
+			}
+			else if (cmdPack[i].command == "E")
+			{
+				bufferedCommand.push_back(CommandFactory::getInstance().createCommand(cmdPack[i].startLba, cmdPack[i].endLba - cmdPack[i].startLba + 1));
+			}
+		}
+		return bufferedCommand;
 	}
 
 private:
