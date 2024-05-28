@@ -5,20 +5,18 @@
 
 using namespace std;
 
-class Help : public CommandHandler
+class Help
 {
 public:
-	Help(ostream& _out, SsdHelper& _ssd, CommandFactory* factory) :
-		CommandHandler(_out, _ssd), m_factory(factory) {};
+	Help(ostream& _out, CommandFactory* factory) :
+		m_outputStream(_out),
+		m_factory(factory) {}
 
-	bool isValidArgs(const vector<string>& args) override;
-
-	Progress doCommand(const vector<string>& args) override;
-
-	string usage() override;;
+	Progress doCommand(const vector<string>& args);
 
 	~Help() {};
 protected:
-
+	ostream& m_outputStream;
 	CommandFactory* m_factory;
+	Logger& logger = Logger::getInstance();
 };

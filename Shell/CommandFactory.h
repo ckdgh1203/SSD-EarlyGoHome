@@ -13,7 +13,6 @@ enum class CommandEnum
 	FULLWRITE,
 	ERASE,
 	ERASE_RANGE,
-	HELP,
 	EXIT,
 	NUMOFCOMMAND
 };

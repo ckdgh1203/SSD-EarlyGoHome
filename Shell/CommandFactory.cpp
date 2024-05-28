@@ -6,7 +6,6 @@
 #include "FullWrite.h"
 #include "Erase.h"
 #include "EraseRange.h"
-#include "Help.h"
 #include "Exit.h"
 #include "SsdHelper.h"
 
@@ -24,7 +23,6 @@ CommandFactory::CommandFactory(ostream& _out, SsdHelper& _ssd)
 	m_handlers.push_back(new FullWrite(_out, _ssd, writeObject));
 	m_handlers.push_back(new Erase(_out, _ssd));
 	m_handlers.push_back(new EraseRange(_out, _ssd));
-	m_handlers.push_back(new Help(_out, _ssd, this));
 	m_handlers.push_back(new Exit(_out, _ssd));
 }
 
@@ -54,8 +52,6 @@ CommandEnum CommandFactory::stringToCommandEnum(const string& commandStr)
 		return CommandEnum::ERASE;
 	if (commandStr == "erase_range")
 		return CommandEnum::ERASE_RANGE;
-	if (commandStr == "help")
-		return CommandEnum::HELP;
 	if (commandStr == "exit")
 		return CommandEnum::EXIT;
 	return CommandEnum::NUMOFCOMMAND;

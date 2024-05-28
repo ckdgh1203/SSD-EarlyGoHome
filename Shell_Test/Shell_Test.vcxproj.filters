@@ -22,9 +22,6 @@
     <ClCompile Include="FullWriteTest.cpp">
       <Filter>소스 파일\CommandTest</Filter>
     </ClCompile>
-    <ClCompile Include="HelpTest.cpp">
-      <Filter>소스 파일\CommandTest</Filter>
-    </ClCompile>
     <ClCompile Include="ReadTest.cpp">
       <Filter>소스 파일\CommandTest</Filter>
     </ClCompile>
@@ -51,6 +48,9 @@
     </ClCompile>
     <ClCompile Include="TestApp6Test.cpp">
       <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
+    <ClCompile Include="HelpTest.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

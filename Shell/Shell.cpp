@@ -1,5 +1,12 @@
 #include "Shell.h"
 
+Shell::Shell(SsdHelper& _ssd, ostream& _out) :
+    m_ssdHelper(_ssd),
+    m_commandFactory(_out, _ssd),
+    m_outputStream(_out),
+    m_help(_out, &m_commandFactory)
+{}
+
 void Shell::run(istream& inputStream)
 {
     while (true)
@@ -16,6 +23,12 @@ void Shell::run(istream& inputStream)
         {
             m_outputStream << args[0] << " " << scriptHandler->getScriptResult() << "\n";
             delete scriptHandler;
+            continue;
+        }
+
+        if (args[0] == "help")
+        {
+            m_help.doCommand(args);
             continue;
         }
 

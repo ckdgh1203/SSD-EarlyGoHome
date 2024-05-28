@@ -3,7 +3,7 @@
 #include "SsdHelper.h"
 #include "CommandFactory.h"
 #include "ScriptFactory.h"
-
+#include "Help.h"
 #include <iostream>
 #include <vector>
 
@@ -13,11 +13,7 @@ class Shell
 {
 public:
 
-    Shell(SsdHelper& _ssd, ostream& _out) :
-        m_ssdHelper(_ssd),
-        m_commandFactory(_out, _ssd),
-        m_outputStream(_out)
-    {}
+    Shell(SsdHelper& _ssd, ostream& _out);
 
     void run(istream& inputStream);
     void runRunner(const string& fileName);
@@ -28,6 +24,6 @@ private:
     SsdHelper& m_ssdHelper;
     CommandFactory m_commandFactory;
     ScriptFactory m_scriptFactory;
-
+    Help m_help;
     string getDirectoryPath(string filePath);
 };

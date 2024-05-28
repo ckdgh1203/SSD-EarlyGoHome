@@ -119,8 +119,8 @@ TEST_F(ShellTestFixture, RunAndHelp)
         "\tfullwrite [DATA]\n"
         "\terase [START_LBA] [NUMBER_OF_LBA]\n"
         "\terase_range [START_LBA] [END_LBA]\n"
-        "\thelp\n"
         "\texit\n"
+        "\thelp\n"
         "shell> " "Exit from Shell\n";
 
     runAndExpect(inputString, expectedMessage);
