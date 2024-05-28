@@ -29,11 +29,11 @@ public:
 
 		if (cmdPacket.command == "W")
 		{
-			fastWrite();
+			fastWrite(cmdPacket);
 		}
 		else if (cmdPacket.command == "E")
 		{
-			fastErase();
+			fastErase(cmdPacket);
 		}
 
 		saveCmdBuffer();
@@ -67,19 +67,21 @@ private:
 		return false;
 	}
 
-	void fastWrite()
+	void fastWrite(CommandPacket cmdPacket)
 	{
-
+		cmdBuf.push_back(cmdPacket);
+		cmdCnt++;
 	}
 
-	void fastErase()
+	void fastErase(CommandPacket cmdPacket)
 	{
-
+		cmdBuf.push_back(cmdPacket);
+		cmdCnt++;
 	}
 
 	void saveCmdBuffer()
 	{
-		string data = to_string(cmdCnt) + "\n";
+		string data = "";
 		for (int i = 0; i < cmdBuf.size(); i++)
 		{
 			data = data + cmdBuf[i].command + " " + to_string(cmdBuf[i].startLba) + " " + to_string(cmdBuf[i].endLba) + " " + cmdBuf[i].data + "\n";
