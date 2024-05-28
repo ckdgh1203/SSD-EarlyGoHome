@@ -27,11 +27,13 @@ int main(int argc, char* argv[])
 		string data = argv[3];
 		ssd.setCommand(commandFactory.createCommand(lba, data));
 	}
+
 	if (cmd == "E")
 	{
 		int size = stoi(argv[3]);
 		ssd.setCommand(commandFactory.createCommand(lba, size));
 	}
+
 	ssd.executeCommand();
 
 	return 0;
