@@ -117,6 +117,8 @@ public:
 		ifstream file(filePath + BUFFER_FILE);
 		string line;
 
+		cmdBuf.clear();
+
 		if (!file.is_open())
 		{
 			cmdCnt = 0;
@@ -138,7 +140,7 @@ public:
 
 	void writeToBufferTxt(string data)
 	{
-		ofstream file(filePath + BUFFER_FILE);
+		ofstream file(filePath + BUFFER_FILE, std::ios_base::trunc);
 		if (file.is_open())
 		{
 			file << data;
