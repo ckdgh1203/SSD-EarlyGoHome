@@ -43,7 +43,10 @@ public:
 
 	deque<CommandPacket> getCommandFromCommandBuffer()
 	{
-		return cmdBuf;
+		deque<CommandPacket> ret = cmdBuf;
+		cmdBuf.clear();
+		cmdCnt = 0;
+		return ret;
 	}
 
 private:
