@@ -10,8 +10,8 @@ using namespace std;
 class ScriptHandler
 {
 public:
-    ScriptHandler(CommandFactory& commandFactory, ostream& outputStream)
-        : m_CommandFactory(commandFactory), m_outputStream(outputStream)
+    ScriptHandler(CommandFactory& commandFactory, ostringstream& stringStream)
+        : m_CommandFactory(commandFactory), m_stringStream(stringStream)
     {
         clearOutputStreamBuffer();
     }
@@ -20,13 +20,12 @@ public:
 
 protected:
     CommandFactory& m_CommandFactory;
-    ostream& m_outputStream;
+    ostringstream& m_stringStream;
 
     void clearOutputStreamBuffer()
     {
-        ostringstream* redirectedOutput = dynamic_cast<ostringstream*>(&m_outputStream);
-        redirectedOutput->str("");
-        redirectedOutput->clear();
+        m_stringStream.str("");
+        m_stringStream.clear();
     }
 
     bool readCompare(const string& inputData, unsigned int lbaBound)
@@ -37,7 +36,7 @@ protected:
             referenceData += (inputData + "\n");
         }
 
-        string readData = dynamic_cast<ostringstream*>(&m_outputStream)->str();
+        string readData = m_stringStream.str();
         clearOutputStreamBuffer();
 
         return (readData == referenceData);

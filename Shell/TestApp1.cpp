@@ -5,13 +5,13 @@
 class TestApp1 : public ScriptHandler
 {
 public:
-	TestApp1(CommandFactory& commandFactory, ostream& outputStream)
-		: ScriptHandler(commandFactory, outputStream)
+	TestApp1(CommandFactory& commandFactory, ostringstream& stringStream)
+		: ScriptHandler(commandFactory, stringStream)
 	{
 
 	}
-	// ScriptHandler을(를) 통해 상속됨
-    void doScript() override
+
+	void doScript() override
     {
 		doFullWrite("0xDEADC0DE");
 		duFullRead();
@@ -20,10 +20,12 @@ public:
 
 		if (false == isCompareSuccess)
 		{
-			m_outputStream << "[WARNING] testapp1 : written data is different with read data!!!" << endl;
+			m_stringStream << "[WARNING] testapp1 : written data is different with read data!!!" << endl;
+			cout << m_stringStream.str();
 			return;
 		}
 
-		m_outputStream << "testapp1 : Done test, written data is same with read data :)" << endl;
+		m_stringStream << "testapp1 : Done test, written data is same with read data :)" << endl;
+		cout << m_stringStream.str();
 	}
 };

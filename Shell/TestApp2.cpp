@@ -5,13 +5,12 @@
 class TestApp2 : public ScriptHandler
 {
 public:
-    TestApp2(CommandFactory& commandFactory, ostream& outputStream)
-        : ScriptHandler(commandFactory, outputStream)
+    TestApp2(CommandFactory& commandFactory, ostringstream& stringStream)
+        : ScriptHandler(commandFactory, stringStream)
     {
 
     }
 
-	// ScriptHandler을(를) 통해 상속됨
 	void doScript() override
 	{
         unsigned int lbaBound = 6;
@@ -28,9 +27,11 @@ public:
 
         if (false == isCompareSuccess)
         {
-            m_outputStream << "[WARNING] testapp2 : written data is different with read data!!!" << endl;
+            m_stringStream << "[WARNING] testapp2 : written data is different with read data!!!" << endl;
+            cout << m_stringStream.str();
             return;
         }
-        m_outputStream << "testapp2 : Done test, written data is same with read data :)" << endl;
+        m_stringStream << "testapp2 : Done test, written data is same with read data :)" << endl;
+        cout << m_stringStream.str();
 	}
 };

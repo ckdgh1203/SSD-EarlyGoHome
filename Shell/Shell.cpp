@@ -33,7 +33,7 @@ public:
             vector<string> args{};
             parseArguments(inputStream, args);
 
-            auto* scriptHandler = m_scriptFactory.create(args[0], m_commandFactory, m_outputStream);
+            auto* scriptHandler = m_scriptFactory.create(args[0], m_commandFactory);
             if (scriptHandler != nullptr)
             {
                 scriptHandler->doScript();

@@ -12,15 +12,15 @@ using namespace std;
 class ScriptFactory
 {
 public:
-	ScriptHandler* create(const string& scriptStr, CommandFactory& commandFactory, ostream& outputStream)
+	ScriptHandler* create(const string& scriptStr, CommandFactory& commandFactory)
 	{
 		ScriptEnum scriptEnum = CovertStrToScriptEnum(scriptStr);
 		switch (scriptEnum)
 		{
 		case TESTAPP1:
-			return new TestApp1(commandFactory, outputStream);
+			return new TestApp1(commandFactory, m_stringStream);
 		case TESTAPP2:
-			return new TestApp2(commandFactory, outputStream);
+			return new TestApp2(commandFactory, m_stringStream);
 		default:
 			return nullptr;
 		}
@@ -40,4 +40,6 @@ private:
 
 		return MAX_SCRIPT;
 	}
+
+	ostringstream m_stringStream{};
 };
