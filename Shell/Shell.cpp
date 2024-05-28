@@ -8,6 +8,8 @@ void Shell::run(istream& inputStream)
 
         vector<string> args{};
         parseArguments(inputStream, args);
+        
+        if (1 > args.size()) continue;
 
         auto* scriptHandler = m_scriptFactory.create(args[0], m_ssdHelper);
         if (scriptHandler != nullptr)

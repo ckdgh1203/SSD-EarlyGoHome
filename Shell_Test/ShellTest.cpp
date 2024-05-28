@@ -125,3 +125,25 @@ TEST_F(ShellTestFixture, RunAndHelp)
 
     runAndExpect(inputString, expectedMessage);
 }
+
+TEST_F(ShellTestFixture, RunAndInvalidCommand)
+{
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+    EXPECT_CALL(ssdResultMock, get()).Times(0);
+    string inputString = "reda 3\n"
+        "\n"
+        "      \n"
+        " help\n"
+        "exit\n";
+
+    const string expectedMessage = "shell> "
+        "\nINVALID COMMAND\n"
+        "shell> "
+        "shell> "
+        "\nINVALID COMMAND\n"
+        "shell> "
+        "\nINVALID COMMAND\n"
+        "shell> " "Exit from Shell\n";
+
+    runAndExpect(inputString, expectedMessage);
+}
