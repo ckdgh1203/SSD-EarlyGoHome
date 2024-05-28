@@ -138,7 +138,7 @@ public:
 
 	void writeToBufferTxt(string data)
 	{
-		ofstream file(BUFFER_FILE);
+		ofstream file(filePath + BUFFER_FILE);
 		if (file.is_open())
 		{
 			file << data;
