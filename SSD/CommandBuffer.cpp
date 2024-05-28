@@ -73,23 +73,13 @@ private:
 		cmdCnt++;
 	}
 
-	int inputSmallOne(int a, int b)
-	{
-		return (a < b) ? a : b;
-	}
-
-	int inputBigOne(int a, int b)
-	{
-		return (a > b) ? a : b;
-	}
-
 	CommandPacket mergeCmdPacket(CommandPacket cmdPacket)
 	{
 		CommandPacket ret;
 		ret.command = cmdPacket.command;
 		ret.data = cmdPacket.data;
-		ret.startLba = inputSmallOne(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
-		ret.endLba = inputBigOne(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
+		ret.startLba = min(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
+		ret.endLba = max(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
 
 		return ret;
 	}
@@ -100,8 +90,8 @@ private:
 		if (!((cmdBuf[cmdCnt - 1].endLba + 1 >= cmdPacket.startLba) && (cmdBuf[cmdCnt - 1].startLba - 1 <= cmdPacket.endLba)))
 			return false;
 
-		int s = inputSmallOne(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
-		int e = inputBigOne(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
+		int s = min(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
+		int e = max(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
 
 		// 연속적이더라도 사이즈가 10보다 커질 경우
 		if (e - s + 1 > 10)
