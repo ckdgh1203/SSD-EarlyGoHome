@@ -156,6 +156,7 @@
     <ClInclude Include="FullWrite.h" />
     <ClInclude Include="Help.h" />
     <ClInclude Include="LbaRangeVerifier.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Read.h" />
     <ClInclude Include="SsdExcutable.h" />
     <ClInclude Include="SsdHelper.h" />

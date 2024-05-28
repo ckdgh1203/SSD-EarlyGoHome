@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "../Shell/Shell.cpp"
+#include "../Shell/Logger.cpp"
 #include "SsdMock.h"
 
 using namespace std;
