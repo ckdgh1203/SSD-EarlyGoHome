@@ -3,18 +3,7 @@
 #include "SSD.cpp"
 
 using namespace std;
-const string WRITE_COMMAND = "W";
-const string READ_COMMAND = "R";
-const string ERASE_COMMAND = "E";
-const string FLUSH_COMMAND = "F";
-const string ERASE_DATA = "0x00000000";
-const int RETURN_FAIL = 0;
-const int RETURN_SUCCESS = 1;
-const int MAX_LBA_RANGE = 100;
-const int MAX_DATA_LENGTH = 10;
-const int START_LBA = 0;
-const int MAX_ERASE_SIZE = 10;
-const int MIN_ERASE_SIZE = 0;
+
 
 bool isInvalidLbaRange(int lba)
 {
@@ -51,7 +40,8 @@ bool isInvalidEraseSize(int size)
 	return (size > MAX_ERASE_SIZE) || (size <= MIN_ERASE_SIZE);
 }
 
-bool ArgValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* argv[])
+
+bool argValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* argv[])
 {
 	if (argc == 0)
 	{
@@ -122,12 +112,16 @@ bool ArgValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* ar
 		cout << "[ERROR] [Invalid SSD Command!]" << endl;
 		return RETURN_FAIL;
 	}
+	return RETURN_SUCCESS;
 }
 
 int main(int argc, char* argv[])
 {
 	CommandPacket cmdPacket = {};
-	ArgValidityCheckAndMakeCmdPack(cmdPacket, argc, argv);
+	if (argValidityCheckAndMakeCmdPack(cmdPacket, argc, argv) == RETURN_FAIL)
+	{
+		return RETURN_FAIL;
+	}
 
 	CommandFactory& commandFactory = CommandFactory::getInstance();
 	FileSingleton& fileSingleton = FileSingleton::getInstance();
@@ -136,7 +130,7 @@ int main(int argc, char* argv[])
 	SSD ssd{};
 	cmdPacket.command = argv[1];
 	
-	if (cmdPacket.command == "F")
+	if (cmdPacket.command == FLUSH_COMMAND)
 	{
 		ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
 		ssd.executeCommand();
@@ -145,21 +139,19 @@ int main(int argc, char* argv[])
 	{
 		if (ssd.bufferingCommand(cmdPacket) == RETURN_FAIL)
 		{
-			if (cmdPacket.command == "R")
+			if (cmdPacket.command == READ_COMMAND)
 			{
 				ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba));
 				ssd.executeCommand();
 			}
 			else
 			{
-				// W, E에서 Need Flush인 상태
-				//Flush Cmd 생성 + execute
 				ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
 				ssd.executeCommand();
 				if (ssd.bufferingCommand(cmdPacket) == RETURN_FAIL)	
 				{
 					//그럴리가 없는 상태
-					return 0;
+					return RETURN_FAIL;
 				}
 			}
 		}
