@@ -107,6 +107,7 @@ void Logger::agingLogFile()
 			if (changeFileName(oldFileName, newFileName))
 			{
 				logFileQueue.push(newFileName);
+
 				if (logFileQueue.size() == 2)
 				{
 					doZip();
@@ -118,6 +119,11 @@ void Logger::agingLogFile()
 
 void Logger::doZip()
 {
+	if (logFileQueue.empty())
+	{
+		return;
+	}
+
 	std::string oldFileName = logFileQueue.front();
 	std::string newFileName = oldFileName;
 	size_t dotIndex = newFileName.find_last_of('.');
@@ -128,5 +134,13 @@ void Logger::doZip()
 	if (changeFileName(oldFileName, newFileName))
 	{
 		logFileQueue.pop();
+	}
+}
+
+void Logger::clean()
+{
+	while (!logFileQueue.empty())
+	{
+		doZip();
 	}
 }

@@ -12,5 +12,7 @@ Progress Exit::doCommand(const vector<string>& args)
 {
     m_outputStream << "Exit from Shell" << endl;
     logger.print("Command : " + sliceString(args, 0));
+    logger.clean();
+
     return Progress::Done;
 }

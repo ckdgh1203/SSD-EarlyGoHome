@@ -8,9 +8,17 @@
 class Logger
 {
 public:
-	Logger() { };
+	static Logger& getInstance()
+	{
+		static Logger instance{};
+		return instance;
+	}
+	Logger() {};
+	Logger& operator=(const Logger& other) = delete;
+	Logger(const Logger& other) = delete;
 
 	void print(std::string msg, const std::source_location& caller = std::source_location::current());
+	void clean();
 
 	~Logger() { };
 
