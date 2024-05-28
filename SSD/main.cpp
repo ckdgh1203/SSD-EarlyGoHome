@@ -31,9 +31,8 @@ int main(int argc, char* argv[])
 	//* F case. 는 if문으로 따로 처리하고 F아닌경우 bufferingCommand()호출하자
 	if (cmdPacket.command == "F")
 	{
-		deque<Command> commandBuffer;
-		
-		//ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba, cmdPacket.data));
+		deque<Command*> commandBuffer = ssd.getBufferedCommand();
+		ssd.setCommand(commandFactory.createCommand(commandBuffer));
 	}
 	else
 	{
