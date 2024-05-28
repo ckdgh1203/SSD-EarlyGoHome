@@ -17,47 +17,56 @@ int main(int argc, char* argv[])
 	CommandPacket cmdPacket = {};
 	cmdPacket.command = argv[1];
 	cmdPacket.startLba = stoi(argv[2]);
-	//string cmd = argv[1];
-	//int lba = lba = stoi(argv[2]);
+	//1. argument 정리해서 CommandPacket만들기 함수 호출
 
-	//argument 정리해서 CommandPacket으로 정리
-
-	if (cmdPacket.command == "R")
+	//2. ssd.bufferingCommand()
+	//2-1. R case. return false면 ReadCmd create
+	//             return true면 그대로 CmdBuffer에서 FastRead 수행
+	//2-2. W/E case. return false면 NeedFlush 상태임. Flush cmd 생성해서 수행하고 다시 bufferingCommand()호출
+	//				 return true면 CommandBuffering 성공
+	//* F case. 는 if문으로 따로 처리하고 F아닌경우 bufferingCommand()호출하자
+	if (cmdPacket.command == "F")
 	{
-		// cmd buffer에 read 있는지 확인
-		if (ssd.executeFastRead(cmdPacket))
-			return 0;
-		//있다면 여기서 리턴
 
-		//없다면 아래
-		ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba));
-	}
-	
-	if (cmdPacket.command == "W")
-	{
-		//string data = argv[3];
-		cmdPacket.endLba = cmdPacket.startLba;
-		cmdPacket.data = argv[3];
-		if (ssd.isNeedFlush())
-		{
-			ssd.flush();
-		}
-		ssd.bufferingCommand(cmdPacket);
 		//ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba, cmdPacket.data));
 	}
-	if (cmdPacket.command == "E")
+	else
 	{
-		//int size = stoi(argv[3]);
-		cmdPacket.endLba = cmdPacket.startLba + stoi(argv[3]) - 1;
-		cmdPacket.data = "0x00000000";
-		if (ssd.isNeedFlush())
+		if (cmdPacket.command == "R")
 		{
-			ssd.flush();
+
 		}
-		ssd.bufferingCommand(cmdPacket);
-		//ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba, cmdPacket.size));
+		else if (cmdPacket.command == "W")
+		{
+			cmdPacket.endLba = cmdPacket.startLba;
+			cmdPacket.data = argv[3];
+		}
+		else if (cmdPacket.command == "E")
+		{
+			cmdPacket.endLba = cmdPacket.startLba + stoi(argv[3]) - 1;
+			cmdPacket.data = "0x00000000";
+		}
+		
+		if (ssd.bufferingCommand(cmdPacket) == 0)	// Fail return
+		{
+			if (cmdPacket.command == "R")
+			{
+				ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba));
+				ssd.executeCommand();
+			}
+			else
+			{
+				// W, E에서 Need Flush인 상태
+				//Flush Cmd 생성 + execute
+				//ssd.executeCommand();
+				if (ssd.bufferingCommand(cmdPacket) == 0)	// Fail return
+				{
+					//그럴리가 없는 상태
+					return 0;
+				}
+			}
+		}
 	}
-	ssd.executeCommand();
 
 	return 0;
 }

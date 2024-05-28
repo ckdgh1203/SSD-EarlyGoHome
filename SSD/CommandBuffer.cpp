@@ -11,9 +11,9 @@ public:
 	{
 		return 0;
 	}
-	void insertCommandToCommandBuffer(CommandPacket cmdPacket)
+	bool insertCommandToCommandBuffer(CommandPacket cmdPacket)
 	{
-
+		return 0;
 	}
 	bool executeFastReadInCommandBuffer(CommandPacket cmdPacket)
 	{

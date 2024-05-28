@@ -42,9 +42,9 @@ public:
 		return commandBuffer.executeFastReadInCommandBuffer(cmdPacket);
 	}
 
-	void bufferingCommand(CommandPacket cmdPacket)
+	bool bufferingCommand(CommandPacket cmdPacket)
 	{
-		commandBuffer.insertCommandToCommandBuffer(cmdPacket);
+		return commandBuffer.insertCommandToCommandBuffer(cmdPacket);
 	}
 
 	void flush()
