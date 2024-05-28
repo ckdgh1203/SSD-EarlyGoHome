@@ -108,12 +108,10 @@ void Logger::agingLogFile()
 			{
 				logFileQueue.push(newFileName);
 
-				std::cout << "Enqueue!!! : " << newFileName << " : " << logFileQueue.size() << std::endl;
 				if (logFileQueue.size() == 2)
 				{
 					doZip();
 				}
-				std::cout << "Enqueue and...!!! : " << newFileName << " : " << logFileQueue.size() << std::endl;
 			}
 		}
 	}
