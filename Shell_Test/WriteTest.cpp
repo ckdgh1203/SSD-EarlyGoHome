@@ -52,3 +52,9 @@ TEST_F(WriteTest, InvalidDataFormatWrite)
     VerifyDataAndExpect("abcd123456", "[WARNING] Prefix '0x' was not included in input data !!!\n");
     VerifyDataAndExpect("0xabcd1234", "[WARNING] Input data has invalid characters !!!\n");
 }
+
+TEST_F(WriteTest, InvalidNumberOfArgument)
+{
+    vector<string> args{ "write", "0" };
+    EXPECT_FALSE(write.isValidArgs(args));
+}

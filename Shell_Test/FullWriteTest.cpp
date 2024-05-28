@@ -55,3 +55,8 @@ TEST_F(FullWriteTest, NotAllowedInputDataException)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
+TEST_F(FullWriteTest, InvalidNumberOfArgument)
+{
+    vector<string> args{"fullwrite"};
+    EXPECT_FALSE(fullWrite.isValidArgs(args));
+}

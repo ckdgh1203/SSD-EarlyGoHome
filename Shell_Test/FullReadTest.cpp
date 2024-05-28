@@ -33,3 +33,9 @@ TEST_F(FullReadTest, DoCommand)
     EXPECT_TRUE(fullRead.isValidArgs(args));
     EXPECT_EQ(Progress::Continue, fullRead.doCommand(args));
 }
+
+TEST_F(FullReadTest, InvalidNumberOfArgument)
+{
+    vector<string> args{};
+    EXPECT_FALSE(fullRead.isValidArgs(args));
+}

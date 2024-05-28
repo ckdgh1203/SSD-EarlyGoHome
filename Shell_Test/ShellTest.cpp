@@ -170,3 +170,17 @@ TEST_F(ShellTestFixture, RunAndInvalidArguments)
 
     runAndExpect(inputString, expectedMessage);
 }
+
+TEST_F(ShellTestFixture, RunAndTestApp1)
+{
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(200);
+    EXPECT_CALL(ssdResultMock, get()).Times(100).WillRepeatedly(Return("0xDEADC0DE"));
+    string inputString = "testapp1 A\n"
+        "exit\n";
+
+    const string expectedMessage = "shell> "
+        "testapp1 Pass!\n\n"
+        "shell> " "Exit from Shell\n";
+
+    runAndExpect(inputString, expectedMessage);
+}

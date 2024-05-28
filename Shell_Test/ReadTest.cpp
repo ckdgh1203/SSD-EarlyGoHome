@@ -41,3 +41,9 @@ TEST_F(ReadTest, ReadSuccess)
         EXPECT_EQ(dataZero + "\n", fetchOutput());
     }
 }
+
+TEST_F(ReadTest, InvalidNumberOfArgument)
+{
+    vector<string> args{ "read" };
+    EXPECT_FALSE(read.isValidArgs(args));
+}
