@@ -12,23 +12,6 @@ public:
 	virtual void executeCommand() = 0;
 
 protected:
-	string ERASE_DATA = "0x00000000";
-
-};
-
-class WriteCommand : public Command
-{
-public:
-	WriteCommand(int lba, const string& data)
-		: lba(lba), data(data)
-	{}
-
-	void executeCommand() override
-	{
-		vector<string> buf = dataReadFromNand();
-		dataWriteToTargetLba(buf, lba, data);
-		dataWriteToNand(buf);
-	}
 	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
 	{
 		buf[lba] = data;
@@ -44,6 +27,21 @@ public:
 		vector<string> buf;
 		buf = FileSingleton::getInstance().readFromNANDTxt();
 		return buf;
+	}
+};
+
+class WriteCommand : public Command
+{
+public:
+	WriteCommand(int lba, const string& data)
+		: lba(lba), data(data)
+	{}
+
+	void executeCommand() override
+	{
+		vector<string> buf = dataReadFromNand();
+		dataWriteToTargetLba(buf, lba, data);
+		dataWriteToNand(buf);
 	}
 
 private:
@@ -85,27 +83,11 @@ public:
 
 	void dataEraseToTargetLba(std::vector<std::string>& buf)
 	{
+		string ERASE_DATA = "0x00000000";
 		for (int i = lba; i < lba + size; i++)
 		{
 			dataWriteToTargetLba(buf, i, ERASE_DATA);
 		}
-	}
-
-	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
-	{
-		buf[lba] = data;
-	}
-
-	void dataWriteToNand(std::vector<std::string>& buf)
-	{
-		FileSingleton::getInstance().writeToNANDTxt(buf);
-	}
-
-	vector<string> dataReadFromNand()
-	{
-		vector<string> buf;
-		buf = FileSingleton::getInstance().readFromNANDTxt();
-		return buf;
 	}
 
 private:
