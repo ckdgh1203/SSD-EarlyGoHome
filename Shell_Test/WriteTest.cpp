@@ -12,7 +12,7 @@ public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Write write{ redirectedOutput, ssd };
+    Write write{ m_redirectedOutput, ssd };
 
     void VerifyDataAndExpect(string input, string expected)
     {

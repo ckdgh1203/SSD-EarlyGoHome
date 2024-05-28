@@ -17,7 +17,7 @@ protected:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Shell shell{ssd, redirectedOutput};
+    Shell shell{ssd, m_redirectedOutput};
 
     const string dataZero = "0x00000000";
 

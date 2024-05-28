@@ -11,13 +11,13 @@ class FullReadTest : public Test, public OutputCapture
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
-    FullRead fullRead{ redirectedOutput, ssd, &read };
+    FullRead fullRead{ m_redirectedOutput, ssd, &read };
 
     const string dataZero = "0x00000000";
 
 private:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Read read{ redirectedOutput, ssd };
+    Read read{ m_redirectedOutput, ssd };
 };
 
 

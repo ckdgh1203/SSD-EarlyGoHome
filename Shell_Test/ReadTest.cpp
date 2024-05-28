@@ -12,7 +12,7 @@ public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Read read{ redirectedOutput, ssd };
+    Read read{ m_redirectedOutput, ssd };
 
     const string dataZero = "0x00000000";
 };

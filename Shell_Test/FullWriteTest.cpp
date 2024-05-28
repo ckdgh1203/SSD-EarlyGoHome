@@ -11,11 +11,11 @@ class FullWriteTest : public Test, public OutputCapture
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
-    FullWrite fullWrite{ redirectedOutput, ssd, &write };
+    FullWrite fullWrite{ m_redirectedOutput, ssd, &write };
 
 private:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Write write{ redirectedOutput, ssd };
+    Write write{ m_redirectedOutput, ssd };
 };
 
 TEST_F(FullWriteTest, DoCommand)

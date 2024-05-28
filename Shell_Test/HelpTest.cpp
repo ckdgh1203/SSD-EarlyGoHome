@@ -13,7 +13,7 @@ public:
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     CommandFactory factory{ std::cout, ssd };
-    Help help{redirectedOutput, ssd, &factory};
+    Help help{m_redirectedOutput, ssd, &factory};
 };
 
 TEST_F(HelpTest, DoCommand)

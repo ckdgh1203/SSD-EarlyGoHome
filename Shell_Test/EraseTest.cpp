@@ -12,7 +12,7 @@ public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Erase erase{ redirectedOutput, ssd };
+    Erase erase{ m_redirectedOutput, ssd };
 };
 
 TEST_F(EraseTest, DoCommand)
