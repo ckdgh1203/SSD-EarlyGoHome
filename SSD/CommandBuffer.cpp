@@ -116,7 +116,7 @@ private:
 					cmdBuf[i].startLba = continuosWrite.endLba + 1;
 				}
 
-				// 뒤 resize cmdBuf[0].endLba 
+				// 뒤 resize
 				if ((cmdBuf[i].endLba >= continuosWrite.startLba) && (cmdBuf[i].endLba <= continuosWrite.endLba))
 				{
 					cmdBuf[i].endLba = continuosWrite.startLba - 1;
