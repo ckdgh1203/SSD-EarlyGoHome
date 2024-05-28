@@ -9,13 +9,22 @@ public:
 		static CommandFactory instance{};
 		return instance;
 	}
-	Command* createCommand(iFile* file, int lba)
+
+	Command* createCommand(int lba)
 	{
-		return new ReadCommand{file, lba};
+		return new ReadCommand{lba };
 	}
-	Command* createCommand(iFile* file, int lba, string data)
+	Command* createCommand(int lba, string data)
 	{
-		return new WriteCommand{file, lba, data };
+		return new WriteCommand{lba, data };
+	}
+	Command* createCommand(int lba, int size)
+	{
+		return new EraseCommand{lba, size };
+	}
+	Command* createCommand(deque<Command*> commandBuffer)
+	{
+		return new FlushCommand{ commandBuffer };
 	}
 
 private:
