@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <deque>
 #include <iostream>
 #include "iSSD.h"
 #include "iFile.h"
@@ -34,16 +35,19 @@ public:
 		{
 			fastErase();
 		}
+
+		saveCmdBuffer();
+
 		return true;
 	}
 
-	vector<CommandPacket> getCommandFromCommandBuffer()
+	deque<CommandPacket> getCommandFromCommandBuffer()
 	{
 		return cmdBuf;
 	}
 
 private:
-	vector<CommandPacket> cmdBuf;
+	deque<CommandPacket> cmdBuf;
 	int cmdCnt = 0;
 
 	bool fastRead(CommandPacket cmdPacket)
