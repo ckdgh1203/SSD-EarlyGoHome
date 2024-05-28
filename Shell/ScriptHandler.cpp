@@ -28,10 +28,10 @@ protected:
         m_stringStream.clear();
     }
 
-    bool readCompare(const string& inputData, unsigned int lbaBound)
+    bool readCompare(const string& inputData, unsigned int startLba, unsigned int endLba)
     {
         string referenceData = "";
-        for (unsigned int iter = 0; iter < lbaBound; iter++)
+        for (unsigned int iter = startLba; iter < endLba; iter++)
         {
             referenceData += (inputData + "\n");
         }
@@ -42,31 +42,31 @@ protected:
         return (readData == referenceData);
     }
 
-    void readRepeatedly(const unsigned int lbaBound)
+    void readRepeatedly(unsigned int startLba, unsigned int endLba)
     {
         vector<vector<string>> argument;
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
         {
             argument.push_back({ "read", to_string(lbaIter) });
         }
 
         CommandHandler* readCommand = m_CommandFactory.create("read");
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
         {
             readCommand->doCommand(argument[lbaIter]);
         }
     }
 
-    void writeRepeatedly(const string& inputData, const unsigned int lbaBound)
+    void writeRepeatedly(const string& inputData, unsigned int startLba, unsigned int endLba)
     {
         vector<vector<string>> argument;
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
         {
             argument.push_back({ "write", to_string(lbaIter), inputData });
         }
 
         CommandHandler* writeCommand = m_CommandFactory.create("write");
-        for (unsigned int lbaIter = 0; lbaIter < lbaBound; lbaIter++)
+        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
         {
             writeCommand->doCommand(argument[lbaIter]);
         }

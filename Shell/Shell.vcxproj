@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="CommandFactory.cpp" />
     <ClCompile Include="CommandHandler.cpp" />
+    <ClCompile Include="Erase.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="FullRead.cpp" />
     <ClCompile Include="FullWrite.cpp" />
@@ -145,6 +146,8 @@
     <ClCompile Include="Write.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataFormatVerifier.h" />
+    <ClInclude Include="LbaRangeVerifier.h" />
     <ClInclude Include="SsdExcutable.h" />
     <ClInclude Include="SsdHelper.h" />
     <ClInclude Include="SsdResult.h" />

@@ -18,7 +18,7 @@ public:
 		if (args.size() != 2)
 			return INVALID;
 
-		for (int lba = startLBA; lba < endLBA; lba++)
+		for (int lba = START_LBA; lba < END_LBA; lba++)
 		{
 			nArgs.push_back({ "write", to_string(lba), args[1]});
 			if (!write->isValidArgs(nArgs[lba]))
@@ -31,7 +31,7 @@ public:
 	Progress doCommand(const vector<string>& args) override
 	{
 		logger.print("Command : " + sliceString(args, 0));
-		for (int lba = startLBA; lba < endLBA; lba++)
+		for (int lba = START_LBA; lba < END_LBA; lba++)
 		{
 			write->doCommand(nArgs[lba]);
 		}

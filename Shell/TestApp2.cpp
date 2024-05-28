@@ -13,17 +13,18 @@ public:
 
 	void doScript() override
 	{
-        unsigned int lbaBound = 6;
+        unsigned int startLba = 0;
+        unsigned int endLba = 6;
 
-        for (int i = 0; i < 30; i++)
+        for (int iter = 0; iter < 30; iter++)
         {
-            writeRepeatedly("0xAAAABBBB", lbaBound);
+            writeRepeatedly("0xAAAABBBB", startLba, endLba);
         }
 
-        writeRepeatedly("0x12345678", lbaBound);
-        readRepeatedly(lbaBound);
+        writeRepeatedly("0x12345678", startLba, endLba);
+        readRepeatedly(startLba, endLba);
 
-        bool isCompareSuccess = readCompare("0x12345678", lbaBound);
+        bool isCompareSuccess = readCompare("0x12345678", startLba, endLba);
 
         if (false == isCompareSuccess)
         {

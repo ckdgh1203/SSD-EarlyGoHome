@@ -16,7 +16,7 @@ public:
 		doFullWrite("0xDEADC0DE");
 		duFullRead();
 
-		bool isCompareSuccess = readCompare("0xDEADC0DE", 100);
+		bool isCompareSuccess = readCompare("0xDEADC0DE", 0, 100);
 
 		if (false == isCompareSuccess)
 		{
