@@ -68,7 +68,7 @@ private:
 		return false;
 	}
 
-	void ignore(CommandPacket cmdPacket)
+	void ignorePreviousCommand(CommandPacket cmdPacket)
 	{
 		deque<CommandPacket> tempBuf;
 
