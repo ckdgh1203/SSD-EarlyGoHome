@@ -14,10 +14,9 @@ using namespace std;
 class SSD
 {
 public:
-	SSD() 
+	SSD()
 		: command(nullptr)
-	{
-	}
+	{}
 	SSD(Command* command)
 		: command(command)
 	{}
@@ -26,10 +25,36 @@ public:
 	{
 		command->executeCommand();
 	}
-	
+
 	void setCommand(Command* newCommand)
 	{
 		command = newCommand;
+	}
+
+
+	bool bufferingCommand(CommandPacket cmdPacket)
+	{
+		return commandBuffer.insertCommandToCommandBuffer(cmdPacket);
+	}
+
+	void flush()
+	{
+		//vector<CommandPacket> cmdPacket = {};
+		//int currentBufferedCommandCnt = commandBuffer.getBufferedCommandCount();
+		//for (int i = 0; i < currentBufferedCommandCnt; i++)
+		//{
+		//	cmdPacket = commandBuffer.getCommandFromCommandBuffer();
+		//	if (cmdPacket[i].command == "W")
+		//	{
+		//		setCommand(CommandFactory::getInstance().createCommand(cmdPacket[i].startLba, cmdPacket[i].data));
+		//	}
+		//	else if (cmdPacket[i].command == "U")
+		//	{
+		//		int size = cmdPacket[i].endLba - cmdPacket[i].startLba + 1;
+		//		setCommand(CommandFactory::getInstance().createCommand(cmdPacket[i].startLba, size));
+		//	}
+		//	executeCommand();
+		//}
 	}
 
 private:
