@@ -28,4 +28,6 @@ private:
     SsdHelper& m_ssdHelper;
     CommandFactory m_commandFactory;
     ScriptFactory m_scriptFactory;
+
+    string getDirectoryPath(string filePath);
 };

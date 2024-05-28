@@ -12,7 +12,7 @@ void Shell::run(istream& inputStream)
         auto* scriptHandler = m_scriptFactory.create(args[0], m_ssdHelper);
         if (scriptHandler != nullptr)
         {
-            scriptHandler->doScript();
+            m_outputStream << args[0] << " " << scriptHandler->getScriptResult() << "\n";
             delete scriptHandler;
             continue;
         }
@@ -37,7 +37,8 @@ void Shell::run(istream& inputStream)
 
 void Shell::runRunner(const string & fileName)
 {
-    ifstream file(fileName);
+    string filePath = getDirectoryPath(__FILE__) + fileName;
+    ifstream file(filePath);
 
     if (!(file.is_open()))
     {
@@ -87,4 +88,15 @@ void Shell::parseArguments(istream& inputStream, vector<string>& args)
     {
         args.push_back(argument);
     }
+}
+
+string Shell::getDirectoryPath(string filePath)
+{
+    size_t lastSlashPos = filePath.find_last_of('/\\');
+    string dirPath = filePath;
+    if (lastSlashPos != std::string::npos)
+    {
+        dirPath = (filePath.substr(0, lastSlashPos) + "./");
+    }
+    return dirPath;
 }

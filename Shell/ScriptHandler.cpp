@@ -6,6 +6,13 @@ ScriptHandler::ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper)
     clearOutputStreamBuffer();
 }
 
+string ScriptHandler::getScriptResult()
+{
+    if (false == this->doScript()) return "Fail!\n";
+
+    return "Pass!\n";
+}
+
 void ScriptHandler::clearOutputStreamBuffer()
 {
     m_stringStream.str("");
