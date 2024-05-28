@@ -31,6 +31,9 @@
     <ClCompile Include="WriteTest.cpp">
       <Filter>소스 파일\CommandTest</Filter>
     </ClCompile>
+    <ClCompile Include="EraseRangeTest.cpp">
+      <Filter>소스 파일\CommandTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

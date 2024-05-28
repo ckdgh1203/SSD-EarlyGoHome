@@ -131,6 +131,7 @@
     <ClCompile Include="CommandFactory.cpp" />
     <ClCompile Include="CommandHandler.cpp" />
     <ClCompile Include="Erase.cpp" />
+    <ClCompile Include="EraseRange.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="FullRead.cpp" />
     <ClCompile Include="FullWrite.cpp" />
