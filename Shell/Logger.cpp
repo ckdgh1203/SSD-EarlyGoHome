@@ -72,7 +72,7 @@ long long Logger::getFileSize(const std::string& filename)
 	return file.tellg();
 }
 
-std::string& Logger::getSaveFileName()
+std::string Logger::getSaveFileName()
 {
 	std::string result = "until_" + getCurrentTimeFileFormatted() + ".log";
 
@@ -125,10 +125,10 @@ void Logger::doZip()
 	{
 		return;
 	}
+
 	std::string oldFileName = logFileQueue.front();
 	std::string newFileName = oldFileName;
 	size_t dotIndex = newFileName.find_last_of('.');
-	std::cout << "Dozip : " << oldFileName << std::endl;
 	if (dotIndex != std::string::npos)
 	{
 		newFileName.replace(dotIndex, newFileName.size() - dotIndex, ".zip");
@@ -141,11 +141,8 @@ void Logger::doZip()
 
 void Logger::clean()
 {
-	std::cout << "Cleanup : " << logFileQueue.size() << std::endl;
-
 	while (!logFileQueue.empty())
 	{
-		std::cout << "????" << std::endl;
 		doZip();
 	}
 }

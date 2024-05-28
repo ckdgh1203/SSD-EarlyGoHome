@@ -49,5 +49,5 @@ protected:
 
 	std::ostream& m_outputStream;
 	SsdHelper& m_ssdHelper;
-	Logger logger;
+	Logger& logger = Logger::getInstance();
 };
