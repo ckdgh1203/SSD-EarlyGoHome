@@ -69,11 +69,16 @@ bool isHexFormat(char ch)
 	return ('0' <= ch && ch <= '9') || ('A' <= ch && ch <= 'F');
 }
 
+bool isNumberFormat(char ch)
+{
+	return ('0' <= ch && ch <= '9');
+}
+
 bool isInvalidData(const string data)
 {
 	if (data.length() != MAX_DATA_LENGTH)
 	{
-		return true;;
+		return true;
 	}
 
 	if (data[0] != '0' || data[1] != 'x')
@@ -144,7 +149,16 @@ bool argValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* ar
 			return RETURN_FAIL;
 		}
 		cmdPacket.startLba = stoi(argv[2]);
-		int size = stoi(argv[3]);
+		string tmp = argv[3];
+		for (int i = 0; i < tmp.size(); i++)
+		{
+			if (isNumberFormat(tmp[i]) == RETURN_FAIL)
+			{
+				cout << "[ERROR] [Not Number argument with Erase Command!]" << endl;
+				return RETURN_FAIL;
+			}
+		}
+		int size = stoi(tmp);
 		cmdPacket.endLba = cmdPacket.startLba + size - 1;
 		cmdPacket.data = DEFAULT_DATA;
 		if (isInvalidEraseSize(size) || isInvalidLbaRange(cmdPacket.startLba))
