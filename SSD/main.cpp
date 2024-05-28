@@ -82,7 +82,6 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-	ssd.executeCommand();
 
 	return 0;
 }
