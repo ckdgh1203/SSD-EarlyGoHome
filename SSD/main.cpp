@@ -3,6 +3,10 @@
 #include "SSD.cpp"
 
 using namespace std;
+const string WRITE_COMMAND = "W";
+const string READ_COMMAND = "R";
+const string ERASE_COMMAND = "E";
+const string FLUSH_COMMAND = "F";
 
 int main(int argc, char* argv[])
 {

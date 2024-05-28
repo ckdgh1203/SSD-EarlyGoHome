@@ -161,3 +161,20 @@ private:
 	int lba;
 	int size;
 };
+
+
+class FlushCommand : public Command
+{
+public:
+	FlushCommand(const deque<Command*>& commandBuffer)
+		: commandBuffer(commandBuffer)
+	{}
+
+	void executeCommand() override
+	{
+		
+	}
+
+private:
+	deque<Command*> commandBuffer;
+};
