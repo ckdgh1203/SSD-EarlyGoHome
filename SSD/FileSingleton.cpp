@@ -123,14 +123,14 @@ public:
 			return;
 		}
 
-		if (getline(file, line))
-			cmdCnt = stoi(line);
-
 		while (getline(file, line))
 		{
 			vector<string> words = splitBySpace(line);
 			cmdBuf.push_back(CommandPacket{ words[0]/*command*/, stoi(words[1]) /*startLba*/, stoi(words[2])/*endLba*/, words[3]/*data*/ });
 		}
+
+		cmdCnt = cmdBuf.size();
+
 		file.close();
 
 		return;
