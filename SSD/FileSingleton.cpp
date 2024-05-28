@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <deque>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -111,7 +112,7 @@ public:
 		file.close();
 	}
 
-	void readFromBuffertxt(vector<CommandPacket>& cmdBuf, int& cmdCnt)
+	void readFromBuffertxt(deque<CommandPacket>& cmdBuf, int& cmdCnt)
 	{
 		ifstream file(filePath + BUFFER_FILE);
 		string line;
