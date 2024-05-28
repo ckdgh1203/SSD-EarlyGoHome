@@ -5,7 +5,6 @@
 #include "CommandFactory.h"
 #include "ScriptHandler.cpp"
 #include "ScriptFactory.cpp"
-#include "Exit.cpp"
 
 #include <iostream>
 #include <sstream>

@@ -1,31 +1,6 @@
-#pragma once
+#include "FullWrite.h"
 
-#include <string>
-#include <iostream>
-
-#include "Write.cpp"
-#include "CommandHandler.h"
-
-using namespace std;
-
-class FullWrite : public CommandHandler
-{
-public:
-	FullWrite(ostream& _out, SsdHelper& _ssd, Write* _write) : CommandHandler(_out, _ssd), write(_write){};
-
-	bool isValidArgs(const vector<string>& args) override;
-
-	Progress doCommand(const vector<string>& args) override;
-
-	void usage() override {}
-
-	~FullWrite() {};
-private:
-	Write* write;
-	vector<vector<string>> nArgs;
-};
-
-inline bool FullWrite::isValidArgs(const vector<string>& args)
+bool FullWrite::isValidArgs(const vector<string>& args)
 {
 	if (args.size() != 2)
 		return INVALID;
@@ -40,7 +15,7 @@ inline bool FullWrite::isValidArgs(const vector<string>& args)
 	return VALID;
 }
 
-inline Progress FullWrite::doCommand(const vector<string>& args)
+Progress FullWrite::doCommand(const vector<string>& args)
 {
 	logger.print("Command : " + sliceString(args, 0));
 	for (int lba = START_LBA; lba < END_LBA; lba++)

@@ -1,18 +1,20 @@
+#pragma once
+
 #include "CommandFactory.h"
 #include "CommandHandler.h"
-#include "Read.cpp"
-#include "Write.cpp"
-#include "FullRead.cpp"
-#include "FullWrite.cpp"
-#include "Erase.cpp"
-#include "EraseRange.cpp"
-#include "Help.cpp"
-#include "Exit.cpp"
+#include "Read.h"
+#include "Write.h"
+#include "FullRead.h"
+#include "FullWrite.h"
+#include "Erase.h"
+#include "EraseRange.h"
+#include "Help.h"
+#include "Exit.h"
 #include "SsdHelper.h"
 
 using namespace std;
 
-inline CommandFactory::CommandFactory(ostream& _out, SsdHelper& _ssd)
+CommandFactory::CommandFactory(ostream& _out, SsdHelper& _ssd)
 {
 	m_handlers.clear();
 	m_handlers.reserve(static_cast<size_t>(CommandEnum::NUMOFCOMMAND));
@@ -28,14 +30,14 @@ inline CommandFactory::CommandFactory(ostream& _out, SsdHelper& _ssd)
 	m_handlers.push_back(new Exit(_out, _ssd));
 }
 
-inline CommandHandler* CommandFactory::create(const string& commandStr)
+CommandHandler* CommandFactory::create(const string& commandStr)
 {
 	CommandEnum commandEnum = stringToCommandEnum(commandStr);
 	if (commandEnum == CommandEnum::NUMOFCOMMAND) return nullptr;
 	return m_handlers[static_cast<size_t>(commandEnum)];
 }
 
-inline CommandEnum CommandFactory::stringToCommandEnum(const string& commandStr)
+CommandEnum CommandFactory::stringToCommandEnum(const string& commandStr)
 {
 	if (commandStr == "read")
 		return CommandEnum::READ;

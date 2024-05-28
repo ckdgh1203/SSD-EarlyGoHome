@@ -129,7 +129,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandFactory.cpp" />
-    <ClCompile Include="CommandHandler.cpp" />
     <ClCompile Include="Erase.cpp" />
     <ClCompile Include="EraseRange.cpp" />
     <ClCompile Include="Exit.cpp" />
@@ -150,10 +149,18 @@
     <ClInclude Include="CommandFactory.h" />
     <ClInclude Include="CommandHandler.h" />
     <ClInclude Include="DataFormatVerifier.h" />
+    <ClInclude Include="Erase.h" />
+    <ClInclude Include="EraseRange.h" />
+    <ClInclude Include="Exit.h" />
+    <ClInclude Include="FullRead.h" />
+    <ClInclude Include="FullWrite.h" />
+    <ClInclude Include="Help.h" />
     <ClInclude Include="LbaRangeVerifier.h" />
+    <ClInclude Include="Read.h" />
     <ClInclude Include="SsdExcutable.h" />
     <ClInclude Include="SsdHelper.h" />
     <ClInclude Include="SsdResult.h" />
+    <ClInclude Include="Write.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

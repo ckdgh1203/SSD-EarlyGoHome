@@ -32,7 +32,19 @@ protected:
 	constexpr static bool VALID = true;
 	constexpr static bool INVALID = false;
 
-	std::string sliceString(const std::vector<std::string>& words, size_t start);
+	std::string sliceString(const std::vector<std::string>& words, size_t start)
+	{
+		string result;
+		for (size_t i = start; i < words.size(); ++i)
+		{
+			result += words[i];
+			if (i != words.size() - 1)
+			{
+				result += " ";
+			}
+		}
+		return result;
+	}
 
 	std::ostream& m_outputStream;
 	SsdHelper& m_ssdHelper;

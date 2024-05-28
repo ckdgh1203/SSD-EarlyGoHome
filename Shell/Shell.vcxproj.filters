@@ -25,9 +25,6 @@
     <ClCompile Include="CommandFactory.cpp">
       <Filter>소스 파일\Command</Filter>
     </ClCompile>
-    <ClCompile Include="CommandHandler.cpp">
-      <Filter>소스 파일\Command</Filter>
-    </ClCompile>
     <ClCompile Include="Erase.cpp">
       <Filter>소스 파일\Command</Filter>
     </ClCompile>
@@ -73,6 +70,30 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CommandHandler.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Erase.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EraseRange.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Exit.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FullRead.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FullWrite.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Help.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Read.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Write.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

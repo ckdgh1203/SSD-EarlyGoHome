@@ -1,29 +1,8 @@
 #pragma once
 
-#include "CommandHandler.h"
+#include "FullRead.h"
 
-#include <iostream>
-#include "Read.cpp"
-
-using namespace std;
-
-class FullRead : public CommandHandler
-{
-public:
-	FullRead(ostream& _out, SsdHelper& _ssd, Read* _read) : CommandHandler(_out, _ssd), read(_read){};
-	bool isValidArgs(const vector<string>& args) override;
-
-	Progress doCommand(const vector<string>& args) override;
-
-	void usage() override;
-
-	~FullRead() {};
-private:
-	Read* read;
-	vector<vector<string>> nArgs;
-};
-
-inline bool FullRead::isValidArgs(const vector<string>& args)
+bool FullRead::isValidArgs(const vector<string>& args)
 {
 	if (args.size() != 1)
 		return INVALID;
@@ -38,7 +17,7 @@ inline bool FullRead::isValidArgs(const vector<string>& args)
 	return VALID;
 }
 
-inline Progress FullRead::doCommand(const vector<string>& args)
+Progress FullRead::doCommand(const vector<string>& args)
 {
 	logger.print("Command : " + sliceString(args, 0));
 	for (int lba = START_LBA; lba < END_LBA; lba++)
@@ -48,7 +27,7 @@ inline Progress FullRead::doCommand(const vector<string>& args)
 	return Progress::Continue;
 }
 
-inline void FullRead::usage()
+void FullRead::usage()
 {
 	cout << "fullread" << endl;
 }
