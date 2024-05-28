@@ -94,11 +94,58 @@ private:
 		cmdCnt++;
 	}
 
+	CommandPacket mergeCmdPacket(CommandPacket cmdPacket)
+	{
+		CommandPacket ret;
+		ret.command = cmdPacket.command;
+		ret.data = cmdPacket.data;
+		ret.startLba = min(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
+		ret.endLba = max(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
+
+		return ret;
+	}
+
+	bool isContinuedLbaRangeCmd(CommandPacket cmdPacket)
+	{
+		// 연속적이지 않을 경우
+		if (!((cmdBuf[cmdCnt - 1].endLba + 1 >= cmdPacket.startLba) && (cmdBuf[cmdCnt - 1].startLba - 1 <= cmdPacket.endLba)))
+			return false;
+
+		int s = min(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
+		int e = max(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
+
+		// 연속적이더라도 사이즈가 10보다 커질 경우
+		if (e - s + 1 > 10)
+			return false;
+		
+		return true;
+	}
+
+	void mergePreviousCommand(CommandPacket cmdPacket)
+	{
+		deque<CommandPacket> temp;
+		for (int i = 0; i < cmdCnt - 1; i++)
+			temp.push_back(cmdBuf[i]);
+
+		if (cmdBuf[cmdCnt - 1].command == "E" && isContinuedLbaRangeCmd(cmdPacket))
+			// merge 가능하면 merge
+			temp.push_back(mergeCmdPacket(cmdPacket));
+		else
+		{	// merge 불가능하면 버퍼에 추가
+			temp.push_back(cmdBuf[cmdCnt - 1]);
+			temp.push_back(cmdPacket);
+			cmdCnt++;
+		}
+
+		cmdBuf = temp;
+	}
+
 	void fastErase(CommandPacket cmdPacket)
 	{
 		ignorePreviousCommand(cmdPacket);
 		cmdBuf.push_back(cmdPacket);
 		cmdCnt++;
+    mergePreviousCommand(cmdPacket);
 	}
 
 	void saveCmdBuffer()
