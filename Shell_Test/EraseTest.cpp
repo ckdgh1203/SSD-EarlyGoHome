@@ -17,10 +17,8 @@ public:
 
 TEST_F(EraseTest, DoCommand)
 {
-    vector<string> args;
-    args.push_back("erase");
-    args.push_back("0");
-    args.push_back("100");
+    EXPECT_CALL(ssdExecutableMock, execute("E 0 100")).Times(1);
+    vector<string> args{ "erase", "0", "100"};
     EXPECT_TRUE(erase.isValidArgs(args));
     EXPECT_EQ(Progress::Continue, erase.doCommand(args));
 }

@@ -23,8 +23,7 @@ private:
 
 TEST_F(FullReadTest, DoCommand)
 {
-    vector<string> args;
-    args.push_back("fullread");
+    vector<string> args{"fullread"};
 
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
     EXPECT_CALL(ssdResultMock, get())

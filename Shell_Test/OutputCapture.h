@@ -8,10 +8,10 @@ class OutputCapture
 protected:
     std::string fetchOutput(void)
     {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
+        auto fetchedString = m_redirectedOutput.str();
+        m_redirectedOutput.str("");
+        m_redirectedOutput.clear();
         return fetchedString;
     }
-    std::ostringstream redirectedOutput{};
+    std::ostringstream m_redirectedOutput{};
 };
