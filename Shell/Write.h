@@ -3,7 +3,6 @@
 #include "CommandHandler.h"
 #include "DataFormatVerifier.h"
 #include "LbaRangeVerifier.h"
-#include <iostream>
 
 using namespace std;
 

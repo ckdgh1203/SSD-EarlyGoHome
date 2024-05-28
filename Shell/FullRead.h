@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "Read.h"
 
 using namespace std;

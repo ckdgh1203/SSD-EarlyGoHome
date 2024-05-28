@@ -2,8 +2,6 @@
 
 #include "CommandHandler.h"
 
-#include <iostream>
-
 using namespace std;
 
 class Exit : public CommandHandler

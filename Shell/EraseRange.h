@@ -3,8 +3,6 @@
 #include "CommandHandler.h"
 #include "LbaRangeVerifier.h"
 
-#include <iostream>
-
 using namespace std;
 
 class EraseRange : public CommandHandler
