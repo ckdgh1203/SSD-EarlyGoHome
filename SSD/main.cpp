@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
 	if (cmdPacket.command == "F")
 	{
 		ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
+		ssd.executeCommand();
 	}
 	else
 	{
@@ -61,7 +62,8 @@ int main(int argc, char* argv[])
 			{
 				// W, E에서 Need Flush인 상태
 				//Flush Cmd 생성 + execute
-				//ssd.executeCommand();
+				ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
+				ssd.executeCommand();
 				if (ssd.bufferingCommand(cmdPacket) == 0)	// Fail return
 				{
 					//그럴리가 없는 상태
