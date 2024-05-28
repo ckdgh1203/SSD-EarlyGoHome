@@ -3,6 +3,7 @@
 #include <iostream>
 #include "iSSD.h"
 #include "iFile.h"
+#include "FileSingleton.cpp"
 using namespace std;
 
 class Command
@@ -18,15 +19,19 @@ protected:
 	const int MAX_LBA_RANGE = 100;
 	const int MAX_DATA_LENGTH = 10;
 	const int START_LBA = 0;
+	const int MAX_ERASE_SIZE = 10;
+	const int MIN_ERASE_SIZE = 0;
+	string ERASE_DATA = "0x00000000";
+
 };
 
 class WriteCommand : public Command
 {
 public:
-	WriteCommand(iFile* m_file, int lba, const string& data)
-		: m_file(m_file), lba(lba), data(data)
+	WriteCommand(int lba, const string& data)
+		: lba(lba), data(data)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidLbaRange(lba) || isInvalidData(data))
@@ -44,18 +49,13 @@ public:
 
 	void dataWriteToNand(std::vector<std::string>& buf)
 	{
-		m_file->writeToNANDTxt(buf);
+		FileSingleton::getInstance().writeToNANDTxt(buf);
 	}
 
 	vector<string> dataReadFromNand()
 	{
 		vector<string> buf;
-		string targetData;
-		for (int currentLBA = START_LBA; currentLBA < MAX_LBA_RANGE; currentLBA++)
-		{
-			targetData = m_file->readFromNANDTxt(currentLBA);
-			buf.push_back(targetData);
-		}
+		buf = FileSingleton::getInstance().readFromNANDTxt();
 		return buf;
 	}
 
@@ -85,35 +85,99 @@ public:
 	}
 
 private:
-	iFile* m_file;
 	int lba;
 	string data;
-
 };
 
 class ReadCommand : public Command
 {
 public:
-	ReadCommand(iFile* m_file, int lba)
-		: m_file(m_file), lba(lba)
+	ReadCommand(int lba)
+		: lba(lba)
 	{}
-	// Command을(를) 통해 상속됨
+
 	void executeCommand() override
 	{
 		if (isInvalidLbaRange(lba))
 			return;
 
 		vector<string> nandTxt;
-		for (int i = 0; i < 100; i++)
-		{
-			nandTxt.push_back(m_file->readFromNANDTxt(i));
-		}
-
-		m_file->writeToResultTxt(nandTxt[lba]);
+		nandTxt = FileSingleton::getInstance().readFromNANDTxt();
+		FileSingleton::getInstance().writeToResultTxt(nandTxt[lba]);
 	}
 
 private:
-	iFile* m_file;
 	int lba;
+};
 
+class EraseCommand : public Command
+{
+public:
+	EraseCommand(int lba, int size)
+		: lba(lba), size(size)
+	{}
+
+	void executeCommand() override
+	{
+		if (isInvalidEraseSize() || isInvalidLbaRange(lba))
+			return;
+
+		vector<string> buf = dataReadFromNand();
+		dataEraseToTargetLba(buf);
+		dataWriteToNand(buf);
+	}
+
+	void dataEraseToTargetLba(std::vector<std::string>& buf)
+	{
+		for (int i = lba; i < lba + size; i++)
+		{
+			dataWriteToTargetLba(buf, i, ERASE_DATA);
+		}
+	}
+
+	bool isInvalidEraseSize()
+	{
+		return (size > MAX_ERASE_SIZE) || (size <= MIN_ERASE_SIZE);
+	}
+
+	void dataWriteToTargetLba(std::vector<std::string>& buf, int lba, std::string& data)
+	{
+		buf[lba] = data;
+	}
+
+	void dataWriteToNand(std::vector<std::string>& buf)
+	{
+		FileSingleton::getInstance().writeToNANDTxt(buf);
+	}
+
+	vector<string> dataReadFromNand()
+	{
+		vector<string> buf;
+		buf = FileSingleton::getInstance().readFromNANDTxt();
+		return buf;
+	}
+
+private:
+	int lba;
+	int size;
+};
+
+
+class FlushCommand : public Command
+{
+public:
+	FlushCommand(const deque<Command*>& commandBuffer)
+		: commandBuffer(commandBuffer)
+	{}
+
+	void executeCommand() override
+	{
+		for (deque<Command*>::size_type i = 0; i < commandBuffer.size(); i++)
+		{
+			commandBuffer[i]->executeCommand();
+		}
+	}
+
+private:
+	deque<Command*> commandBuffer;
 };

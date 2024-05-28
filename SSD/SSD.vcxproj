@@ -128,8 +128,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="CommandBuffer.cpp" />
     <ClCompile Include="CommandFactory.cpp" />
-    <ClCompile Include="File.cpp" />
+    <ClCompile Include="FileSingleton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SSD.cpp" />
   </ItemGroup>
