@@ -2,10 +2,9 @@
 
 #include "SsdHelper.h"
 #include "CommandFactory.h"
-#include "ScriptFactory.cpp"
+#include "ScriptFactory.h"
 
 #include <iostream>
-#include <sstream>
 #include <vector>
 
 using namespace std;

@@ -1,4 +1,3 @@
-#pragma once
 #include "Read.h"
 
 bool Read::isValidArgs(const vector<string>& args)

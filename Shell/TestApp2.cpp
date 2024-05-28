@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ScriptHandler.cpp"
+#include "ScriptHandler.h"
 
 class TestApp2 : public ScriptHandler
 {

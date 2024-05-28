@@ -1,5 +1,3 @@
-#pragma once
-
 #include "FullRead.h"
 
 bool FullRead::isValidArgs(const vector<string>& args)

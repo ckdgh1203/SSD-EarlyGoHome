@@ -1,5 +1,3 @@
-#pragma once
-
 #include "CommandFactory.h"
 #include "CommandHandler.h"
 #include "Read.h"

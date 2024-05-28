@@ -1,5 +1,3 @@
-#pragma once
-
 #include "EraseRange.h"
 
 bool EraseRange::isValidArgs(const vector<string>& args)

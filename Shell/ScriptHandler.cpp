@@ -1,95 +1,78 @@
-#pragma once
+#include "ScriptHandler.h"
 
-#include <iostream>
-#include <sstream>
-#include <vector>
-#include "CommandFactory.h"
-
-using namespace std;
-
-class ScriptHandler
+ScriptHandler::ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper)
+    : m_CommandFactory(stringStream, ssdHelper), m_stringStream(stringStream)
 {
-public:
-    ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper)
-        : m_CommandFactory(stringStream, ssdHelper), m_stringStream(stringStream)
+    clearOutputStreamBuffer();
+}
+
+void ScriptHandler::clearOutputStreamBuffer()
+{
+    m_stringStream.str("");
+    m_stringStream.clear();
+}
+
+bool ScriptHandler::readCompare(const string& inputData, unsigned int startLba, unsigned int endLba)
+{
+    string referenceData = "";
+    for (unsigned int iter = startLba; iter < endLba; iter++)
     {
-        clearOutputStreamBuffer();
+        referenceData += (inputData + "\n");
     }
 
-    virtual void doScript() = 0;
+    string readData = m_stringStream.str();
+    clearOutputStreamBuffer();
 
-protected:
-    CommandFactory m_CommandFactory;
-    ostringstream& m_stringStream;
+    return (readData == referenceData);
+}
 
-    void clearOutputStreamBuffer()
+void ScriptHandler::readRepeatedly(unsigned int startLba, unsigned int endLba)
+{
+    vector<vector<string>> argument;
+    for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
     {
-        m_stringStream.str("");
-        m_stringStream.clear();
+        argument.push_back({ "read", to_string(lbaIter) });
     }
 
-    bool readCompare(const string& inputData, unsigned int startLba, unsigned int endLba)
+    CommandHandler* readCommand = m_CommandFactory.create("read");
+    for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
     {
-        string referenceData = "";
-        for (unsigned int iter = startLba; iter < endLba; iter++)
-        {
-            referenceData += (inputData + "\n");
-        }
+        readCommand->doCommand(argument[lbaIter]);
+    }
+}
 
-        string readData = m_stringStream.str();
-        clearOutputStreamBuffer();
-
-        return (readData == referenceData);
+void ScriptHandler::writeRepeatedly(const string& inputData, unsigned int startLba, unsigned int endLba)
+{
+    vector<vector<string>> argument;
+    for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
+    {
+        argument.push_back({ "write", to_string(lbaIter), inputData });
     }
 
-    void readRepeatedly(unsigned int startLba, unsigned int endLba)
+    CommandHandler* writeCommand = m_CommandFactory.create("write");
+    for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
     {
-        vector<vector<string>> argument;
-        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
-        {
-            argument.push_back({ "read", to_string(lbaIter) });
-        }
-
-        CommandHandler* readCommand = m_CommandFactory.create("read");
-        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
-        {
-            readCommand->doCommand(argument[lbaIter]);
-        }
+        writeCommand->doCommand(argument[lbaIter]);
     }
+}
 
-    void writeRepeatedly(const string& inputData, unsigned int startLba, unsigned int endLba)
-    {
-        vector<vector<string>> argument;
-        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
-        {
-            argument.push_back({ "write", to_string(lbaIter), inputData });
-        }
+void ScriptHandler::doFullWrite(const string& inputData)
+{
+    vector<string> fullwriteArgument;
+    fullwriteArgument.push_back("fullwrite");
+    fullwriteArgument.push_back(inputData);
 
-        CommandHandler* writeCommand = m_CommandFactory.create("write");
-        for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
-        {
-            writeCommand->doCommand(argument[lbaIter]);
-        }
-    }
+    CommandHandler* fullwriteCmd = m_CommandFactory.create("fullwrite");
+    fullwriteCmd->isValidArgs(fullwriteArgument);
+    fullwriteCmd->doCommand(fullwriteArgument);
+}
 
-    void doFullWrite(const string& inputData)
-    {
-        vector<string> fullwriteArgument;
-        fullwriteArgument.push_back("fullwrite");
-        fullwriteArgument.push_back(inputData);
+void ScriptHandler::duFullRead()
+{
+    vector<string> fullreadArgument;
+    fullreadArgument.push_back("fullread");
 
-        CommandHandler* fullwriteCmd = m_CommandFactory.create("fullwrite");
-        fullwriteCmd->isValidArgs(fullwriteArgument);
-        fullwriteCmd->doCommand(fullwriteArgument);
-    }
-
-    void duFullRead()
-    {
-        vector<string> fullreadArgument;
-        fullreadArgument.push_back("fullread");
-
-        CommandHandler* fullreadCmd = m_CommandFactory.create("fullread");
-        fullreadCmd->isValidArgs(fullreadArgument);
-        fullreadCmd->doCommand(fullreadArgument);
-    }
-};
+    CommandHandler* fullreadCmd = m_CommandFactory.create("fullread");
+    fullreadCmd->isValidArgs(fullreadArgument);
+    fullreadCmd->doCommand(fullreadArgument);
+}

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Write.h"
 
 bool Write::isValidArgs(const vector<string>& args)

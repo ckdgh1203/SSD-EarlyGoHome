@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Help.h"
 
 bool Help::isValidArgs(const vector<string>& args)

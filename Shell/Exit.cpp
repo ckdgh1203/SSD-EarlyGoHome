@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Exit.h"
 
 bool Exit::isValidArgs(const vector<string>& args)

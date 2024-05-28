@@ -44,7 +44,7 @@ string Logger::extractCallerName(const char* funcSig)
 	return sig.substr(start, end - start) + "()";
 }
 
-inline string Logger::formatCallFunction(string callFunction)
+string Logger::formatCallFunction(string callFunction)
 {
 	string formatCallFunction(30, ' ');
 	size_t length = callFunction.size();
