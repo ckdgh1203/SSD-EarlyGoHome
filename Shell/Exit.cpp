@@ -16,3 +16,8 @@ Progress Exit::doCommand(const vector<string>& args)
 
     return Progress::Done;
 }
+
+string Exit::usage()
+{ 
+    return "exit\n";
+}

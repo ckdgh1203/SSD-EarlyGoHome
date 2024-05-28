@@ -16,6 +16,11 @@ Progress Read::doCommand(const vector<string>& args)
 	return Progress::Continue;
 }
 
+string Read::usage() 
+{
+	return "read [LBA]\n";
+}
+
 bool Read::isInvalidNumberOfArguments(const std::vector<std::string>& args)
 {
 	return (args.size() != 2);

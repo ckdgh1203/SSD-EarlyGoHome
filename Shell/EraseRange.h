@@ -12,7 +12,7 @@ public:
 
 	bool isValidArgs(const vector<string>& args) override;
 	Progress doCommand(const vector<string>& args) override;
-	void usage() override {};
+	string usage() override;;
 
 	~EraseRange() {};
 private:

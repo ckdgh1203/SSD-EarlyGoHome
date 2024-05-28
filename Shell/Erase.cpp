@@ -19,3 +19,8 @@ Progress Erase::doCommand(const vector<string>& args)
 	m_ssdHelper.execute(arguments);
 	return Progress::Continue;
 }
+
+string Erase::usage() 
+{ 
+	return "erase [START_LBA] [NUMBER_OF_LBA]\n";
+}

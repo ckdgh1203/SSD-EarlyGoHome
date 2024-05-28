@@ -8,19 +8,11 @@ using namespace testing;
 class HelpTest : public Test
 {
 public:
-    class TestableHelp : public Help
-    {
-    public:
-        NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
-        NiceMock<SsdResultMock> ssdResultMock{};
-        SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-        TestableHelp(ostream& _out) : Help(_out, ssd) {}
-        const string& helpMessage(void)
-        {
-            return m_helpMessage;
-        }
-    };
-    TestableHelp help{ redirectedOutput };
+    NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
+    NiceMock<SsdResultMock> ssdResultMock{};
+    SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
+    CommandFactory factory{ std::cout, ssd };
+    Help help{redirectedOutput, ssd, &factory};
 
     string fetchOutput(void)
     {
@@ -39,6 +31,14 @@ TEST_F(HelpTest, DoCommand)
 	vector<string> emptyArgs;
 	EXPECT_EQ(Progress::Continue, help.doCommand(emptyArgs));
     auto commandOutput = fetchOutput();
-
-    EXPECT_EQ(help.helpMessage(), commandOutput);
+    const string expectedMessage = "Help:\n"
+        "\tread [LBA]\n"
+        "\twrite [LBA] [DATA]\n"
+        "\tfullread\n"
+        "\tfullwrite [DATA]\n"
+        "\terase [START_LBA] [NUMBER_OF_LBA]\n"
+        "\terase_range [START_LBA] [END_LBA]\n"
+        "\thelp\n"
+        "\texit\n";
+    EXPECT_EQ(expectedMessage, commandOutput);
 }

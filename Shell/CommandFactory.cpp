@@ -24,7 +24,7 @@ CommandFactory::CommandFactory(ostream& _out, SsdHelper& _ssd)
 	m_handlers.push_back(new FullWrite(_out, _ssd, writeObject));
 	m_handlers.push_back(new Erase(_out, _ssd));
 	m_handlers.push_back(new EraseRange(_out, _ssd));
-	m_handlers.push_back(new Help(_out, _ssd));
+	m_handlers.push_back(new Help(_out, _ssd, this));
 	m_handlers.push_back(new Exit(_out, _ssd));
 }
 
@@ -33,6 +33,11 @@ CommandHandler* CommandFactory::create(const string& commandStr)
 	CommandEnum commandEnum = stringToCommandEnum(commandStr);
 	if (commandEnum == CommandEnum::NUMOFCOMMAND) return nullptr;
 	return m_handlers[static_cast<size_t>(commandEnum)];
+}
+
+const std::vector<CommandHandler*>& CommandFactory::getHandlerList(void)
+{
+	return m_handlers;
 }
 
 CommandEnum CommandFactory::stringToCommandEnum(const string& commandStr)

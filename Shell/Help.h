@@ -1,25 +1,24 @@
 #pragma once
 
 #include "CommandHandler.h"
+#include "CommandFactory.h"
 
 using namespace std;
 
 class Help : public CommandHandler
 {
 public:
-	Help(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
+	Help(ostream& _out, SsdHelper& _ssd, CommandFactory* factory) :
+		CommandHandler(_out, _ssd), m_factory(factory) {};
 
 	bool isValidArgs(const vector<string>& args) override;
 
 	Progress doCommand(const vector<string>& args) override;
 
-	void usage() override {};
+	string usage() override;;
 
 	~Help() {};
 protected:
-	const string m_helpMessage = "Help:\n"
-		"\tread [LBA]\n"
-		"\twrite [LBA] [DATA]\n"
-		"\tfullread\n"
-		"\tfullwrite [DATA]\n";
+
+	CommandFactory* m_factory;
 };

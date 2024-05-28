@@ -24,6 +24,7 @@ public:
 	CommandFactory(std::ostream& _out, SsdHelper& _ssd);
 
 	CommandHandler* create(const std::string& commandStr);
+	const std::vector<CommandHandler*>& getHandlerList(void);
 private:
 	CommandEnum stringToCommandEnum(const std::string& commandStr);
 	std::vector<CommandHandler*> m_handlers{};

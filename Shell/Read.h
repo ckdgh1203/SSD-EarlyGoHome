@@ -14,7 +14,7 @@ public:
 
 	Progress doCommand(const vector<string>& args) override;
 
-	void usage() override {};
+	string usage() override;;
 
 	~Read() {};
 private:

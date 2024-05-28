@@ -17,6 +17,11 @@ Progress Write::doCommand(const vector<string>& args)
 	return Progress::Continue;
 }
 
+string Write::usage() 
+{
+	return "write [LBA] [DATA]\n";
+}
+
 bool Write::isInvalidNumberOfArguments(const std::vector<std::string>& args)
 {
 	return (args.size() != 3);

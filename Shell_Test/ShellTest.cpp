@@ -35,7 +35,7 @@ protected:
         return fetchedString;
     }
 
-    void runAndExpect(const string& input, string& expected)
+    void runAndExpect(const string& input, const string& expected)
     {
         auto ss = istringstream(input);
         shell.run(ss);
@@ -128,13 +128,17 @@ TEST_F(ShellTestFixture, RunAndHelp)
     string inputString = "help\n"
         "exit\n";
 
-    string expected = "shell> "
+    const string expectedMessage = "shell> "
         "Help:\n"
         "\tread [LBA]\n"
         "\twrite [LBA] [DATA]\n"
         "\tfullread\n"
         "\tfullwrite [DATA]\n"
+        "\terase [START_LBA] [NUMBER_OF_LBA]\n"
+        "\terase_range [START_LBA] [END_LBA]\n"
+        "\thelp\n"
+        "\texit\n"
         "shell> " "Exit from Shell\n";
 
-    runAndExpect(inputString, expected);
+    runAndExpect(inputString, expectedMessage);
 }

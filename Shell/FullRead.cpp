@@ -25,7 +25,7 @@ Progress FullRead::doCommand(const vector<string>& args)
 	return Progress::Continue;
 }
 
-void FullRead::usage()
+string FullRead::usage()
 {
-	cout << "fullread" << endl;
+	return "fullread\n";
 }

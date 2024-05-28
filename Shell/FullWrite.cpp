@@ -24,3 +24,8 @@ Progress FullWrite::doCommand(const vector<string>& args)
 	}
 	return Progress::Continue;
 }
+
+string FullWrite::usage() 
+{ 
+	return "fullwrite [DATA]\n";
+}

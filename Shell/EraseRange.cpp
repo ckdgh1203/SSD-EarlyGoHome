@@ -20,3 +20,8 @@ Progress EraseRange::doCommand(const vector<string>& args)
 	m_ssdHelper.execute(arguments);
 	return Progress::Continue;
 }
+
+string EraseRange::usage() 
+{
+	return "erase_range [START_LBA] [END_LBA]\n";
+}
