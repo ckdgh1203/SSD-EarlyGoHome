@@ -3,7 +3,7 @@
 bool Read::isValidArgs(const vector<string>& args)
 {
 	if (isInvalidNumberOfArguments(args)) return INVALID;
-	if (m_lbaRangeVerifier.isLbaOutOfRange(stoi(args[1]))) return INVALID;
+	if (m_lbaRangeVerifier.isInvalidLba(args[1])) return INVALID;
 	return VALID;
 }
 

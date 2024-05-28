@@ -147,3 +147,26 @@ TEST_F(ShellTestFixture, RunAndInvalidCommand)
 
     runAndExpect(inputString, expectedMessage);
 }
+
+TEST_F(ShellTestFixture, RunAndInvalidArguments)
+{
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+    EXPECT_CALL(ssdResultMock, get()).Times(0);
+    string inputString = "read A\n"
+        "write abcd1234\n"
+        "erase 1 100\n"
+        "erase_range 100 1\n"
+        "exit\n";
+
+    const string expectedMessage = "shell> "
+        "\nINVALID COMMAND\n"
+        "shell> "
+        "\nINVALID COMMAND\n"
+        "shell> "
+        "\nINVALID COMMAND\n"
+        "shell> "
+        "\nINVALID COMMAND\n"
+        "shell> " "Exit from Shell\n";
+
+    runAndExpect(inputString, expectedMessage);
+}
