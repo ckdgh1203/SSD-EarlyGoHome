@@ -3,10 +3,14 @@
 #include "SSD.cpp"
 
 using namespace std;
+const string WRITE_COMMAND = "W";
+const string READ_COMMAND = "R";
+const string ERASE_COMMAND = "E";
+const string FLUSH_COMMAND = "F";
 
 int main(int argc, char* argv[])
 {
-	if (argc < 2 || argc > 4)
+	if (argc < 3 || argc > 4)
 		return 0;
 
 	CommandFactory& commandFactory = CommandFactory::getInstance();
@@ -27,8 +31,8 @@ int main(int argc, char* argv[])
 	//* F case. 는 if문으로 따로 처리하고 F아닌경우 bufferingCommand()호출하자
 	if (cmdPacket.command == "F")
 	{
-
-		//ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba, cmdPacket.data));
+		ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
+		ssd.executeCommand();
 	}
 	else
 	{
@@ -58,7 +62,8 @@ int main(int argc, char* argv[])
 			{
 				// W, E에서 Need Flush인 상태
 				//Flush Cmd 생성 + execute
-				//ssd.executeCommand();
+				ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
+				ssd.executeCommand();
 				if (ssd.bufferingCommand(cmdPacket) == 0)	// Fail return
 				{
 					//그럴리가 없는 상태
