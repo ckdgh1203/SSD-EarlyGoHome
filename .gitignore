@@ -400,5 +400,6 @@ FodyWeavers.xsd
 
 
 # SSD-EarlyGoHome Data Files
-Data/nand.txt
-Data/result.txt
+*/nand.txt
+*/result.txt
+*/buffer.txt

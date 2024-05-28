@@ -123,14 +123,21 @@ int main(int argc, char* argv[])
 		return RETURN_FAIL;
 	}
 
+	SSD ssd{};
+	if (cmdPacket.command != "G" && argc < 3 || argc > 4)
+		return 0;
+
 	CommandFactory& commandFactory = CommandFactory::getInstance();
 	FileSingleton& fileSingleton = FileSingleton::getInstance();
-	fileSingleton.setFilePath("Data/");
+	fileSingleton.setFilePath(__FILE__);
 
-	SSD ssd{};
-	cmdPacket.command = argv[1];
-	
-	if (cmdPacket.command == FLUSH_COMMAND)
+	if (cmdPacket.command == "G")
+	{
+		cout << fileSingleton.getResultPath() << endl;
+		return 0;
+	}
+
+	if (cmdPacket.command == "F")
 	{
 		ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
 		ssd.executeCommand();

@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <direct.h>
 #include "iFile.h"
 #include "iSSD.h"
 
@@ -14,19 +15,30 @@ const string DEFAULT_DATA = "0x00000000";
 class FileSingleton : public iFile
 {
 public:
-	const string NAND_FILE = "nand.txt";
-	const string RESULT_FILE = "result.txt";
-	const string BUFFER_FILE = "buffer.txt";
-
 	static FileSingleton& getInstance()
 	{
 		static FileSingleton instance{};
 		return instance;
 	}
 
-	void setFilePath(string file)
+	void setFilePath(string prefixPath)
 	{
-		filePath = file;
+		DATA_DIR = getDirectoryPath(prefixPath) + "/" + DATA_DIR;
+		NAND_FILE = DATA_DIR + "/" + NAND_FILE;
+		RESULT_FILE = DATA_DIR + "/" + RESULT_FILE;
+		BUFFER_FILE = DATA_DIR + "/" + BUFFER_FILE;
+
+		if (!directoryExists(DATA_DIR))
+		{
+			if (_mkdir(DATA_DIR.c_str()) == 0)
+			{
+				createOutputFiles();
+			}
+		}
+		else
+		{
+			createOutputFiles();
+		}
 	}
 
 	void initTxtFiles()
@@ -42,7 +54,7 @@ public:
 
 	vector<string> readFromNANDTxt() override
 	{
-		ifstream file(filePath + NAND_FILE);
+		ifstream file(NAND_FILE);
 		vector<string> ret;
 		for (int i = 0; i < 100; i++)
 		{
@@ -63,7 +75,7 @@ public:
 
 	void writeToNANDTxt(vector<string> buf) override
 	{
-		ofstream file(filePath + NAND_FILE);
+		ofstream file(NAND_FILE);
 		if (!file.is_open())
 		{
 			cout << "write file open fail" << endl;
@@ -80,7 +92,7 @@ public:
 
 	string readFromResultTxt() override
 	{
-		ifstream file(filePath + RESULT_FILE);
+		ifstream file(RESULT_FILE);
 		string ret;
 		string temp;
 
@@ -100,7 +112,7 @@ public:
 
 	void writeToResultTxt(string data) override
 	{
-		ofstream file(filePath + RESULT_FILE);
+		ofstream file(RESULT_FILE);
 		if (!file.is_open())
 		{
 			cout << "write file open fail" << endl;
@@ -114,8 +126,10 @@ public:
 
 	void readFromBuffertxt(deque<CommandPacket>& cmdBuf, int& cmdCnt)
 	{
-		ifstream file(filePath + BUFFER_FILE);
+		ifstream file(BUFFER_FILE);
 		string line;
+
+		cmdBuf.clear();
 
 		if (!file.is_open())
 		{
@@ -138,12 +152,19 @@ public:
 
 	void writeToBufferTxt(string data)
 	{
-		ofstream file(filePath + BUFFER_FILE);
+		ofstream file(BUFFER_FILE, std::ios_base::trunc);
 		if (file.is_open())
 		{
 			file << data;
 			file.close();
 		}
+	}
+
+	string getResultPath()
+	{
+		if (!resultFileExist)
+			return "";
+		return RESULT_FILE;
 	}
 
 private:
@@ -187,5 +208,80 @@ private:
 		return words;
 	}
 
+
+	string getDirectoryPath(string filePath)
+	{
+		size_t lastSlashPos = filePath.find_last_of('/\\');
+		string dirPath = filePath;
+		if (lastSlashPos != std::string::npos)
+		{
+			dirPath = filePath.substr(0, lastSlashPos);
+		}
+		return dirPath;
+	}
+
+	bool fileExists(const std::string& fileName)
+	{
+		struct stat buffer;
+
+		return (stat(fileName.c_str(), &buffer) == 0);
+	}
+
+	bool directoryExists(const std::string& dirPath)
+	{
+		struct stat info;
+
+		if (stat(dirPath.c_str(), &info) != 0)
+		{
+			return false;
+		}
+		else if (info.st_mode & S_IFDIR)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+
+	void createOutputFiles()
+	{
+		if (!fileExists(NAND_FILE))
+		{
+			ofstream file(NAND_FILE);
+			if (file)
+			{
+				file.close();
+			}
+		}
+		if (!fileExists(BUFFER_FILE))
+		{
+			ofstream file(BUFFER_FILE);
+			if (file)
+			{
+				file.close();
+			}
+		}
+		if (!fileExists(RESULT_FILE))
+		{
+			ofstream file(RESULT_FILE);
+			if (file)
+			{
+				resultFileExist = true;
+				file.close();
+			}
+		}
+		else
+		{
+			resultFileExist = true;
+		}
+	}
+
+	string DATA_DIR = "/Data";
+	string NAND_FILE = "nand.txt";
+	string RESULT_FILE = "result.txt";
+	string BUFFER_FILE = "buffer.txt";
+
 	string filePath;
+	bool resultFileExist = false;
 };
