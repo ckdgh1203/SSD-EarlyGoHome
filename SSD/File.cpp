@@ -3,17 +3,59 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <sys/stat.h>
+#include <direct.h>
 #include "iFile.h"
 
 using namespace std;
 
-const string NAND_FILE = "Data/nand.txt";
-const string RESULT_FILE = "Data/result.txt";
-const string DEFAULT_DATA = "0x00000000";
-
 class SSDFile : public iFile
 {
 public:
+	SSDFile(string prefixPath)
+	{
+		DATA_DIR = getDirectoryPath(prefixPath) + "/" + DATA_DIR;
+		NAND_FILE = DATA_DIR + "/" + NAND_FILE;
+		RESULT_FILE = DATA_DIR + "/" + RESULT_FILE;
+
+		if (!directoryExists(DATA_DIR))
+		{
+			if (_mkdir(DATA_DIR.c_str()) == 0)
+			{
+				createOutputFiles();
+			}
+		}
+		else
+		{
+			createOutputFiles();
+		}
+	}
+
+	void createOutputFiles()
+	{
+		if (!fileExists(NAND_FILE))
+		{
+			ofstream file(NAND_FILE);
+			if (file)
+			{
+				file.close();
+			}
+		}
+		if (!fileExists(RESULT_FILE))
+		{
+			ofstream file(RESULT_FILE);
+			if (file)
+			{
+				resultFileExist = true;
+				file.close();
+			}
+		}
+		else
+		{
+			resultFileExist = true;
+		}
+	}
+
 	string readFromNANDTxt(int lba) override
 	{
 		ifstream file(NAND_FILE);
@@ -34,6 +76,7 @@ public:
 	void writeToNANDTxt(vector<string> buf) override
 	{
 		ofstream file(NAND_FILE);
+
 		if (!file.is_open())
 		{
 			cout << "write file open fail" << endl;
@@ -71,6 +114,7 @@ public:
 	void writeToResultTxt(string data) override
 	{
 		ofstream file(RESULT_FILE);
+
 		if (!file.is_open())
 		{
 			cout << "write file open fail" << endl;
@@ -80,6 +124,13 @@ public:
 		file << data << endl;
 
 		file.close();
+	}
+
+	string getResultPath()
+	{
+		if (!resultFileExist)
+			return "";
+		return RESULT_FILE;
 	}
 
 private:
@@ -96,4 +147,44 @@ private:
 			targetLine++;
 		}
 	}
+
+	string getDirectoryPath(string filePath)
+	{
+		size_t lastSlashPos = filePath.find_last_of('/\\');
+		string dirPath = filePath;
+		if (lastSlashPos != std::string::npos)
+		{
+			dirPath = filePath.substr(0, lastSlashPos);
+		}
+		return dirPath;
+	}
+
+	bool fileExists(const std::string& fileName)
+	{
+		struct stat buffer;
+
+		return (stat(fileName.c_str(), &buffer) == 0);
+	}
+
+	bool directoryExists(const std::string& dirPath)
+	{
+		struct stat info;
+
+		if (stat(dirPath.c_str(), &info) != 0)
+		{
+			return false;
+		}
+		else if (info.st_mode & S_IFDIR)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	string DATA_DIR = "/Data";
+	string NAND_FILE = "nand.txt";
+	string RESULT_FILE = "result.txt";
+	bool resultFileExist = false;
+	const string DEFAULT_DATA = "0x00000000";
 };
