@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 #include <filesystem>
@@ -132,6 +133,16 @@ public:
 		file.close();
 
 		return;
+	}
+
+	void writeToBufferTxt(string data)
+	{
+		ofstream file(BUFFER_FILE);
+		if (file.is_open())
+		{
+			file << data;
+			file.close();
+		}
 	}
 
 private:

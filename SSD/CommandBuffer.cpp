@@ -48,7 +48,7 @@ private:
 
 	bool fastRead(CommandPacket cmdPacket)
 	{
-		for (int i = (int)cmdBuf.size() - 1; i >= 0; --i)
+		for (int i = (int)cmdBuf.size() - 1; i >= 0; i--)
 		{
 			if (cmdBuf[i].startLba <= cmdPacket.startLba && cmdPacket.startLba <= cmdBuf[i].endLba)
 			{
@@ -68,6 +68,16 @@ private:
 	void fastErase()
 	{
 
+	}
+
+	void saveCmdBuffer()
+	{
+		string data = to_string(cmdCnt) + "\n";
+		for (int i = 0; i < cmdBuf.size(); i++)
+		{
+			data = data + cmdBuf[i].command + " " + to_string(cmdBuf[i].startLba) + " " + to_string(cmdBuf[i].endLba) + " " + cmdBuf[i].data + "\n";
+		}
+		FileSingleton::getInstance().writeToBufferTxt(data);
 	}
 };
 
