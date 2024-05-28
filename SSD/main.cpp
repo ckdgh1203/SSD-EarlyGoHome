@@ -1,8 +1,62 @@
 #include <iostream>
 #include <string>
 #include "SSD.cpp"
-
 using namespace std;
+
+bool isInvalidLbaRange(int lba);
+bool isHexFormat(char ch);
+bool isInvalidData(const string data);
+bool isInvalidEraseSize(int size);
+bool argValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* argv[]);
+
+int main(int argc, char* argv[])
+{
+	CommandPacket cmdPacket = {};
+	if (argValidityCheckAndMakeCmdPack(cmdPacket, argc, argv) == RETURN_FAIL)
+	{
+		return RETURN_FAIL;
+	}
+
+	SSD ssd{};
+	CommandFactory& commandFactory = CommandFactory::getInstance();
+	FileSingleton& fileSingleton = FileSingleton::getInstance();
+	fileSingleton.setFilePath(__FILE__);
+	if (cmdPacket.command == GETPATH_COMMAND)
+	{
+		cout << fileSingleton.getResultPath() << endl;
+		return RETURN_FAIL;
+	}
+
+	if (cmdPacket.command == FLUSH_COMMAND)
+	{
+		ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
+		ssd.executeCommand();
+	}
+	else
+	{
+		if (ssd.bufferingCommand(cmdPacket) == RETURN_FAIL)
+		{
+			if (cmdPacket.command == READ_COMMAND)
+			{
+				ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba));
+				ssd.executeCommand();
+			}
+			else
+			{
+				ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
+				ssd.executeCommand();
+				if (ssd.bufferingCommand(cmdPacket) == RETURN_FAIL)	
+				{
+					cout << "[ERROR] Command Buffering Fail after Flush!" << endl;
+					return RETURN_FAIL;
+				}
+			}
+		}
+	}
+
+	return RETURN_SUCCESS;
+}
+
 
 
 bool isInvalidLbaRange(int lba)
@@ -107,62 +161,18 @@ bool argValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* ar
 			return RETURN_FAIL;
 		}
 	}
+	else if (cmdPacket.command == GETPATH_COMMAND)
+	{
+		if (argc != 2)
+		{
+			cout << "[ERROR] [GetPath Command needs 1 arg!]" << endl;
+			return RETURN_FAIL;
+		}
+	}
 	else
 	{
 		cout << "[ERROR] [Invalid SSD Command!]" << endl;
 		return RETURN_FAIL;
 	}
 	return RETURN_SUCCESS;
-}
-
-int main(int argc, char* argv[])
-{
-	CommandPacket cmdPacket = {};
-	if (argValidityCheckAndMakeCmdPack(cmdPacket, argc, argv) == RETURN_FAIL)
-	{
-		return RETURN_FAIL;
-	}
-
-	SSD ssd{};
-	if (cmdPacket.command != "G" && argc < 3 || argc > 4)
-		return 0;
-
-	CommandFactory& commandFactory = CommandFactory::getInstance();
-	FileSingleton& fileSingleton = FileSingleton::getInstance();
-	fileSingleton.setFilePath(__FILE__);
-
-	if (cmdPacket.command == "G")
-	{
-		cout << fileSingleton.getResultPath() << endl;
-		return 0;
-	}
-
-	if (cmdPacket.command == "F")
-	{
-		ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
-		ssd.executeCommand();
-	}
-	else
-	{
-		if (ssd.bufferingCommand(cmdPacket) == RETURN_FAIL)
-		{
-			if (cmdPacket.command == READ_COMMAND)
-			{
-				ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba));
-				ssd.executeCommand();
-			}
-			else
-			{
-				ssd.setCommand(commandFactory.createCommand(ssd.getBufferedCommand()));
-				ssd.executeCommand();
-				if (ssd.bufferingCommand(cmdPacket) == RETURN_FAIL)	
-				{
-					//그럴리가 없는 상태
-					return RETURN_FAIL;
-				}
-			}
-		}
-	}
-
-	return 0;
 }

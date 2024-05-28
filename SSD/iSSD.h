@@ -6,6 +6,7 @@ const string WRITE_COMMAND = "W";
 const string READ_COMMAND = "R";
 const string ERASE_COMMAND = "E";
 const string FLUSH_COMMAND = "F";
+const string GETPATH_COMMAND = "G";
 const string DEFAULT_DATA = "0x00000000";
 const int RETURN_FAIL = 0;
 const int RETURN_SUCCESS = 1;
