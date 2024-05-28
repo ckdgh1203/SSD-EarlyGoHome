@@ -145,7 +145,7 @@ private:
 		ignorePreviousCommand(cmdPacket);
 		cmdBuf.push_back(cmdPacket);
 		cmdCnt++;
-    mergePreviousCommand(cmdPacket);
+		mergePreviousCommand(cmdPacket);
 	}
 
 	void saveCmdBuffer()
