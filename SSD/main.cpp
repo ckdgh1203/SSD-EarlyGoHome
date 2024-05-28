@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	SSD ssd{};
 	CommandPacket cmdPacket = {};
 	cmdPacket.command = argv[1];
-	cmdPacket.startLba = stoi(argv[2]);
+	
 	//1. argument 정리해서 CommandPacket만들기 함수 호출
 
 	//2. ssd.bufferingCommand()
@@ -38,15 +38,17 @@ int main(int argc, char* argv[])
 	{
 		if (cmdPacket.command == "R")
 		{
-
+			cmdPacket.startLba = stoi(argv[2]);
 		}
 		else if (cmdPacket.command == "W")
 		{
+			cmdPacket.startLba = stoi(argv[2]);
 			cmdPacket.endLba = cmdPacket.startLba;
 			cmdPacket.data = argv[3];
 		}
 		else if (cmdPacket.command == "E")
 		{
+			cmdPacket.startLba = stoi(argv[2]);
 			cmdPacket.endLba = cmdPacket.startLba + stoi(argv[3]) - 1;
 			cmdPacket.data = "0x00000000";
 		}
