@@ -56,12 +56,13 @@ public:
 		ifstream file(NAND_FILE);
 		vector<string> ret;
 
+		for (int i = START_LBA; i < MAX_LBA_RANGE; i++)
+		{
+			ret.push_back(DEFAULT_DATA);
+		}
+
 		if (!file.is_open())
 		{
-			for (int i = START_LBA; i < MAX_LBA_RANGE; i++)
-			{
-				ret.push_back(DEFAULT_DATA);
-			}
 			return ret;
 		}
 
