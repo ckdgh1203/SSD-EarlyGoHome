@@ -10,7 +10,6 @@
 #include "iSSD.h"
 
 using namespace std;
-const string DEFAULT_DATA = "0x00000000";
 
 class FileSingleton : public iFile
 {
