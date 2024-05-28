@@ -31,7 +31,8 @@ public:
 		{
 			fastWrite(cmdPacket);
 		}
-		else if (cmdPacket.command == "E")
+		
+		if (cmdPacket.command == "E")
 		{
 			fastErase(cmdPacket);
 		}
@@ -57,7 +58,7 @@ private:
 	{
 		for (int i = (int)cmdBuf.size() - 1; i >= 0; i--)
 		{
-			if (cmdBuf[i].startLba <= cmdPacket.startLba && cmdPacket.startLba <= cmdBuf[i].endLba)
+			if ((cmdBuf[i].startLba <= cmdPacket.startLba) && (cmdPacket.startLba <= cmdBuf[i].endLba))
 			{
 				FileSingleton::getInstance().writeToResultTxt(cmdBuf[i].data);
 				return true;
@@ -67,14 +68,33 @@ private:
 		return false;
 	}
 
+	void ignore(CommandPacket cmdPacket)
+	{
+		deque<CommandPacket> tempBuf;
+
+		for (int i = 0 ; i < cmdBuf.size() ; i++)
+		{
+			if (!((cmdPacket.startLba <= cmdBuf[i].startLba) && (cmdBuf[i].endLba <= cmdPacket.endLba)))
+			{
+				tempBuf.push_back(cmdBuf[i]);
+			}
+		}
+
+		cmdBuf.clear();
+		cmdBuf = tempBuf;
+		cmdCnt = cmdBuf.size();
+	}
+
 	void fastWrite(CommandPacket cmdPacket)
 	{
+		ignore(cmdPacket);
 		cmdBuf.push_back(cmdPacket);
 		cmdCnt++;
 	}
 
 	void fastErase(CommandPacket cmdPacket)
 	{
+		ignore(cmdPacket);
 		cmdBuf.push_back(cmdPacket);
 		cmdCnt++;
 	}
