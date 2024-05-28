@@ -403,6 +403,6 @@ coverage/
 *.zip
 
 # SSD-EarlyGoHome Data Files
-*/nand.txt
-*/result.txt
-*/buffer.txt
+**/nand.txt
+**/result.txt
+**/buffer.txt

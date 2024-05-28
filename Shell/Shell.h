@@ -20,6 +20,7 @@ public:
     {}
 
     void run(istream& inputStream);
+    void runRunner(const string& fileName);
     void parseArguments(istream& inputStream, vector<string>& args);
 
 private:
@@ -27,4 +28,6 @@ private:
     SsdHelper& m_ssdHelper;
     CommandFactory m_commandFactory;
     ScriptFactory m_scriptFactory;
+
+    string getDirectoryPath(string filePath);
 };

@@ -11,16 +11,18 @@ class ScriptHandler
 public:
     ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper);
 
-    virtual void doScript() = 0;
+    virtual bool doScript() = 0;
+    string getScriptResult();
 
 protected:
     CommandFactory m_CommandFactory;
     ostringstream& m_stringStream;
 
     void clearOutputStreamBuffer();
+    string createReferenceData(const string& inputData, const int iteration);
     bool readCompare(const string& inputData, unsigned int startLba, unsigned int endLba);
     void readRepeatedly(unsigned int startLba, unsigned int endLba);
     void writeRepeatedly(const string& inputData, unsigned int startLba, unsigned int endLba);
     void doFullWrite(const string& inputData);
-    void duFullRead();
+    void doFullRead();
 };

@@ -18,6 +18,5 @@ Progress EraseRange::doCommand(const vector<string>& args)
 	auto numberOfLba = stoi(args[2]) - stoi(args[1]) + 1;
 	string arguments = "E " + args[1] + " " + to_string(numberOfLba);
 	m_ssdHelper.execute(arguments);
-	m_outputStream << m_ssdHelper.getResult() << endl;
 	return Progress::Continue;
 }
