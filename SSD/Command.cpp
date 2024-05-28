@@ -172,7 +172,10 @@ public:
 
 	void executeCommand() override
 	{
-		
+		for (deque<Command*>::size_type i = 0; i < commandBuffer.size(); i++)
+		{
+			commandBuffer[i]->executeCommand();
+		}
 	}
 
 private:

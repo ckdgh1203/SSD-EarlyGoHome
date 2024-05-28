@@ -24,7 +24,7 @@ public:
 	}
 	Command* createCommand(deque<Command*> commandBuffer)
 	{
-		return new EraseCommand{ commandBuffer };
+		return new FlushCommand{ commandBuffer };
 	}
 
 private:

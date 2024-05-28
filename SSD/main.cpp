@@ -10,7 +10,7 @@ const string FLUSH_COMMAND = "F";
 
 int main(int argc, char* argv[])
 {
-	if (argc < 2 || argc > 4)
+	if (argc < 3 || argc > 4)
 		return 0;
 
 	CommandFactory& commandFactory = CommandFactory::getInstance();
@@ -31,7 +31,8 @@ int main(int argc, char* argv[])
 	//* F case. 는 if문으로 따로 처리하고 F아닌경우 bufferingCommand()호출하자
 	if (cmdPacket.command == "F")
 	{
-
+		deque<Command> commandBuffer;
+		
 		//ssd.setCommand(commandFactory.createCommand(cmdPacket.startLba, cmdPacket.data));
 	}
 	else
