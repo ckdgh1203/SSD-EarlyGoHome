@@ -10,8 +10,8 @@ using namespace std;
 class ScriptHandler
 {
 public:
-    ScriptHandler(CommandFactory& commandFactory, ostringstream& stringStream)
-        : m_CommandFactory(commandFactory), m_stringStream(stringStream)
+    ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper)
+        : m_CommandFactory(stringStream, ssdHelper), m_stringStream(stringStream)
     {
         clearOutputStreamBuffer();
     }
@@ -19,7 +19,7 @@ public:
     virtual void doScript() = 0;
 
 protected:
-    CommandFactory& m_CommandFactory;
+    CommandFactory m_CommandFactory;
     ostringstream& m_stringStream;
 
     void clearOutputStreamBuffer()

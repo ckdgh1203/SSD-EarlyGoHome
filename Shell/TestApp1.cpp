@@ -5,8 +5,8 @@
 class TestApp1 : public ScriptHandler
 {
 public:
-	TestApp1(CommandFactory& commandFactory, ostringstream& stringStream)
-		: ScriptHandler(commandFactory, stringStream)
+	TestApp1(ostringstream& stringStream, SsdHelper& ssdHelper)
+		: ScriptHandler(stringStream, ssdHelper)
 	{
 
 	}

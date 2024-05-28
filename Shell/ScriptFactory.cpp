@@ -12,15 +12,15 @@ using namespace std;
 class ScriptFactory
 {
 public:
-	ScriptHandler* create(const string& scriptStr, CommandFactory& commandFactory)
+	ScriptHandler* create(const string& scriptStr, SsdHelper& ssdHelper)
 	{
 		ScriptEnum scriptEnum = CovertStrToScriptEnum(scriptStr);
 		switch (scriptEnum)
 		{
 		case TESTAPP1:
-			return new TestApp1(commandFactory, m_stringStream);
+			return new TestApp1(m_stringStream, ssdHelper);
 		case TESTAPP2:
-			return new TestApp2(commandFactory, m_stringStream);
+			return new TestApp2(m_stringStream, ssdHelper);
 		default:
 			return nullptr;
 		}

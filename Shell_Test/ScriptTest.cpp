@@ -13,7 +13,7 @@ protected:
 	NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
 	NiceMock<SsdResultMock> ssdResultMock{};
     ostringstream redirectedOutput{};
-    CommandFactory commandFactory{ redirectedOutput, ssd };
+    SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
 
     const string dataZero = "0x00000000";
     const string testData = "0xDEADC0DE";
@@ -31,21 +31,18 @@ protected:
         scriptHandler.doScript();
         EXPECT_THAT(fetchOutput(), expected);
     }
-
-private:
-    SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
 };
 
 class TestApp1Fixture : public ScriptTestFixture
 {
 protected:
-    TestApp1 testScript{ commandFactory, redirectedOutput };
+    TestApp1 testScript{ redirectedOutput,ssd };
 };
 
 class TestApp2Fixture : public ScriptTestFixture
 {
 protected:
-    TestApp2 testScript{ commandFactory, redirectedOutput };
+    TestApp2 testScript{ redirectedOutput,ssd };
 };
 
 TEST_F(TestApp1Fixture, TestApp1FailureCase)
