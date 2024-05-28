@@ -2,10 +2,11 @@
 #include <gmock/gmock.h>
 #include "../Shell/Read.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class ReadTest : public Test
+class ReadTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
@@ -13,18 +14,7 @@ public:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     Read read{ redirectedOutput, ssd };
 
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
-
     const string dataZero = "0x00000000";
-
-private:
-    ostringstream redirectedOutput{};
 };
 
 TEST_F(ReadTest, DoCommand)

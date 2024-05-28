@@ -2,30 +2,22 @@
 #include <gmock/gmock.h>
 #include "../Shell/FullRead.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class FullReadTest : public Test
+class FullReadTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     FullRead fullRead{ redirectedOutput, ssd, &read };
 
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
-
     const string dataZero = "0x00000000";
 
 private:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     Read read{ redirectedOutput, ssd };
-    ostringstream redirectedOutput{};
 };
 
 

@@ -2,27 +2,20 @@
 #include <gmock/gmock.h>
 #include "../Shell/FullWrite.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class FullWriteTest : public Test
+class FullWriteTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     FullWrite fullWrite{ redirectedOutput, ssd, &write };
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
 
 private:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     Write write{ redirectedOutput, ssd };
-    ostringstream redirectedOutput{};
 };
 
 TEST_F(FullWriteTest, DoCommand)

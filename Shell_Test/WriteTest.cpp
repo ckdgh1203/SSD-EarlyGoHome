@@ -2,24 +2,17 @@
 #include <gmock/gmock.h>
 #include "../Shell/Write.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class WriteTest : public Test
+class WriteTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     Write write{ redirectedOutput, ssd };
-
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
 
     void VerifyDataAndExpect(string input, string expected)
     {
@@ -34,9 +27,6 @@ public:
 
     const string dataZero = "0x00000000";
     const string VALID_LBA = "99";
-
-private:
-    ostringstream redirectedOutput{};
 };
 
 TEST_F(WriteTest, DoCommand)

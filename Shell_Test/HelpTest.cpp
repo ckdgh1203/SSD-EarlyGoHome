@@ -2,10 +2,11 @@
 #include <gmock/gmock.h>
 #include "../Shell/Help.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class HelpTest : public Test
+class HelpTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
@@ -13,17 +14,6 @@ public:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     CommandFactory factory{ std::cout, ssd };
     Help help{redirectedOutput, ssd, &factory};
-
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
-
-private:
-    ostringstream redirectedOutput{};
 };
 
 TEST_F(HelpTest, DoCommand)

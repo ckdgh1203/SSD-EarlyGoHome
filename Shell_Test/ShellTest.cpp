@@ -6,11 +6,12 @@
 #include "../Shell/Shell.cpp"
 #include "../Shell/Logger.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace std;
 using namespace testing;
 
-class ShellTestFixture : public Test
+class ShellTestFixture : public Test, public OutputCapture
 {
 protected:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
@@ -18,22 +19,7 @@ protected:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     Shell shell{ssd, redirectedOutput};
 
-    static constexpr int INVALID_LBA = 100;
-    static constexpr int VALID_LBA = 99;
     const string dataZero = "0x00000000";
-    const string testData = "0xDEADC0DE";
-
-    void SetUp(void) override
-    {
-    }
-
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
 
     void runAndExpect(const string& input, const string& expected)
     {
@@ -41,9 +27,6 @@ protected:
         shell.run(ss);
         EXPECT_EQ(expected, fetchOutput());
     }
-
-private:
-    ostringstream redirectedOutput{};
 };
 
 TEST_F(ShellTestFixture, RunAndExit)

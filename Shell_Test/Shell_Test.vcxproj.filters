@@ -34,9 +34,6 @@
     <ClCompile Include="EraseRangeTest.cpp">
       <Filter>소스 파일\CommandTest</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptTestFixture.cpp">
-      <Filter>소스 파일\ScriptTest</Filter>
-    </ClCompile>
     <ClCompile Include="TestApp1Test.cpp">
       <Filter>소스 파일\ScriptTest</Filter>
     </ClCompile>
@@ -75,6 +72,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SsdMock.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptTestFixture.h" />
+    <ClInclude Include="OutputCapture.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

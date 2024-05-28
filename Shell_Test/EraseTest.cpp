@@ -2,29 +2,17 @@
 #include <gmock/gmock.h>
 #include "../Shell/Erase.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class EraseTest : public Test
+class EraseTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     Erase erase{ redirectedOutput, ssd };
-
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
-
-    const string dataZero = "0x00000000";
-
-private:
-    ostringstream redirectedOutput{};
 };
 
 TEST_F(EraseTest, DoCommand)
