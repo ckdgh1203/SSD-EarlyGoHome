@@ -87,11 +87,57 @@ private:
 		cmdCnt = cmdBuf.size();
 	}
 
+	void narrowRangeOfErase(CommandPacket cmdPacket)
+	{
+		cmdBuf.push_back(cmdPacket);
+		cmdCnt++;
+		int curIndex = cmdCnt - 1;
+
+		while (curIndex)
+		{
+			CommandPacket cur = cmdBuf[curIndex];
+
+			// 1. 기존 cmdBuf 안 "E" Command Start, End 확인
+			for (int i = curIndex-1; i >= 0; i--)
+			{
+				if (cmdBuf[i].command != "E")
+					continue;
+
+				if (cur.startLba == cmdBuf[i].startLba)
+				{	// 기존 cmdBuf 안 E Command 중 Start 같을 때
+
+					if (cmdBuf[i].startLba == cmdBuf[i].endLba)
+					{	// 사이즈 하나 짜리였으면, 기존 E 패킷 삭제
+						cmdBuf.erase(cmdBuf.begin() + i);
+						cmdCnt--;
+						curIndex--;
+					}
+
+					if (cmdBuf[i].startLba != cmdBuf[i].endLba)
+					{
+						// 사이즈 1 아니라면, 기존 E 패킷 스타트 LBA +1
+						cmdBuf[i].startLba += 1;
+					}
+					break;
+				}
+
+				if (cur.endLba == cmdBuf[i].endLba)
+				{
+					// 기존 cmdBuf 안 E Command 중 End 같을 때
+					// 사이즈 1 아닌 경우만 있으므로, 기존 E 패킷 엔드 LBA -1
+					cmdBuf[i].endLba -= 1;
+					break;
+				}
+			}
+
+			curIndex--;
+		}
+	}
+
 	void fastWrite(CommandPacket cmdPacket)
 	{
 		ignorePreviousCommand(cmdPacket);
-		cmdBuf.push_back(cmdPacket);
-		cmdCnt++;
+		narrowRangeOfErase(cmdPacket);
 	}
 
 	CommandPacket mergeCmdPacket(CommandPacket cmdPacket)
