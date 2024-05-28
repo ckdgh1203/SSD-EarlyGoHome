@@ -135,8 +135,11 @@
     <ClCompile Include="EraseRange.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="FullRead.cpp" />
+    <ClCompile Include="TestApp4.cpp" />
     <ClCompile Include="FullWrite.cpp" />
+    <ClCompile Include="TestApp3.cpp" />
     <ClCompile Include="Help.cpp" />
+    <ClCompile Include="TestApp6.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Read.cpp" />
@@ -146,6 +149,7 @@
     <ClCompile Include="TestApp1.cpp" />
     <ClCompile Include="TestApp2.cpp" />
     <ClCompile Include="Write.cpp" />
+    <ClCompile Include="TestApp5.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandFactory.h" />
@@ -168,6 +172,10 @@
     <ClInclude Include="SsdResult.h" />
     <ClInclude Include="TestApp1.h" />
     <ClInclude Include="TestApp2.h" />
+    <ClInclude Include="TestApp3.h" />
+    <ClInclude Include="TestApp4.h" />
+    <ClInclude Include="TestApp5.h" />
+    <ClInclude Include="TestApp6.h" />
     <ClInclude Include="Write.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

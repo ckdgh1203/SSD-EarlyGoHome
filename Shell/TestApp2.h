@@ -8,5 +8,5 @@ public:
     TestApp2(ostringstream& stringStream, SsdHelper& ssdHelper)
         : ScriptHandler(stringStream, ssdHelper) {}
 
-    void doScript() override;
+    bool doScript() override;
 };

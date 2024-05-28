@@ -6,24 +6,36 @@ ScriptHandler::ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper)
     clearOutputStreamBuffer();
 }
 
+string ScriptHandler::getScriptResult()
+{
+    if (false == this->doScript()) return "Fail!\n";
+
+    return "Pass!\n";
+}
+
 void ScriptHandler::clearOutputStreamBuffer()
 {
     m_stringStream.str("");
     m_stringStream.clear();
 }
 
-bool ScriptHandler::readCompare(const string& inputData, unsigned int startLba, unsigned int endLba)
+string ScriptHandler::createReferenceData(const string& inputData, const int iteration)
 {
-    string referenceData = "";
-    for (unsigned int iter = startLba; iter < endLba; iter++)
+    string Data = "";
+    for (int iter = 0; iter < iteration; iter++)
     {
-        referenceData += (inputData + "\n");
+        Data += (inputData + "\n");
     }
 
+    return Data;
+}
+
+bool ScriptHandler::readCompare(const string& inputData, unsigned int startLba, unsigned int endLba)
+{
     string readData = m_stringStream.str();
     clearOutputStreamBuffer();
 
-    return (readData == referenceData);
+    return (readData == inputData);
 }
 
 void ScriptHandler::readRepeatedly(unsigned int startLba, unsigned int endLba)
@@ -35,9 +47,9 @@ void ScriptHandler::readRepeatedly(unsigned int startLba, unsigned int endLba)
     }
 
     CommandHandler* readCommand = m_CommandFactory.create("read");
-    for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
+    for (unsigned int Iter = 0; Iter < (endLba - startLba); Iter++)
     {
-        readCommand->doCommand(argument[lbaIter]);
+        readCommand->doCommand(argument[Iter]);
     }
 }
 
@@ -50,9 +62,9 @@ void ScriptHandler::writeRepeatedly(const string& inputData, unsigned int startL
     }
 
     CommandHandler* writeCommand = m_CommandFactory.create("write");
-    for (unsigned int lbaIter = startLba; lbaIter < endLba; lbaIter++)
+    for (unsigned int Iter = 0; Iter < (endLba - startLba); Iter++)
     {
-        writeCommand->doCommand(argument[lbaIter]);
+        writeCommand->doCommand(argument[Iter]);
     }
 }
 
@@ -67,7 +79,7 @@ void ScriptHandler::doFullWrite(const string& inputData)
     fullwriteCmd->doCommand(fullwriteArgument);
 }
 
-void ScriptHandler::duFullRead()
+void ScriptHandler::doFullRead()
 {
     vector<string> fullreadArgument;
     fullreadArgument.push_back("fullread");

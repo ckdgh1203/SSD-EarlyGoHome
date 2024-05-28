@@ -49,6 +49,18 @@
     <ClCompile Include="TestApp2.cpp">
       <Filter>소스 파일\Script</Filter>
     </ClCompile>
+    <ClCompile Include="TestApp3.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp4.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp5.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp6.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -112,6 +124,18 @@
       <Filter>헤더 파일\Script</Filter>
     </ClInclude>
     <ClInclude Include="TestApp2.h">
+      <Filter>헤더 파일\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp3.h">
+      <Filter>헤더 파일\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp4.h">
+      <Filter>헤더 파일\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp5.h">
+      <Filter>헤더 파일\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp6.h">
       <Filter>헤더 파일\Script</Filter>
     </ClInclude>
   </ItemGroup>
