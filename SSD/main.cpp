@@ -92,7 +92,7 @@ bool argValidityCheckAndMakeCmdPack(CommandPacket& cmdPacket, int argc, char* ar
 		cmdPacket.startLba = stoi(argv[2]);
 		int size = stoi(argv[3]);
 		cmdPacket.endLba = cmdPacket.startLba + size - 1;
-		cmdPacket.data = ERASE_DATA;
+		cmdPacket.data = DEFAULT_DATA;
 		if (isInvalidEraseSize(size) || isInvalidLbaRange(cmdPacket.startLba))
 		{
 			cout << "[ERROR] [Invalid argument with Erase Command!]" << endl;
