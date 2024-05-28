@@ -22,6 +22,10 @@ public:
 	{
 		return new EraseCommand{lba, size };
 	}
+	Command* createCommand(deque<Command*> commandBuffer)
+	{
+		return new EraseCommand{ commandBuffer };
+	}
 
 private:
 	CommandFactory() {}
