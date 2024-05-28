@@ -4,19 +4,7 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptFactory.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptHandler.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Shell.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TestApp1.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TestApp2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CommandFactory.cpp">
@@ -49,6 +37,18 @@
     <ClCompile Include="Logger.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptFactory.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptHandler.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp1.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp2.cpp">
+      <Filter>소스 파일\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SsdExcutable.h">
@@ -60,43 +60,46 @@
     <ClInclude Include="SsdResult.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="DataFormatVerifier.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LbaRangeVerifier.h">
+    <ClInclude Include="Logger.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CommandFactory.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="CommandHandler.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="DataFormatVerifier.h">
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="Erase.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="EraseRange.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="Exit.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="FullRead.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="FullWrite.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="Help.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="LbaRangeVerifier.h">
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="Read.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="Write.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
+    <ClInclude Include="Shell.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -109,6 +112,12 @@
     </Filter>
     <Filter Include="소스 파일\Command">
       <UniqueIdentifier>{35fee1c5-7b13-43d5-bd4f-0bc20fbd342c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Script">
+      <UniqueIdentifier>{a8ce67c5-c6dc-45fe-8d71-a9ac40a01bda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Command">
+      <UniqueIdentifier>{6e85f25d-fabd-457b-9048-e3c3c76d41ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

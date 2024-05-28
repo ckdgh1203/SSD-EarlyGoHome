@@ -158,6 +158,7 @@
     <ClInclude Include="LbaRangeVerifier.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Read.h" />
+    <ClInclude Include="Shell.h" />
     <ClInclude Include="SsdExcutable.h" />
     <ClInclude Include="SsdHelper.h" />
     <ClInclude Include="SsdResult.h" />
