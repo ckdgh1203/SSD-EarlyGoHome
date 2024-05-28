@@ -117,6 +117,8 @@ public:
 		ifstream file(filePath + BUFFER_FILE);
 		string line;
 
+		cmdBuf.clear();
+
 		if (!file.is_open())
 		{
 			cmdCnt = 0;
