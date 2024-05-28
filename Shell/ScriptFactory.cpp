@@ -1,21 +1,11 @@
-#pragma once
+#include "ScriptFactory.h"
+#include "TestApp1.h"
+#include "TestApp2.h"
 
-#include "ScriptHandler.cpp"
-#include "TestApp1.cpp"
-#include "TestApp2.cpp"
-#include "TestApp3.cpp"
-#include "TestApp4.cpp"
-#include "TestApp5.cpp"
-#include "TestApp6.cpp"
-#include <iostream>
-#include <sstream>
-
-using namespace std;
-
-class ScriptFactory
+ScriptHandler* ScriptFactory::create(const string& scriptStr, SsdHelper& ssdHelper)
 {
-public:
-	ScriptHandler* create(const string& scriptStr, SsdHelper& ssdHelper)
+	ScriptEnum scriptEnum = CovertStrToScriptEnum(scriptStr);
+	switch (scriptEnum)
 	{
 		ScriptEnum scriptEnum = CovertStrToScriptEnum(scriptStr);
 		switch (scriptEnum)
@@ -36,35 +26,22 @@ public:
 			return nullptr;
 		}
 	}
-private:
-	typedef enum
-	{
-		TESTAPP1,
-		TESTAPP2,
-		TESTAPP3,
-		TESTAPP4,
-		TESTAPP5,
-		TESTAPP6,
-		MAX_SCRIPT
-	} ScriptEnum;
+}
 
-	ScriptEnum CovertStrToScriptEnum(const string& scriptStr)
-	{
-		if (scriptStr == "FullWriteAndFullReadAndCompare" || scriptStr == "testapp1")
-			return TESTAPP1;
-		if (scriptStr == "Write0to6Repeat30AndWrite0to6AndReadCompare" || scriptStr == "testapp2")
-			return TESTAPP2;
-		if (scriptStr == "FullWriteAndRead99AndCompare" || scriptStr == "testapp3")
-			return TESTAPP3;
-		if (scriptStr == "FullReadAndCompare" || scriptStr == "testapp4")
-			return TESTAPP4;
-		if (scriptStr == "Write0Repeat10AndReadCompare" || scriptStr == "testapp5")
-			return TESTAPP5;
-		if (scriptStr == "Write5to10AndWrite8to10AndReadCompare" || scriptStr == "testapp6")
-			return TESTAPP6;
+ScriptFactory::ScriptEnum ScriptFactory::CovertStrToScriptEnum(const string& scriptStr)
+{
+	if (scriptStr == "FullWriteAndFullReadAndCompare" || scriptStr == "testapp1")
+		return TESTAPP1;
+	if (scriptStr == "Write0to6Repeat30AndWrite0to6AndReadCompare" || scriptStr == "testapp2")
+		return TESTAPP2;
+	if (scriptStr == "FullWriteAndRead99AndCompare" || scriptStr == "testapp3")
+		return TESTAPP3;
+	if (scriptStr == "FullReadAndCompare" || scriptStr == "testapp4")
+		return TESTAPP4;
+	if (scriptStr == "Write0Repeat10AndReadCompare" || scriptStr == "testapp5")
+		return TESTAPP5;
+	if (scriptStr == "Write5to10AndWrite8to10AndReadCompare" || scriptStr == "testapp6")
+		return TESTAPP6;
 
-		return MAX_SCRIPT;
-	}
-
-	ostringstream m_stringStream{};
-};
+	return MAX_SCRIPT;
+}

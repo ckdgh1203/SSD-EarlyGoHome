@@ -1,17 +1,19 @@
 #pragma once
 
 #include "SsdHelper.h"
-#include <string>
-#include <vector>
-#include "Logger.cpp"
+#include "Logger.h"
 
-using namespace std;
+#include <string>
+#include <iostream>
+#include <vector>
 
 enum class Progress
 {
 	Continue = 0,
 	Done = 1,
 };
+
+using namespace std;
 
 class CommandHandler
 {
@@ -31,9 +33,9 @@ protected:
 	constexpr static bool VALID = true;
 	constexpr static bool INVALID = false;
 
-	string sliceString(const std::vector<std::string>& words, size_t start)
+	std::string sliceString(const std::vector<std::string>& words, size_t start)
 	{
-		std::string result;
+		string result;
 		for (size_t i = start; i < words.size(); ++i)
 		{
 			result += words[i];
@@ -45,7 +47,7 @@ protected:
 		return result;
 	}
 
-	ostream& m_outputStream;
+	std::ostream& m_outputStream;
 	SsdHelper& m_ssdHelper;
 	Logger logger;
 };

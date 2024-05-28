@@ -4,7 +4,7 @@
     <ClCompile Include="gtest_main.cc" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gtest\gtest-all.cc" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gmock\gmock-all.cc" />
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="ShellTest.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CommandFactoryTest.cpp">
@@ -34,6 +34,27 @@
     <ClCompile Include="EraseRangeTest.cpp">
       <Filter>소스 파일\CommandTest</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptTestFixture.cpp">
+      <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp1Test.cpp">
+      <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp2Test.cpp">
+      <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp3Test.cpp">
+      <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp4Test.cpp">
+      <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp5Test.cpp">
+      <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp6Test.cpp">
+      <Filter>소스 파일\ScriptTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -47,6 +68,9 @@
     </Filter>
     <Filter Include="소스 파일\CommandTest">
       <UniqueIdentifier>{593993f1-55ff-4058-ad33-b14b2c4f73df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ScriptTest">
+      <UniqueIdentifier>{a4240f89-3f10-4854-a9ad-e54cc74776e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

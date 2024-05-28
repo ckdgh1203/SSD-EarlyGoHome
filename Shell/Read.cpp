@@ -1,41 +1,22 @@
-#pragma once
+#include "Read.h"
 
-#include "CommandHandler.cpp"
-#include "LbaRangeVerifier.h"
-
-#include <iostream>
-
-using namespace std;
-
-class Read : public CommandHandler
+bool Read::isValidArgs(const vector<string>& args)
 {
-public:
-	Read(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
+	if (isInvalidNumberOfArguments(args)) return INVALID;
+	if (m_lbaRangeVerifier.isLbaOutOfRange(stoi(args[1]))) return INVALID;
+	return VALID;
+}
 
-	bool isValidArgs(const vector<string>& args) override
-	{
-		if (isInvalidNumberOfArguments(args)) return INVALID;
-		if (m_lbaRangeVerifier.isLbaOutOfRange(stoi(args[1]))) return INVALID;
-		return VALID;
-	}
+Progress Read::doCommand(const vector<string>& args)
+{
+	logger.print("Command : " + sliceString(args, 0));
+	string arguments = "R " + args[1];
+	m_ssdHelper.execute(arguments);
+	m_outputStream << m_ssdHelper.getResult() << endl;
+	return Progress::Continue;
+}
 
-	Progress doCommand(const vector<string>& args) override
-	{
-		logger.print("Command : " + sliceString(args, 0));
-		string arguments = "R " + args[1];
-		m_ssdHelper.execute(arguments);
-		m_outputStream << m_ssdHelper.getResult() << endl;
-		return Progress::Continue;
-	}
-
-	void usage() override {};
-
-	~Read() {};
-private:
-	LbaRangeVerifier m_lbaRangeVerifier;
-
-	bool isInvalidNumberOfArguments(const std::vector<std::string>& args)
-	{
-		return (args.size() != 2);
-	}
-};
+bool Read::isInvalidNumberOfArguments(const std::vector<std::string>& args)
+{
+	return (args.size() != 2);
+}
