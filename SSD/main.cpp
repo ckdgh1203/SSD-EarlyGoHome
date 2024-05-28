@@ -10,17 +10,25 @@ const string FLUSH_COMMAND = "F";
 
 int main(int argc, char* argv[])
 {
-	if (argc < 3 || argc > 4)
+	if (argc <= 1)
 		return 0;
-
-	CommandFactory& commandFactory = CommandFactory::getInstance();
-	FileSingleton& fileSingleton = FileSingleton::getInstance();
-	fileSingleton.setFilePath("Data/");
 
 	SSD ssd{};
 	CommandPacket cmdPacket = {};
 	cmdPacket.command = argv[1];
-	
+
+	if (cmdPacket.command != "G" && argc < 3 || argc > 4)
+		return 0;
+
+	CommandFactory& commandFactory = CommandFactory::getInstance();
+	FileSingleton& fileSingleton = FileSingleton::getInstance();
+	fileSingleton.setFilePath(__FILE__);
+
+	if (cmdPacket.command == "G")
+	{
+		cout << fileSingleton.getResultPath() << endl;
+		return 0;
+	}
 	//1. argument 정리해서 CommandPacket만들기 함수 호출
 
 	//2. ssd.bufferingCommand()
