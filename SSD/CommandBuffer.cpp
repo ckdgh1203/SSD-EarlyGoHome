@@ -215,8 +215,6 @@ private:
 	void fastErase(CommandPacket cmdPacket)
 	{
 		ignorePreviousCommand(cmdPacket);
-		cmdBuf.push_back(cmdPacket);
-		cmdCnt++;
 		mergePreviousCommand(cmdPacket);
 	}
 
