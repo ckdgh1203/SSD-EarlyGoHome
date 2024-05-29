@@ -42,7 +42,7 @@ void Shell::run(istream& inputStream)
         if (!commandHandler->isValidArgs(args))
         {
             m_outputStream << "\nINVALID COMMAND\n";
-            commandHandler->usage();
+            m_outputStream << commandHandler->usage();
             continue;
         }
 

@@ -166,12 +166,16 @@ TEST_F(ShellTestFixture, RunAndInvalidArguments)
 
     const string expectedMessage = "shell> "
         "\nINVALID COMMAND\n"
+        "read [LBA]\n"
         "shell> "
         "\nINVALID COMMAND\n"
+        "write [LBA] [DATA]\n"
         "shell> "
         "\nINVALID COMMAND\n"
+        "erase [START_LBA] [NUMBER_OF_LBA]\n"
         "shell> "
         "\nINVALID COMMAND\n"
+        "erase_range [START_LBA] [END_LBA]\n"
         "shell> " "Exit from Shell\n";
 
     runAndExpect(inputString, expectedMessage);
