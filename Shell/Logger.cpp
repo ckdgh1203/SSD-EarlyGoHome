@@ -125,13 +125,7 @@ void Logger::doZip()
 	}
 
 	std::string oldFileName = logFileQueue.front();
-	std::string newFileName = oldFileName;
-	size_t dotIndex = newFileName.find_last_of('.');
-	if (dotIndex != std::string::npos)
-	{
-		newFileName.replace(dotIndex, newFileName.size() - dotIndex, ".zip");
-	}
-	if (changeFileName(oldFileName, newFileName))
+	if (zipAlgorithm->doZip(oldFileName))
 	{
 		logFileQueue.pop();
 	}
@@ -143,4 +137,9 @@ void Logger::clean()
 	{
 		doZip();
 	}
+}
+
+void Logger::setZipAlgo(std::unique_ptr<ZipAlgo> algorithm)
+{
+	zipAlgorithm = move(algorithm);
 }

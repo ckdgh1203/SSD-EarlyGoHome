@@ -167,6 +167,7 @@
     <ClInclude Include="ScriptFactory.h" />
     <ClInclude Include="ScriptHandler.h" />
     <ClInclude Include="Shell.h" />
+    <ClInclude Include="SimpleZip.h" />
     <ClInclude Include="SsdExcutable.h" />
     <ClInclude Include="SsdHelper.h" />
     <ClInclude Include="SsdResult.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="TestApp5.h" />
     <ClInclude Include="TestApp6.h" />
     <ClInclude Include="Write.h" />
+    <ClInclude Include="ZipAlgo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
