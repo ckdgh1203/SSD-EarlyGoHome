@@ -158,35 +158,51 @@ private:
 		narrowRangeOfErase();
 	}
 
-	CommandPacket mergeCmdPacket(CommandPacket cmdPacket)
+	CommandPacket mergeCmdPacket(CommandPacket cmdPacket, int mergeTargetIndex)
 	{
 		CommandPacket ret;
 		ret.command = cmdPacket.command;
 		ret.data = cmdPacket.data;
-		ret.startLba = min(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
-		ret.endLba = max(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
+		ret.startLba = min(cmdBuf[mergeTargetIndex].startLba, cmdPacket.startLba);
+		ret.endLba = max(cmdBuf[mergeTargetIndex].endLba, cmdPacket.endLba);
 
 		return ret;
 	}
 
-	bool isContinuedLbaRangeCmd(CommandPacket cmdPacket)
+	int isContinuedLbaRangeCmd(CommandPacket cmdPacket)
 	{
-		// 연속적이지 않을 경우
-		if (!((cmdBuf[cmdCnt - 1].endLba + 1 >= cmdPacket.startLba) && (cmdBuf[cmdCnt - 1].startLba - 1 <= cmdPacket.endLba)))
+		for (int i = cmdCnt - 1; i >= 0; i--)
 		{
-			return false;
+			if (cmdBuf[i].command != ERASE_COMMAND)
+				continue;
+
+			// 연속적이지 않을 경우
+			if (!((cmdBuf[i].endLba + 1 >= cmdPacket.startLba) && (cmdBuf[i].startLba - 1 <= cmdPacket.endLba)))
+			{
+				continue;
+			}
+
+			int s = min(cmdBuf[i].startLba, cmdPacket.startLba);
+			int e = max(cmdBuf[i].endLba, cmdPacket.endLba);
+
+			// 연속적이더라도 사이즈가 10보다 커질 경우
+			if (e - s + 1 > MAX_ERASE_SIZE)
+			{
+				continue;
+			}
+
+			// merge 가능한 Erase Command와 새로 들어온 Erase Command 사이에 같은 메모리 공간을 사용할 경우
+			for (int j = i+1; j <= cmdCnt - 1; j++)
+			{
+				if (!((cmdBuf[i].endLba < cmdBuf[j].startLba) && (cmdBuf[i].startLba > cmdBuf[j].endLba)))
+					// 메모리 공간 겹치면
+					continue;
+			}
+
+			return i;
 		}
 
-		int s = min(cmdBuf[cmdCnt - 1].startLba, cmdPacket.startLba);
-		int e = max(cmdBuf[cmdCnt - 1].endLba, cmdPacket.endLba);
-
-		// 연속적이더라도 사이즈가 10보다 커질 경우
-		if (e - s + 1 > MAX_ERASE_SIZE)
-		{
-			return false;
-		}
-		
-		return true;
+		return -1;
 	}
 
 	void mergePreviousCommand(CommandPacket cmdPacket)
@@ -197,14 +213,22 @@ private:
 			temp.push_back(cmdBuf[i]);
 		}
 
-		if (cmdBuf[cmdCnt - 1].command == ERASE_COMMAND && isContinuedLbaRangeCmd(cmdPacket))
+		if (cmdCnt > 0 && isContinuedLbaRangeCmd(cmdPacket) != -1)
 		{
+			int mergeTargetIndex = isContinuedLbaRangeCmd(cmdPacket);
+
 			// merge 가능하면 merge
-			temp.push_back(mergeCmdPacket(cmdPacket));
+			if (mergeTargetIndex < cmdCnt - 1)
+			{
+				temp.erase(temp.begin() + mergeTargetIndex);
+				temp.push_back(cmdBuf[cmdCnt - 1]);
+			}
+			temp.push_back(mergeCmdPacket(cmdPacket, mergeTargetIndex));
 		}
 		else
 		{	// merge 불가능하면 버퍼에 추가
-			temp.push_back(cmdBuf[cmdCnt - 1]);
+			if (cmdCnt > 0)
+				temp.push_back(cmdBuf[cmdCnt - 1]);
 			temp.push_back(cmdPacket);
 			cmdCnt++;
 		}
@@ -215,8 +239,6 @@ private:
 	void fastErase(CommandPacket cmdPacket)
 	{
 		ignorePreviousCommand(cmdPacket);
-		cmdBuf.push_back(cmdPacket);
-		cmdCnt++;
 		mergePreviousCommand(cmdPacket);
 	}
 
