@@ -134,6 +134,7 @@
     <ClCompile Include="Erase.cpp" />
     <ClCompile Include="EraseRange.cpp" />
     <ClCompile Include="Exit.cpp" />
+    <ClCompile Include="Flush.cpp" />
     <ClCompile Include="FullRead.cpp" />
     <ClCompile Include="TestApp4.cpp" />
     <ClCompile Include="FullWrite.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Erase.h" />
     <ClInclude Include="EraseRange.h" />
     <ClInclude Include="Exit.h" />
+    <ClInclude Include="Flush.h" />
     <ClInclude Include="FullRead.h" />
     <ClInclude Include="FullWrite.h" />
     <ClInclude Include="Help.h" />

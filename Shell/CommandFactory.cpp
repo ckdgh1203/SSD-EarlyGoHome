@@ -7,6 +7,7 @@
 #include "Erase.h"
 #include "EraseRange.h"
 #include "Exit.h"
+#include "Flush.h"
 #include "SsdHelper.h"
 
 using namespace std;
@@ -24,6 +25,7 @@ CommandFactory::CommandFactory(ostream& _out, SsdHelper& _ssd)
 	m_handlers.push_back(new Erase(_out, _ssd));
 	m_handlers.push_back(new EraseRange(_out, _ssd));
 	m_handlers.push_back(new Exit(_out, _ssd));
+	m_handlers.push_back(new Flush(_out, _ssd));
 }
 
 CommandHandler* CommandFactory::create(const string& commandStr)
@@ -54,5 +56,7 @@ CommandEnum CommandFactory::stringToCommandEnum(const string& commandStr)
 		return CommandEnum::ERASE_RANGE;
 	if (commandStr == "exit")
 		return CommandEnum::EXIT;
+	if (commandStr == "flush")
+		return CommandEnum::FLUSH;
 	return CommandEnum::NUMOFCOMMAND;
 }

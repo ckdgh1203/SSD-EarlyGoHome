@@ -14,6 +14,7 @@ enum class CommandEnum
 	ERASE,
 	ERASE_RANGE,
 	EXIT,
+	FLUSH,
 	NUMOFCOMMAND
 };
 
