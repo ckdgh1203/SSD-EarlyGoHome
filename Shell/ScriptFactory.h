@@ -16,6 +16,7 @@ class ScriptFactory
 {
 public:
 	ScriptHandler* create(const string& scriptStr, SsdHelper& ssdHelper);
+	const std::vector<string> getCommandList(void);
 private:
 	typedef enum
 	{

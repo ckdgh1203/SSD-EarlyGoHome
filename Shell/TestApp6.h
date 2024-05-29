@@ -10,4 +10,5 @@ public:
     {}
 
     bool doScript() override;
+    string usage(void) override { return "testapp6 or Write5to10AndWrite8to10AndReadCompare\n"; };
 };

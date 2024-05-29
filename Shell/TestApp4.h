@@ -12,4 +12,5 @@ public:
     {}
 
     bool doScript() override;
+    string usage(void) override { return "testapp4 or FullReadAndCompare\n"; };
 };

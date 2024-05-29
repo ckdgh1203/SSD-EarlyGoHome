@@ -9,4 +9,5 @@ public:
 		: ScriptHandler(stringStream, ssdHelper) {}
 
 	bool doScript() override;
+	string usage(void) override { return "testapp1 or FullWriteAndFullReadAndCompare\n"; };
 };

@@ -13,7 +13,8 @@ public:
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
     CommandFactory factory{ std::cout, ssd };
-    Help help{m_redirectedOutput, &factory};
+    ScriptFactory scriptFactory{};
+    Help help{m_redirectedOutput, ssd, &factory, &scriptFactory};
 };
 
 TEST_F(HelpTest, DoCommand)
@@ -29,6 +30,12 @@ TEST_F(HelpTest, DoCommand)
         "\terase [START_LBA] [NUMBER_OF_LBA]\n"
         "\terase_range [START_LBA] [END_LBA]\n"
         "\texit\n"
+        "\ttestapp1 or FullWriteAndFullReadAndCompare\n"
+        "\ttestapp2 or Write0to6Repeat30AndWrite0to6AndReadCompare\n"
+        "\ttestapp3 or FullWriteAndRead99AndCompare\n"
+        "\ttestapp4 or FullReadAndCompare\n"
+        "\ttestapp5 or Write0Repeat10AndReadCompare\n"
+        "\ttestapp6 or Write5to10AndWrite8to10AndReadCompare\n"
         "\thelp\n";
     EXPECT_EQ(expectedMessage, commandOutput);
 }
