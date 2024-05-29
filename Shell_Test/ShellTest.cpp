@@ -216,3 +216,18 @@ TEST_F(ShellTestFixture, RunAndTestApps)
 
     runAndExpect(inputString, expectedMessage);
 }
+
+TEST_F(ShellTestFixture, RunnerSucceed)
+{
+    shell.runRunner("run_list.lst");
+}
+
+TEST_F(ShellTestFixture, RunnerWithInvalidFileName)
+{
+    shell.runRunner("invalid.file");
+}
+
+TEST_F(ShellTestFixture, RunnerWithInvalidRunList)
+{
+    shell.runRunner("invalid_run_list.lst");
+}
