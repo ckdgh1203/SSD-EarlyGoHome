@@ -5,6 +5,7 @@ bool FullWrite::isValidArgs(const vector<string>& args)
 	if (args.size() != 2)
 		return INVALID;
 
+	nArgs.clear();
 	for (int lba = START_LBA; lba < END_LBA; lba++)
 	{
 		nArgs.push_back({ "write", to_string(lba), args[1] });
