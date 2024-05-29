@@ -138,6 +138,12 @@
     <ClInclude Include="TestApp6.h">
       <Filter>헤더 파일\Script</Filter>
     </ClInclude>
+    <ClInclude Include="ZipAlgo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleZip.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="헤더 파일">

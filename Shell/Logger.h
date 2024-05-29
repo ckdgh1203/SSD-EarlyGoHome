@@ -5,6 +5,9 @@
 #include <source_location>
 #include <queue>
 
+#include "ZipAlgo.h"
+#include "SimpleZip.h"
+
 class Logger
 {
 public:
@@ -13,12 +16,18 @@ public:
 		static Logger instance{};
 		return instance;
 	}
-	Logger() {};
+	Logger() 
+	{
+		// TODO - Stategy Pattern but not Factory.
+		setZipAlgo(std::make_unique<SimpleZip>());
+	};
 	Logger& operator=(const Logger& other) = delete;
 	Logger(const Logger& other) = delete;
 
 	void print(std::string msg, const std::source_location& caller = std::source_location::current());
 	void clean();
+
+	void setZipAlgo(std::unique_ptr<ZipAlgo> algorithm);
 
 	~Logger() { };
 
@@ -37,4 +46,6 @@ private:
 	const std::string LOGFILE = "latest.log";
 	const long long TEN_KB = 10240;
 	std::queue<std::string> logFileQueue;
+
+	std::unique_ptr<ZipAlgo> zipAlgorithm;
 };
