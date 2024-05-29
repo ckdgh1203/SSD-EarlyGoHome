@@ -18,7 +18,7 @@ public:
 TEST_F(EraseRangeTest, DoCommand)
 {
     EXPECT_CALL(ssdExecutableMock, execute("E 0 100")).Times(1);
-    vector<string> args{ "erase_range", "0", "99" };
+    vector<string> args{ "erase_range", "0", "100" };
     EXPECT_TRUE(eraseRange.isValidArgs(args));
     EXPECT_EQ(Progress::Continue, eraseRange.doCommand(args));
 }
@@ -31,7 +31,7 @@ TEST_F(EraseRangeTest, InvalidStartLba)
 
 TEST_F(EraseRangeTest, InvalidEndLba)
 {
-    vector<string> args{ "erase_range", "10", "100" };
+    vector<string> args{ "erase_range", "10", "200" };
     EXPECT_FALSE(eraseRange.isValidArgs(args));
 }
 

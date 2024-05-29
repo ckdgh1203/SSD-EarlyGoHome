@@ -5,6 +5,7 @@ bool FullRead::isValidArgs(const vector<string>& args)
 	if (args.size() != 1)
 		return INVALID;
 
+	nArgs.clear();
 	for (int lba = START_LBA; lba < END_LBA; lba++)
 	{
 		nArgs.push_back({ "read", to_string(lba) });
