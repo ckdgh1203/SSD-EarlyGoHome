@@ -219,6 +219,8 @@ TEST_F(ShellTestFixture, RunAndTestApps)
 
 TEST_F(ShellTestFixture, RunnerSucceed)
 {
+    EXPECT_CALL(ssdResultMock, get()).WillRepeatedly(Return("0xDEADC0DE"));
+
     shell.runRunner("run_list.lst");
 }
 
