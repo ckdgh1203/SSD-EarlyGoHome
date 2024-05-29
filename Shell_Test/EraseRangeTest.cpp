@@ -2,29 +2,17 @@
 #include <gmock/gmock.h>
 #include "../Shell/EraseRange.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class EraseRangeTest : public Test
+class EraseRangeTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    EraseRange eraseRange{ redirectedOutput, ssd };
-
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
-
-    const string dataZero = "0x00000000";
-
-private:
-    ostringstream redirectedOutput{};
+    EraseRange eraseRange{ m_redirectedOutput, ssd };
 };
 
 TEST_F(EraseRangeTest, DoCommand)

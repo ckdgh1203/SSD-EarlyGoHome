@@ -24,6 +24,17 @@ ScriptHandler* ScriptFactory::create(const string& scriptStr, SsdHelper& ssdHelp
 	}
 }
 
+const std::vector<string> ScriptFactory::getCommandList(void)
+{
+	return vector<string> { "testapp1",
+		"testapp2",
+		"testapp3",
+		"testapp4",
+		"testapp5",
+		"testapp6"
+	};
+}
+
 ScriptFactory::ScriptEnum ScriptFactory::CovertStrToScriptEnum(const string& scriptStr)
 {
 	if (scriptStr == "FullWriteAndFullReadAndCompare" || scriptStr == "testapp1")

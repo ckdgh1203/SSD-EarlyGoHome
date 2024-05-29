@@ -23,7 +23,7 @@ public:
 
 	virtual bool isValidArgs(const vector<string>& args) = 0;
 	virtual Progress doCommand(const vector<string>& args) = 0;
-	virtual void usage() = 0;
+	virtual std::string usage() = 0;
 	virtual ~CommandHandler() {};
 private:
 protected:

@@ -1,25 +1,27 @@
 #pragma once
 
 #include "CommandHandler.h"
+#include "CommandFactory.h"
+#include "ScriptFactory.h"
 
 using namespace std;
 
-class Help : public CommandHandler
+class Help
 {
 public:
-	Help(ostream& _out, SsdHelper& _ssd) : CommandHandler(_out, _ssd) {};
+	Help(ostream& _out, SsdHelper& _ssd, CommandFactory* commandFactory, ScriptFactory* scriptFactory) :
+		m_outputStream(_out),
+		m_ssdHelper(_ssd),
+		m_commandFactory(commandFactory),
+		m_scriptFactory(scriptFactory) {}
 
-	bool isValidArgs(const vector<string>& args) override;
-
-	Progress doCommand(const vector<string>& args) override;
-
-	void usage() override {};
+	Progress doCommand(const vector<string>& args);
 
 	~Help() {};
 protected:
-	const string m_helpMessage = "Help:\n"
-		"\tread [LBA]\n"
-		"\twrite [LBA] [DATA]\n"
-		"\tfullread\n"
-		"\tfullwrite [DATA]\n";
+	ostream& m_outputStream;
+	CommandFactory* m_commandFactory;
+	ScriptFactory* m_scriptFactory;
+	SsdHelper& m_ssdHelper;
+	Logger& logger = Logger::getInstance();
 };

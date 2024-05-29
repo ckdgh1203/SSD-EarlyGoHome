@@ -1,5 +1,12 @@
 #include "Shell.h"
 
+Shell::Shell(SsdHelper& _ssd, ostream& _out) :
+    m_ssdHelper(_ssd),
+    m_commandFactory(_out, _ssd),
+    m_outputStream(_out),
+    m_help(_out, _ssd, &m_commandFactory, &m_scriptFactory)
+{}
+
 void Shell::run(istream& inputStream)
 {
     while (true)
@@ -8,12 +15,20 @@ void Shell::run(istream& inputStream)
 
         vector<string> args{};
         parseArguments(inputStream, args);
+        
+        if (1 > args.size()) continue;
 
         auto* scriptHandler = m_scriptFactory.create(args[0], m_ssdHelper);
         if (scriptHandler != nullptr)
         {
             m_outputStream << args[0] << " " << scriptHandler->getScriptResult() << "\n";
             delete scriptHandler;
+            continue;
+        }
+
+        if (args[0] == "help")
+        {
+            m_help.doCommand(args);
             continue;
         }
 
@@ -27,7 +42,7 @@ void Shell::run(istream& inputStream)
         if (!commandHandler->isValidArgs(args))
         {
             m_outputStream << "\nINVALID COMMAND\n";
-            commandHandler->usage();
+            m_outputStream << commandHandler->usage();
             continue;
         }
 
@@ -92,7 +107,7 @@ void Shell::parseArguments(istream& inputStream, vector<string>& args)
 
 string Shell::getDirectoryPath(string filePath)
 {
-    size_t lastSlashPos = filePath.find_last_of('/\\');
+    size_t lastSlashPos = filePath.find_last_of(static_cast<char>('/\\'));
     string dirPath = filePath;
     if (lastSlashPos != std::string::npos)
     {

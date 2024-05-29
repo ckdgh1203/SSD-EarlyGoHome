@@ -2,41 +2,36 @@
 #include <gmock/gmock.h>
 #include "../Shell/FullWrite.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class FullWriteTest : public Test
+class FullWriteTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
-    FullWrite fullWrite{ redirectedOutput, ssd, &write };
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
+    FullWrite fullWrite{ m_redirectedOutput, ssd, &write };
 
 private:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Write write{ redirectedOutput, ssd };
-    ostringstream redirectedOutput{};
+    Write write{ m_redirectedOutput, ssd };
 };
 
 TEST_F(FullWriteTest, DoCommand)
 {
-    vector<string> args;
-    args.push_back("fullwrite");
-    args.push_back("0xABCD1234");
+    vector<string> args{ "fullwrite", "0xABCD1234" };
+
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
 
     EXPECT_TRUE(fullWrite.isValidArgs(args));
     EXPECT_EQ(Progress::Continue, fullWrite.doCommand(args));
 }
 
-TEST_F(FullWriteTest, FullWrite_NotIncludedPrefixException)
+TEST_F(FullWriteTest, NotIncludedPrefixException)
 {
+    EXPECT_CALL(ssdExecutableMock, execute(_)).Times(0);
+
     string expected = "[WARNING] Prefix '0x' was not included in input data !!!\n";
 
     vector<string> args;
@@ -48,7 +43,7 @@ TEST_F(FullWriteTest, FullWrite_NotIncludedPrefixException)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
-TEST_F(FullWriteTest, FullWrite_NotAllowedInputDataException)
+TEST_F(FullWriteTest, NotAllowedInputDataException)
 {
     string expected = "[WARNING] Input data has invalid characters !!!\n";
 
@@ -60,3 +55,8 @@ TEST_F(FullWriteTest, FullWrite_NotAllowedInputDataException)
     EXPECT_THAT(fetchOutput(), Eq(expected));
 }
 
+TEST_F(FullWriteTest, InvalidNumberOfArgument)
+{
+    vector<string> args{"fullwrite"};
+    EXPECT_FALSE(fullWrite.isValidArgs(args));
+}

@@ -2,37 +2,28 @@
 #include <gmock/gmock.h>
 #include "../Shell/FullRead.cpp"
 #include "SsdMock.h"
+#include "OutputCapture.h"
 
 using namespace testing;
 
-class FullReadTest : public Test
+class FullReadTest : public Test, public OutputCapture
 {
 public:
     NiceMock<SsdExcutalbeMock> ssdExecutableMock{};
     NiceMock<SsdResultMock> ssdResultMock{};
-    FullRead fullRead{ redirectedOutput, ssd, &read };
-
-    string fetchOutput(void)
-    {
-        auto fetchedString = redirectedOutput.str();
-        redirectedOutput.str("");
-        redirectedOutput.clear();
-        return fetchedString;
-    }
+    FullRead fullRead{ m_redirectedOutput, ssd, &read };
 
     const string dataZero = "0x00000000";
 
 private:
     SsdHelper ssd{ &ssdExecutableMock, &ssdResultMock };
-    Read read{ redirectedOutput, ssd };
-    ostringstream redirectedOutput{};
+    Read read{ m_redirectedOutput, ssd };
 };
 
 
 TEST_F(FullReadTest, DoCommand)
 {
-    vector<string> args;
-    args.push_back("fullread");
+    vector<string> args{"fullread"};
 
     EXPECT_CALL(ssdExecutableMock, execute(_)).Times(100);
     EXPECT_CALL(ssdResultMock, get())
@@ -41,4 +32,10 @@ TEST_F(FullReadTest, DoCommand)
 
     EXPECT_TRUE(fullRead.isValidArgs(args));
     EXPECT_EQ(Progress::Continue, fullRead.doCommand(args));
+}
+
+TEST_F(FullReadTest, InvalidNumberOfArgument)
+{
+    vector<string> args{};
+    EXPECT_FALSE(fullRead.isValidArgs(args));
 }

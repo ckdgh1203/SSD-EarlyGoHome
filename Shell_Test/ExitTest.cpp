@@ -19,3 +19,9 @@ TEST_F(ExitTest, DoCommand)
 	vector<string> emptyArgs;
 	EXPECT_EQ(Progress::Done, exit.doCommand(emptyArgs));
 }
+
+TEST_F(ExitTest, InvalidNumberOfArgument)
+{
+	vector<string> args{};
+	EXPECT_FALSE(exit.isValidArgs(args));
+}

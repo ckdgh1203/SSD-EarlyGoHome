@@ -14,7 +14,7 @@ bool TestApp4::doScript()
 
 		if (outputVector.size() <= 1) continue;
 
-		int lastElem = outputVector.size() - 1;
+		auto lastElem = outputVector.size() - 1;
 		if (outputVector[0] != outputVector[lastElem])
 			return false;
 	}

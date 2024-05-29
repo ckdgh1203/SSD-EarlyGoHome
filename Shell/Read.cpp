@@ -3,7 +3,7 @@
 bool Read::isValidArgs(const vector<string>& args)
 {
 	if (isInvalidNumberOfArguments(args)) return INVALID;
-	if (m_lbaRangeVerifier.isLbaOutOfRange(stoi(args[1]))) return INVALID;
+	if (m_lbaRangeVerifier.isInvalidLba(args[1])) return INVALID;
 	return VALID;
 }
 
@@ -14,6 +14,11 @@ Progress Read::doCommand(const vector<string>& args)
 	m_ssdHelper.execute(arguments);
 	m_outputStream << m_ssdHelper.getResult() << endl;
 	return Progress::Continue;
+}
+
+string Read::usage() 
+{
+	return "read [LBA]\n";
 }
 
 bool Read::isInvalidNumberOfArguments(const std::vector<std::string>& args)

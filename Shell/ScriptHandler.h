@@ -12,6 +12,7 @@ public:
     ScriptHandler(ostringstream& stringStream, SsdHelper& ssdHelper);
 
     virtual bool doScript() = 0;
+    virtual string usage() = 0;
     string getScriptResult();
 
 protected:
